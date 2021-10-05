@@ -54,9 +54,6 @@ class MyLexer(object):
 		t.value = int(t.value)
 		return t
 
-
-
-
 	
 	# Contagem do numero de linhas, cada vez que aparecer uma quebra de linha, incrementamos o numero de linhas
 	def t_newline(self, t):
@@ -77,9 +74,10 @@ class MyLexer(object):
 		
 		print(self.output)
 		if(self.textOutput != None):
-			print("OUTPUT ACESSADO\n")
 			self.textOutput.setText(self.output)
 		t.lexer.skip(1)
+
+		
 
 	# Criando o analisador lexico
 	def build(self, **kwargs):
@@ -93,22 +91,22 @@ class MyLexer(object):
 			if not token:
 				break
 			self.output = self.output + str(token.value) + " => " + str(self.tokensExtenso[token.type]) +"\n"
-			print(self.output)
+		print(self.output)
 
 		if(self.textOutput != None):
 			self.textOutput.setText(self.output)
-
+		self.output = ""
 		print("\n")
 
-----------------------------------------------------------------------------------------------------------
+#----------------------------------------------------------------------------------------------------------
 		
-if __name__ == '__main__':
-	lexer = MyLexer()
-	lexer.build()
-	lexer.use(input('Digite sua expressão aqui: '))
+# if __name__ == '__main__':
+# 	lexer = MyLexer()
+# 	lexer.build()
+# 	lexer.use(input('Digite sua expressão aqui: '))
 
-	#atributos de cada token: type, value, lineno(numero da linha), lexpos(posição na linha)
-	# print("\n")
-	# for token in lexer: 
-	# 	print(token.value, " => ", tokens_extenso[token.type],'\n')
-	# print("\n")
+# 	#atributos de cada token: type, value, lineno(numero da linha), lexpos(posição na linha)
+# 	# print("\n")
+# 	# for token in lexer: 
+# 	# 	print(token.value, " => ", tokens_extenso[token.type],'\n')
+# 	# print("\n")
