@@ -14,7 +14,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(889, 731)
+        MainWindow.resize(889, 743)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
@@ -24,6 +24,7 @@ class Ui_MainWindow(object):
         self.centralwidget.setObjectName("centralwidget")
         self.analyzeButton = QtWidgets.QPushButton(self.centralwidget)
         self.analyzeButton.setGeometry(QtCore.QRect(20, 10, 31, 31))
+        self.analyzeButton.setStyleSheet("")
         self.analyzeButton.setText("")
         self.analyzeButton.setObjectName("analyzeButton")
         self.textInputPlaceHolder = QtWidgets.QPlainTextEdit(self.centralwidget)
@@ -33,9 +34,6 @@ class Ui_MainWindow(object):
         self.textOutput.setGeometry(QtCore.QRect(20, 510, 841, 181))
         self.textOutput.setObjectName("textOutput")
         MainWindow.setCentralWidget(self.centralwidget)
-        self.statusbar = QtWidgets.QStatusBar(MainWindow)
-        self.statusbar.setObjectName("statusbar")
-        MainWindow.setStatusBar(self.statusbar)
         self.menuBar = QtWidgets.QMenuBar(MainWindow)
         self.menuBar.setGeometry(QtCore.QRect(0, 0, 889, 21))
         self.menuBar.setObjectName("menuBar")

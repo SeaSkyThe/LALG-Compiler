@@ -4,11 +4,17 @@ import sys
 from Lexic.lexer import * 
 
 
+
+
+
 # Line number Widget definition
 class LineNumberArea(QtWidgets.QWidget):
     def __init__(self, codeArea):
         super().__init__(codeArea)
         self.codeArea = codeArea
+
+        # Line Number Block WIDTH Constant
+        LINE_NUMBER_WIDTH = 5 + self.fontMetrics().width('9') * 4
 
     def sizeHint(self):
         return self.QSize(self.codeArea.lineNumberAreaWidth(), 0)
@@ -22,9 +28,9 @@ class CodeArea(QtWidgets.QPlainTextEdit):
         super().__init__(centralwidget)
         self.lineNumberArea = LineNumberArea(self)
 
-        self.blockCountChanged.connect(lambda: self.updateLineNumberAreaWidth)
-        self.updateRequest.connect(lambda: self.updateLineNumberArea)
-        self.cursorPositionChanged.connect(lambda: self.highlightCurrentLine)
+        self.blockCountChanged.connect(self.updateLineNumberAreaWidth)
+        self.updateRequest.connect(self.updateLineNumberArea)
+        self.cursorPositionChanged.connect(self.highlightCurrentLine)
 
         #self.updateLineNumberAreaWidth(0)
     
@@ -34,13 +40,14 @@ class CodeArea(QtWidgets.QPlainTextEdit):
         maximum = max(1, self.blockCount())
         while(maximum >= 10):
             maximum /= 10
-            digits = digits + 1
+            digits += 1
 
-        space = 4 + self.fontMetrics().width('9') * digits
+        space = 5 + self.fontMetrics().width('9') * digits
 
         return space
 
     def updateLineNumberAreaWidth(self, newBlockCount):
+        
         self.setViewportMargins(self.lineNumberAreaWidth(), 0, 0, 0)
         
     # (self, QtCore.QRect, int)
@@ -62,7 +69,7 @@ class CodeArea(QtWidgets.QPlainTextEdit):
         #QRect
         cr = self.contentsRect()
 
-        self.lineNumberArea.setGeometry(QtCore.QRect(cr.left(), cr.top(), 4 + self.fontMetrics().width('9') * 4, cr.height()))
+        self.lineNumberArea.setGeometry(QtCore.QRect(cr.left(), cr.top(), self.lineNumberAreaWidth(), cr.height()))
 
     def lineNumberAreaPaintEvent(self, event):
         myPainter = QtGui.QPainter(self.lineNumberArea)
@@ -80,8 +87,7 @@ class CodeArea(QtWidgets.QPlainTextEdit):
             if block.isVisible() and (bottom >= event.rect().top()):
                 number = str(blockNumber + 1)
                 myPainter.setPen(QtCore.Qt.black)
-                myPainter.drawText(0, top, self.lineNumberArea.width(), height,
-                QtCore.Qt.AlignCenter, number)
+                myPainter.drawText(0, int(top), int(self.lineNumberArea.width()), int(height), QtCore.Qt.AlignCenter, number)
 
             block = block.next()
             top = bottom
@@ -143,11 +149,10 @@ class ExecWindow(Ui_MainWindow):
 
         # Creating Code Area with Line Number
         self.textInput = CodeArea(self.centralwidget)
-        self.textInput.setGeometry(QtCore.QRect(20, 50, 841, 451))
+        self.textInput.setGeometry(QtCore.QRect(20 , 50, 841, 451))
         self.textInput.setObjectName("textInput")
         # Setting tab distance
-        self.textInput.setTabStopDistance(
-        QtGui.QFontMetricsF(self.textInput.font()).horizontalAdvance(' ') * 4)
+        self.textInput.setTabStopDistance(QtGui.QFontMetricsF(self.textInput.font()).horizontalAdvance(' ') * 4)
 
 
         # Setting buttons icons
