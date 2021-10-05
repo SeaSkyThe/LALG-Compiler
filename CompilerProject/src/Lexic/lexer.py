@@ -70,14 +70,13 @@ class MyLexer(object):
 
 	# Error handling
 	def t_error(self, t):
-		self.output = self.output + "Caracter invalido '%s' \n" % t.value[0]
+		self.output = self.output + "Caracter invalido '%s'" % t.value[0] + " - Linha %d \n" % t.lineno
 		
-		print(self.output)
+		#print(self.output)
 		if(self.textOutput != None):
 			self.textOutput.setText(self.output)
 		t.lexer.skip(1)
 
-		
 
 	# Criando o analisador lexico
 	def build(self, **kwargs):
@@ -91,12 +90,12 @@ class MyLexer(object):
 			if not token:
 				break
 			self.output = self.output + str(token.value) + " => " + str(self.tokensExtenso[token.type]) +"\n"
-		print(self.output)
+		#print(self.output)
 
 		if(self.textOutput != None):
 			self.textOutput.setText(self.output)
 		self.output = ""
-		print("\n")
+		#print("\n")
 
 #----------------------------------------------------------------------------------------------------------
 		
