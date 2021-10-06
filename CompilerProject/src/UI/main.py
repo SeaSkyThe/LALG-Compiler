@@ -2,7 +2,9 @@ from UI.MainWindow import *
 import sys
 #importando analisador lexico
 from Lexic.lexer import * 
-
+#Importando componentes para a sintaxe
+from PyQt5.QtCore import QFile, QRegExp, Qt
+from PyQt5.QtGui import QFont, QSyntaxHighlighter, QTextCharFormat, QColor
 
 
 
@@ -101,7 +103,7 @@ class CodeArea(QtWidgets.QPlainTextEdit):
 
         if(not self.isReadOnly()):
             selection = QtWidgets.QTextEdit.ExtraSelection()
-            lineColor = QtGui.QColor(QtCore.Qt.yellow).lighter(160)
+            lineColor = QtGui.QColor(QtCore.Qt.yellow).lighter(185)
 
             selection.format.setBackground(lineColor)
             selection.format.setProperty(QtGui.QTextFormat.FullWidthSelection, True)
@@ -129,6 +131,91 @@ class CodeArea(QtWidgets.QPlainTextEdit):
 #----------------------------------------------------------------------------------------------------------------------------------------#
 #----------------------------------------------------------------------------------------------------------------------------------------#
 
+# Syntax Highlighter
+class Highlighter(QSyntaxHighlighter):
+    def __init__(self, parent=None):
+        super(Highlighter, self).__init__(parent)
+
+        #Keywords format
+        keyword = QTextCharFormat()
+        keyword.setForeground(QColor('#229bdd'))
+        keyword.setFontWeight(QFont.Bold)
+        keywordPatterns = [r"\bint\b", r"\bfloat\b", r"\bboolean\b", r"\bvar\b",  r"\bprocedure\b", 
+        r"\bbegin\b",  r"\bend\b", r"\bprogram\b"
+        ]
+        self.highlightingRules = [(QRegExp(pattern), keyword)
+                for pattern in keywordPatterns]
+
+        #Conditions and loops
+        conditionAndLoops = QTextCharFormat()
+        conditionAndLoops.setForeground(QColor('#d11f1f'))
+        conditionAndLoops.setFontWeight(QFont.Bold)
+        conditionAndLoopsPatterns = [r"\bwhile\b", r"\bfor\b", r"\bdo\b", r"\bif\b",  r"\belse\b", 
+        r"\bthen\b"
+        ]
+        self.highlightingRules += [(QRegExp(pattern), conditionAndLoops)
+                for pattern in conditionAndLoopsPatterns]
+        
+        #Numbers Format
+        number = QTextCharFormat()
+        number.setForeground(QColor('#8f3dd6'))
+        self.highlightingRules.append((QRegExp(r".\W\d+|\btrue\b|\bfalse\b"),
+                number))
+
+        # Operators format
+        operator = QTextCharFormat()
+        operator.setForeground(QColor('#d11f1f'))
+        self.highlightingRules.append((QRegExp(r"[\+\-\*/<>=:]"),
+                operator))
+
+        #Comment Format
+        singleLineComment = QTextCharFormat()
+        singleLineComment.setForeground(Qt.lightGray)
+        self.highlightingRules.append((QRegExp("//[^\n]*"),
+                singleLineComment))
+
+        self.multiLineComment = QTextCharFormat()
+        self.multiLineComment.setForeground(Qt.lightGray)
+
+        self.commentStartExpression = QRegExp(r"\{")
+        self.commentEndExpression = QRegExp(r"\}")
+
+
+    def highlightBlock(self, text):
+        for pattern, format in self.highlightingRules:
+            expression = QRegExp(pattern)
+            index = expression.indexIn(text)
+            while index >= 0:
+                length = expression.matchedLength()
+                self.setFormat(index, length, format)
+                index = expression.indexIn(text, index + length)
+
+        self.setCurrentBlockState(0)
+
+        startIndex = 0
+        if self.previousBlockState() != 1:
+            startIndex = self.commentStartExpression.indexIn(text)
+
+        while startIndex >= 0:
+            endIndex = self.commentEndExpression.indexIn(text, startIndex)
+
+            if endIndex == -1:
+                self.setCurrentBlockState(1)
+                commentLength = len(text) - startIndex
+            else:
+                commentLength = endIndex - startIndex + self.commentEndExpression.matchedLength()
+
+            self.setFormat(startIndex, commentLength,
+                    self.multiLineComment)
+            startIndex = self.commentStartExpression.indexIn(text,
+                    startIndex + commentLength);
+
+
+#----------------------------------------------------------------------------------------------------------------------------------------#
+#----------------------------------------------------------------------------------------------------------------------------------------#
+#----------------------------------------------------------------------------------------------------------------------------------------#
+#----------------------------------------------------------------------------------------------------------------------------------------#
+#----------------------------------------------------------------------------------------------------------------------------------------#
 
 # CLASS TO EXECUTE THE UI
 
@@ -154,6 +241,8 @@ class ExecWindow(Ui_MainWindow):
         # Setting tab distance
         self.textInput.setTabStopDistance(QtGui.QFontMetricsF(self.textInput.font()).horizontalAdvance(' ') * 4)
 
+        # Setting syntax colors
+        self.highlighter = Highlighter(self.textInput.document())
 
         # Setting buttons icons
         pixmap = QtGui.QPixmap("UI/botao-play.png")
@@ -187,17 +276,23 @@ class ExecWindow(Ui_MainWindow):
     def openFile(self):
         text = ""
         filename = QtWidgets.QFileDialog.getOpenFileName()[0]
-        with open(filename, "r") as f:
-            for line in f:
-                text = text + line
+        try:
+            with open(filename, "r") as f:
+                for line in f:
+                    text = text + line
 
-        self.textInput.setPlainText(text)
+            self.textInput.setPlainText(text)
+        except:
+            pass
 
     # Saving a File
     def saveFile(self):
         filename = QtWidgets.QFileDialog.getSaveFileName()[0]
-        with open(filename, "w+") as f:
-            f.write(self.textInput.toPlainText())
+        try:
+            with open(filename, "w+") as f:
+                f.write(self.textInput.toPlainText())
+        except:
+            pass
     
 if __name__ == '__main__':
     app = QtWidgets.QApplication(sys.argv)
