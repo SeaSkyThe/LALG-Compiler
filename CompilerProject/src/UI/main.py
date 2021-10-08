@@ -241,8 +241,10 @@ class ExecWindow(Ui_MainWindow):
         # Setting tab distance
         self.textInput.setTabStopDistance(QtGui.QFontMetricsF(self.textInput.font()).horizontalAdvance(' ') * 4)
 
-        # Setting syntax colors
+        # Setting syntax colors for textInput
         self.highlighter = Highlighter(self.textInput.document())
+        # Setting syntax colors for textOutput
+        self.highighter2 = Highlighter(self.textOutput.document())
 
         # Setting buttons icons
         pixmap = QtGui.QPixmap("UI/botao-play.png")
