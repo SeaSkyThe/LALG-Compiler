@@ -43,6 +43,8 @@ class MyLexer(object):
 		'OR': "OPERADOR LÓGICO 'OU'",
 		'FIM_LINHA': 'FINAL DA LINHA',
 		'SEPARADOR': "SEPARADOR VIRGULA",
+		'PONTO_FINAL': 'PONTO FINAL',
+		'DOIS_PONTOS': 'DOIS PONTOS',
 		}
 
 		
@@ -109,6 +111,8 @@ class MyLexer(object):
 		'MENOR_IGUAL',
 		'FIM_LINHA',			#DELIMITADOR DE FIM DA LINHA ';'
 		'SEPARADOR', 			#SEPARADOR ','
+		'PONTO_FINAL', 			#DELIMITA FIM DO PROGRAMA '.'
+		'DOIS_PONTOS',			#":"
 		'AP',    				#ABRE PARENTESES
 		'FP',	 				#FECHA PARENTESES
 		#'PROGRAM',				#PALAVRA QUE INICIA O PROGRAMA
@@ -127,6 +131,7 @@ class MyLexer(object):
 	t_FP = r'\)'
 
 	t_OPIGUAL_ATRIB = r':='
+	t_DOIS_PONTOS = r':'
 	t_OPIGUAL_COMP = r'='
 	t_MAIOR_IGUAL = r'>='
 	t_MAIOR = r'>'
@@ -135,27 +140,30 @@ class MyLexer(object):
 
 	t_FIM_LINHA = r';'
 	t_SEPARADOR = r','
+	t_PONTO_FINAL = r'\.'
 
 	# CARACTERES IGNORADOS - APENAS ESPACOS E TABULACOES
-	t_ignore = ' \t:'
+	t_ignore = ' \t'
 
 	# NUMEROS E IDENTIFICADORES
 
 	def t_ID(self, t):
-		r'[a-zA-Z_][a-zA-Z_0-9]*' 
+		#r'[a-zA-Z_][a-zA-Z_0-9]*' #*  = 0 ou more
+		r'[a-zA-Z_][a-zA-Z_0-9]{0,50}' #definindo limite de caracteres
 		t.type = self.reserved.get(t.value,'ID')    # Check for reserved words
 		return t
 
 	# Especificação em forma de função, pois no caso dos numeros é necessária uma conversão deles
 	def t_REAL(self, t):
-		r'(\d+\.\d+)'
+		r'(\d{40}\\.\d{40})' #40 casas decimais
 		# r'[+-]?(\d+\.\d+)'
 		t.value = float(t.value)
 		return t
 
 	def t_INT(self, t):
 		# r'[+-]?\d+'
-		r'\d+'
+		#r'\d+' # 1 ou mais
+		r'\d{1,40}' #1 ate 40 digitos
 		t.value = int(t.value)
 		return t
 
