@@ -133,19 +133,22 @@ class CodeArea(QtWidgets.QPlainTextEdit):
 
 # Syntax Highlighter
 class Highlighter(QSyntaxHighlighter):
-    def __init__(self, parent=None):
+    def __init__(self, textType, parent=None):
         super(Highlighter, self).__init__(parent)
+        self.highlightingRules = [] #Setting the list of rules
+        self.textType = textType #Setting the syntax highlighter type
 
+    #Input syntax rules
+    def inputRules(self):
         #Keywords format
         keyword = QTextCharFormat()
         keyword.setForeground(QColor('#229bdd'))
         keyword.setFontWeight(QFont.Bold)
         keywordPatterns = [r"\bint\b", r"\bfloat\b", r"\bboolean\b", r"\bvar\b",  r"\bprocedure\b", 
-        r"\bbegin\b",  r"\bend\b", r"\bprogram\b"
+        r"\bbegin\b",  r"\bend\b", r"\bprogram\b", r"\bread\b", r"\bwrite\b"
         ]
         self.highlightingRules = [(QRegExp(pattern), keyword)
                 for pattern in keywordPatterns]
-
         #Conditions and loops
         conditionAndLoops = QTextCharFormat()
         conditionAndLoops.setForeground(QColor('#d11f1f'))
@@ -159,13 +162,13 @@ class Highlighter(QSyntaxHighlighter):
         #Numbers Format
         number = QTextCharFormat()
         number.setForeground(QColor('#8f3dd6'))
-        self.highlightingRules.append((QRegExp(r".\W\d+|\btrue\b|\bfalse\b"),
+        self.highlightingRules.append((QRegExp(r"\b\d+\b|\btrue\b|\bfalse\b"),
                 number))
 
         # Operators format
         operator = QTextCharFormat()
-        operator.setForeground(QColor('#d11f1f'))
-        self.highlightingRules.append((QRegExp(r"[\+\-\*/<>=:]"),
+        operator.setForeground(QColor('#c98e20'))
+        self.highlightingRules.append((QRegExp(r"[\+\-\*/<>=:()]|\bdiv\b"),
                 operator))
 
         #Comment Format
@@ -180,35 +183,117 @@ class Highlighter(QSyntaxHighlighter):
         self.commentStartExpression = QRegExp(r"\{")
         self.commentEndExpression = QRegExp(r"\}")
 
+    #Output syntax rules
+    def outputRules(self):
+        #Any
+        anyChar = QTextCharFormat()
+        anyChar.setForeground(QColor('#ff00ee'))
+        anyChar.setFontWeight(QFont.Bold)
+        self.highlightingRules.append((QRegExp(r"."),
+                anyChar))
 
+        #Variable Type
+        variable = QTextCharFormat()
+        variable.setForeground(QColor('#14b3a3'))
+        variable.setFontWeight(QFont.Bold)
+        variablePatterns = [r"\bint\b", r"\bfloat\b", r"\bdouble\b", r"\bboolean\b",  
+            r"\bvar\b"
+        ]
+
+        for pattern in variablePatterns:
+            self.highlightingRules.append((QRegExp(pattern),
+                variable))
+
+        #key Type
+        key = QTextCharFormat()
+        key.setForeground(QColor('#00f8fc'))
+        key.setFontWeight(QFont.Bold)
+        keyPatterns = [r"\bprocedure\b", r"\bprogram\b", r"\bbegin\b", r"\bend\b",  
+        ]
+        for pattern in keyPatterns:
+            self.highlightingRules.append((QRegExp(pattern),
+                key))
+
+        #condition Type
+        condition = QTextCharFormat()
+        condition.setForeground(QColor('#750d85'))
+        condition.setFontWeight(QFont.Bold)
+        conditionPatterns = [r"\bif\b", r"\belse\b", r"\bthen\b", r"\bwhile\b", r"\bfor\b",
+        ]
+        for pattern in conditionPatterns:
+            self.highlightingRules.append((QRegExp(pattern),
+                condition))
+
+        #numbers
+        numbers = QTextCharFormat()
+        numbers.setForeground(QColor('#32a852'))
+        self.highlightingRules.append((QRegExp(r"\b\d+\b|\bdiv\b"),
+                numbers))
+
+
+        #Symbols
+        Symbols = QTextCharFormat()
+        Symbols.setForeground(QColor('#ff0000'))
+        self.highlightingRules.append((QRegExp(r"[\W]|\bdiv\b"),
+                Symbols))
+
+        #Lexic Pointer
+        LexicPointer = QTextCharFormat()
+        LexicPointer.setForeground(QColor('#363636'))
+        self.highlightingRules.append((QRegExp(r'(?==>).*'),
+                LexicPointer))
+
+        #Line Number
+        line = QTextCharFormat()
+        line.setForeground(QColor('#7300ff'))
+        self.highlightingRules.append((QRegExp(r"^LINHA.*"),
+                line))
+
+
+    #QSyntaxHighlighter Function to paint the Regex rules
     def highlightBlock(self, text):
-        for pattern, format in self.highlightingRules:
-            expression = QRegExp(pattern)
-            index = expression.indexIn(text)
-            while index >= 0:
-                length = expression.matchedLength()
-                self.setFormat(index, length, format)
-                index = expression.indexIn(text, index + length)
+        #Painting the input rules
+        if(self.textType == 'input'):
+            for pattern, format in self.highlightingRules:
+                expression = QRegExp(pattern)
+                index = expression.indexIn(text)
+                while index >= 0:
+                    length = expression.matchedLength()
+                    self.setFormat(index, length, format)
+                    index = expression.indexIn(text, index + length)
 
-        self.setCurrentBlockState(0)
+            self.setCurrentBlockState(0)
 
-        startIndex = 0
-        if self.previousBlockState() != 1:
-            startIndex = self.commentStartExpression.indexIn(text)
+            #Comment rule
+            startIndex = 0
+            if self.previousBlockState() != 1:
+                startIndex = self.commentStartExpression.indexIn(text)
 
-        while startIndex >= 0:
-            endIndex = self.commentEndExpression.indexIn(text, startIndex)
+            while startIndex >= 0:
+                endIndex = self.commentEndExpression.indexIn(text, startIndex)
 
-            if endIndex == -1:
-                self.setCurrentBlockState(1)
-                commentLength = len(text) - startIndex
-            else:
-                commentLength = endIndex - startIndex + self.commentEndExpression.matchedLength()
+                if endIndex == -1:
+                    self.setCurrentBlockState(1)
+                    commentLength = len(text) - startIndex
+                else:
+                    commentLength = endIndex - startIndex + self.commentEndExpression.matchedLength()
 
-            self.setFormat(startIndex, commentLength,
-                    self.multiLineComment)
-            startIndex = self.commentStartExpression.indexIn(text,
-                    startIndex + commentLength);
+                self.setFormat(startIndex, commentLength,
+                        self.multiLineComment)
+                startIndex = self.commentStartExpression.indexIn(text,
+                        startIndex + commentLength);
+
+        #Painting the output rules
+        elif(self.textType == 'output'):
+            for pattern, format in self.highlightingRules:
+                expression = QRegExp(pattern)
+                index = expression.indexIn(text)
+                while index >= 0:
+                    length = expression.matchedLength()
+                    self.setFormat(index, length, format)
+                    index = expression.indexIn(text, index + length)
+
+            self.setCurrentBlockState(0)
 
 
 # Definir highlighter para o output
@@ -245,9 +330,11 @@ class ExecWindow(Ui_MainWindow):
         self.textInput.setTabStopDistance(QtGui.QFontMetricsF(self.textInput.font()).horizontalAdvance(' ') * 4)
 
         # Setting syntax colors for textInput
-        self.highlighter = Highlighter(self.textInput.document())
+        self.highlighter = Highlighter('input', self.textInput.document())
+        self.highlighter.inputRules()
         # Setting syntax colors for textOutput
-        self.highighter2 = Highlighter(self.textOutput.document())
+        self.highlighter2 = Highlighter('output', self.textOutput.document())
+        self.highlighter2.outputRules()
 
         # Setting buttons icons
         pixmap = QtGui.QPixmap("UI/botao-play.png")
