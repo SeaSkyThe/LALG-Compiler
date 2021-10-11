@@ -21,3 +21,7 @@ pip-delete-this-directory.txt
 
 # QT Desinger Files
 *.ui
+
+
+#build folder
+CompilerProject/src/build

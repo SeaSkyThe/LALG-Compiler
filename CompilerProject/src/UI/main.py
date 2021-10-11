@@ -320,7 +320,7 @@ class ExecWindow(Ui_MainWindow):
         super().setupUi(self.window)
         
         # Setting window icon
-        self.window.setWindowIcon(QtGui.QIcon('UI/icons8-svelte-48.png'))
+        self.window.setWindowIcon(QtGui.QIcon('icons/icons8-svelte-48.png'))
 
         # Creating Code Area with Line Number
         self.textInput = CodeArea(self.centralwidget)
@@ -337,7 +337,7 @@ class ExecWindow(Ui_MainWindow):
         self.highlighter2.outputRules()
 
         # Setting buttons icons
-        pixmap = QtGui.QPixmap("UI/botao-play.png")
+        pixmap = QtGui.QPixmap("icons/botao-play.png")
         compile_icon = QtGui.QIcon(pixmap)
         self.analyzeButton.setIcon(compile_icon)
         self.analyzeButton.setIconSize(self.analyzeButton.size())

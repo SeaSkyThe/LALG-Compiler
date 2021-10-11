@@ -206,7 +206,7 @@ class MyLexer(object):
 
 	# Criando o analisador lexico
 	def build(self, **kwargs):
-		self.lexer = lex.lex(module=self, **kwargs, debug=True)
+		self.lexer = lex.lex(module=self, **kwargs, debug=False)
 		return self.lexer
 
 	# usando analisador lexico

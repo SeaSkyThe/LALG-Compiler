@@ -1,0 +1,1 @@
+Basta executar o exe na pasta: CompilerProject/bin/main.exe

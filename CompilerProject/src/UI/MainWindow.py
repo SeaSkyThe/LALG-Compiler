@@ -20,9 +20,8 @@ class Ui_MainWindow(object):
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.analyzeButton = QtWidgets.QPushButton(self.centralwidget)
-        self.analyzeButton.setGeometry(QtCore.QRect(20, 10, 31, 31))
+        self.analyzeButton.setGeometry(QtCore.QRect(20, 10, 71, 31))
         self.analyzeButton.setStyleSheet("")
-        self.analyzeButton.setText("")
         self.analyzeButton.setObjectName("analyzeButton")
         self.textInputPlaceHolder = QtWidgets.QPlainTextEdit(self.centralwidget)
         self.textInputPlaceHolder.setGeometry(QtCore.QRect(20, 50, 841, 451))
@@ -52,6 +51,7 @@ class Ui_MainWindow(object):
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "Compilador"))
+        self.analyzeButton.setText(_translate("MainWindow", "Analyze"))
         self.textOutput.setPlaceholderText(_translate("MainWindow", "Output"))
         self.menuFile.setTitle(_translate("MainWindow", "File"))
         self.actionOpen.setText(_translate("MainWindow", "Open"))
