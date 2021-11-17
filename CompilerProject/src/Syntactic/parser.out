@@ -1,0 +1,306 @@
+Created by PLY version 3.11 (http://www.dabeaz.com/ply)
+
+Unused terminals:
+
+    AND
+    BEGIN
+    BOOLEAN
+    DIV
+    DO
+    DOIS_PONTOS
+    ELSE
+    END
+    FALSE
+    FIM_LINHA
+    ID
+    IF
+    MAIOR
+    MAIOR_IGUAL
+    MENOR
+    MENOR_IGUAL
+    OPIGUAL_ATRIB
+    OPIGUAL_COMP
+    OR
+    PONTO_FINAL
+    PROCEDURE
+    PROGRAM
+    READ
+    REAL
+    SEPARADOR
+    THEN
+    TRUE
+    VAR
+    WHILE
+    WRITE
+
+Grammar
+
+Rule 0     S' -> expression
+Rule 1     expression -> expression OPSOMA term
+Rule 2     expression -> expression OPSUB term
+Rule 3     expression -> expression OPMUL factor
+Rule 4     expression -> expression OPDIV factor
+Rule 5     expression -> term
+Rule 6     term -> factor
+Rule 7     factor -> INT
+Rule 8     factor -> AP expression FP
+
+Terminals, with rules where they appear
+
+AND                  : 
+AP                   : 8
+BEGIN                : 
+BOOLEAN              : 
+DIV                  : 
+DO                   : 
+DOIS_PONTOS          : 
+ELSE                 : 
+END                  : 
+FALSE                : 
+FIM_LINHA            : 
+FP                   : 8
+ID                   : 
+IF                   : 
+INT                  : 7
+MAIOR                : 
+MAIOR_IGUAL          : 
+MENOR                : 
+MENOR_IGUAL          : 
+OPDIV                : 4
+OPIGUAL_ATRIB        : 
+OPIGUAL_COMP         : 
+OPMUL                : 3
+OPSOMA               : 1
+OPSUB                : 2
+OR                   : 
+PONTO_FINAL          : 
+PROCEDURE            : 
+PROGRAM              : 
+READ                 : 
+REAL                 : 
+SEPARADOR            : 
+THEN                 : 
+TRUE                 : 
+VAR                  : 
+WHILE                : 
+WRITE                : 
+error                : 
+
+Nonterminals, with rules where they appear
+
+expression           : 1 2 3 4 8 0
+factor               : 3 4 6
+term                 : 1 2 5
+
+Parsing method: LALR
+
+state 0
+
+    (0) S' -> . expression
+    (1) expression -> . expression OPSOMA term
+    (2) expression -> . expression OPSUB term
+    (3) expression -> . expression OPMUL factor
+    (4) expression -> . expression OPDIV factor
+    (5) expression -> . term
+    (6) term -> . factor
+    (7) factor -> . INT
+    (8) factor -> . AP expression FP
+
+    INT             shift and go to state 4
+    AP              shift and go to state 5
+
+    expression                     shift and go to state 1
+    term                           shift and go to state 2
+    factor                         shift and go to state 3
+
+state 1
+
+    (0) S' -> expression .
+    (1) expression -> expression . OPSOMA term
+    (2) expression -> expression . OPSUB term
+    (3) expression -> expression . OPMUL factor
+    (4) expression -> expression . OPDIV factor
+
+    OPSOMA          shift and go to state 6
+    OPSUB           shift and go to state 7
+    OPMUL           shift and go to state 8
+    OPDIV           shift and go to state 9
+
+
+state 2
+
+    (5) expression -> term .
+
+    OPSOMA          reduce using rule 5 (expression -> term .)
+    OPSUB           reduce using rule 5 (expression -> term .)
+    OPMUL           reduce using rule 5 (expression -> term .)
+    OPDIV           reduce using rule 5 (expression -> term .)
+    $end            reduce using rule 5 (expression -> term .)
+    FP              reduce using rule 5 (expression -> term .)
+
+
+state 3
+
+    (6) term -> factor .
+
+    OPSOMA          reduce using rule 6 (term -> factor .)
+    OPSUB           reduce using rule 6 (term -> factor .)
+    OPMUL           reduce using rule 6 (term -> factor .)
+    OPDIV           reduce using rule 6 (term -> factor .)
+    $end            reduce using rule 6 (term -> factor .)
+    FP              reduce using rule 6 (term -> factor .)
+
+
+state 4
+
+    (7) factor -> INT .
+
+    OPSOMA          reduce using rule 7 (factor -> INT .)
+    OPSUB           reduce using rule 7 (factor -> INT .)
+    OPMUL           reduce using rule 7 (factor -> INT .)
+    OPDIV           reduce using rule 7 (factor -> INT .)
+    $end            reduce using rule 7 (factor -> INT .)
+    FP              reduce using rule 7 (factor -> INT .)
+
+
+state 5
+
+    (8) factor -> AP . expression FP
+    (1) expression -> . expression OPSOMA term
+    (2) expression -> . expression OPSUB term
+    (3) expression -> . expression OPMUL factor
+    (4) expression -> . expression OPDIV factor
+    (5) expression -> . term
+    (6) term -> . factor
+    (7) factor -> . INT
+    (8) factor -> . AP expression FP
+
+    INT             shift and go to state 4
+    AP              shift and go to state 5
+
+    expression                     shift and go to state 10
+    term                           shift and go to state 2
+    factor                         shift and go to state 3
+
+state 6
+
+    (1) expression -> expression OPSOMA . term
+    (6) term -> . factor
+    (7) factor -> . INT
+    (8) factor -> . AP expression FP
+
+    INT             shift and go to state 4
+    AP              shift and go to state 5
+
+    term                           shift and go to state 11
+    factor                         shift and go to state 3
+
+state 7
+
+    (2) expression -> expression OPSUB . term
+    (6) term -> . factor
+    (7) factor -> . INT
+    (8) factor -> . AP expression FP
+
+    INT             shift and go to state 4
+    AP              shift and go to state 5
+
+    term                           shift and go to state 12
+    factor                         shift and go to state 3
+
+state 8
+
+    (3) expression -> expression OPMUL . factor
+    (7) factor -> . INT
+    (8) factor -> . AP expression FP
+
+    INT             shift and go to state 4
+    AP              shift and go to state 5
+
+    factor                         shift and go to state 13
+
+state 9
+
+    (4) expression -> expression OPDIV . factor
+    (7) factor -> . INT
+    (8) factor -> . AP expression FP
+
+    INT             shift and go to state 4
+    AP              shift and go to state 5
+
+    factor                         shift and go to state 14
+
+state 10
+
+    (8) factor -> AP expression . FP
+    (1) expression -> expression . OPSOMA term
+    (2) expression -> expression . OPSUB term
+    (3) expression -> expression . OPMUL factor
+    (4) expression -> expression . OPDIV factor
+
+    FP              shift and go to state 15
+    OPSOMA          shift and go to state 6
+    OPSUB           shift and go to state 7
+    OPMUL           shift and go to state 8
+    OPDIV           shift and go to state 9
+
+
+state 11
+
+    (1) expression -> expression OPSOMA term .
+
+    OPSOMA          reduce using rule 1 (expression -> expression OPSOMA term .)
+    OPSUB           reduce using rule 1 (expression -> expression OPSOMA term .)
+    OPMUL           reduce using rule 1 (expression -> expression OPSOMA term .)
+    OPDIV           reduce using rule 1 (expression -> expression OPSOMA term .)
+    $end            reduce using rule 1 (expression -> expression OPSOMA term .)
+    FP              reduce using rule 1 (expression -> expression OPSOMA term .)
+
+
+state 12
+
+    (2) expression -> expression OPSUB term .
+
+    OPSOMA          reduce using rule 2 (expression -> expression OPSUB term .)
+    OPSUB           reduce using rule 2 (expression -> expression OPSUB term .)
+    OPMUL           reduce using rule 2 (expression -> expression OPSUB term .)
+    OPDIV           reduce using rule 2 (expression -> expression OPSUB term .)
+    $end            reduce using rule 2 (expression -> expression OPSUB term .)
+    FP              reduce using rule 2 (expression -> expression OPSUB term .)
+
+
+state 13
+
+    (3) expression -> expression OPMUL factor .
+
+    OPSOMA          reduce using rule 3 (expression -> expression OPMUL factor .)
+    OPSUB           reduce using rule 3 (expression -> expression OPMUL factor .)
+    OPMUL           reduce using rule 3 (expression -> expression OPMUL factor .)
+    OPDIV           reduce using rule 3 (expression -> expression OPMUL factor .)
+    $end            reduce using rule 3 (expression -> expression OPMUL factor .)
+    FP              reduce using rule 3 (expression -> expression OPMUL factor .)
+
+
+state 14
+
+    (4) expression -> expression OPDIV factor .
+
+    OPSOMA          reduce using rule 4 (expression -> expression OPDIV factor .)
+    OPSUB           reduce using rule 4 (expression -> expression OPDIV factor .)
+    OPMUL           reduce using rule 4 (expression -> expression OPDIV factor .)
+    OPDIV           reduce using rule 4 (expression -> expression OPDIV factor .)
+    $end            reduce using rule 4 (expression -> expression OPDIV factor .)
+    FP              reduce using rule 4 (expression -> expression OPDIV factor .)
+
+
+state 15
+
+    (8) factor -> AP expression FP .
+
+    OPSOMA          reduce using rule 8 (factor -> AP expression FP .)
+    OPSUB           reduce using rule 8 (factor -> AP expression FP .)
+    OPMUL           reduce using rule 8 (factor -> AP expression FP .)
+    OPDIV           reduce using rule 8 (factor -> AP expression FP .)
+    $end            reduce using rule 8 (factor -> AP expression FP .)
+    FP              reduce using rule 8 (factor -> AP expression FP .)
+

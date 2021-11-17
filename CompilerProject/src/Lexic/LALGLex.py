@@ -1,11 +1,20 @@
 import ply.lex as lex
 import re
 
-class MyLexer(object):
+#implementando com Singleton
+class myLexer(object):
+	_instance = None
+
+	def __new__(self, textOutput=None):
+		if (self._instance is None):
+			self._instance = super().__new__(self)
+		return self._instance
+
 	def __init__(self, textOutput=None):
 		self.textOutput = textOutput
 		self.input = ""
 		self.output = ""
+		self.lexer = None
 
 		self.tokensExtenso = {
 		'REAL': 'TIPO REAL',						#NUMERO REAL
@@ -145,6 +154,9 @@ class MyLexer(object):
 	# CARACTERES IGNORADOS - APENAS ESPACOS E TABULACOES
 	t_ignore = ' \t'
 
+
+	def getTokens(self):
+		return self.tokens
 	# NUMEROS E IDENTIFICADORES
 
 	def t_ID(self, t):
@@ -177,6 +189,7 @@ class MyLexer(object):
 		t.lexer.lineno += len(t.value)
 		# depois de atualizar o numero da linha, damos um '\n' no output para separar por linhas
 		self.output = self.output + "\nLINHA %d: \n" % t.lexer.lineno
+		
 	# Compute column.
 	# input is the input text string
 	# token is a token instance
@@ -206,7 +219,8 @@ class MyLexer(object):
 
 	# Criando o analisador lexico
 	def build(self, **kwargs):
-		self.lexer = lex.lex(module=self, **kwargs, debug=False)
+		if(self.lexer == None):
+			self.lexer = lex.lex(module=self, **kwargs, debug=False)
 		return self.lexer
 
 	# usando analisador lexico

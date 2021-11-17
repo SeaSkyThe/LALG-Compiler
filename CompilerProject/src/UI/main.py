@@ -1,7 +1,11 @@
 from UI.MainWindow import *
 import sys
 #importando analisador lexico
-from Lexic.lexer import * 
+from Lexic.LALGLex import *
+
+#importando parser (analisador sintatico)
+from Syntactic.parser import *
+
 #Importando componentes para a sintaxe
 from PyQt5.QtCore import QFile, QRegExp, Qt
 from PyQt5.QtGui import QFont, QSyntaxHighlighter, QTextCharFormat, QColor
@@ -311,7 +315,8 @@ class ExecWindow(Ui_MainWindow):
     def __init__(self, window):
         super().__init__()
         self.window = window
-
+        self.lexer = None
+        self.parser = None
         self.setupUi(self.window)
         self.connectActions()
     
@@ -350,19 +355,36 @@ class ExecWindow(Ui_MainWindow):
     
     def connectActions(self):
         # pressing the analyze button
-        self.analyzeButton.clicked.connect(lambda: self.analyze())
+        self.analyzeButton.clicked.connect(lambda: self.lexicAnalyze())
+        # pressing the compile button - open parser (Syntactic Analyze)
+        self.compileButton.clicked.connect(lambda: self.parse())
+
         # Handling Open and Save Files cases
         self.actionOpen.triggered.connect(lambda: self.openFile())
         self.actionSave.triggered.connect(lambda: self.saveFile())
 
 
     # Lexical Analysis Function
-    def analyze(self):
-        lexer = MyLexer(self.textOutput)
-        lexer.build()
+    def lexicAnalyze(self):
+        self.lexer = myLexer(self.textOutput)
+        self.lexer.build()
         # Passando o texto de input
         text = self.textInput.toPlainText()
-        lexer.use(text)
+        
+        self.lexer.use(text)
+
+    # Parsing Function (Syntactic Analysis)
+    def parse(self):
+        self.parser = createParser()
+
+        #pegando o input e jogando no parser que foi criado utilizando o analisador lexico
+        text = self.textInput.toPlainText()
+
+        #calculando resultado e exibindo na tela de output
+        result = self.parser.parse(text)
+        self.textOutput.setText("")
+        self.textOutput.setText(str(result))
+    
 
     # Opening a File
     def openFile(self):
