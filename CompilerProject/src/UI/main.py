@@ -148,7 +148,7 @@ class Highlighter(QSyntaxHighlighter):
         keyword = QTextCharFormat()
         keyword.setForeground(QColor('#229bdd'))
         keyword.setFontWeight(QFont.Bold)
-        keywordPatterns = [r"\bint\b", r"\bfloat\b", r"\bboolean\b", r"\bvar\b",  r"\bprocedure\b", 
+        keywordPatterns = [r"\bint\b", r"\bfloat\b", r"\breal\b",r"\bboolean\b", r"\bvar\b",  r"\bprocedure\b", 
         r"\bbegin\b",  r"\bend\b", r"\bprogram\b", r"\bread\b", r"\bwrite\b"
         ]
         self.highlightingRules = [(QRegExp(pattern), keyword)
@@ -382,6 +382,7 @@ class ExecWindow(Ui_MainWindow):
 
         #calculando resultado e exibindo na tela de output
         result = self.parser.parse(text)
+        
         self.textOutput.setText("")
         self.textOutput.setText(str(result))
     

@@ -17,15 +17,17 @@ class myLexer(object):
 		self.lexer = None
 
 		self.tokensExtenso = {
-		'REAL': 'TIPO REAL',						#NUMERO REAL
-		'INT': 'TIPO INTEIRO', 					#NUMERO INTEIRO
+		'REAL': 'TIPO REAL',						#TIPO REAL
+		'INT': 'TIPO INTEIRO', 						#TIPO INTEIRO
 		'BOOLEAN': 'TIPO BOOLEANO',						#VALOR BOOLEANO
+		'NUM_REAL': 'NUMERO REAL',
+		'NUM_INT': 'NUMERO INTEIRO',
 		'OPSOMA': 'OPERADOR SOMA',					#OPERADOR SOMA
 		'OPSUB': 'OPERADOR SUBTRACAO', 				#OPERADOR SUBTRACAO
 		'OPMUL': 'OPERADOR MULTIPLICACAO', 			#OPERADOR MULTIPLICACAO
 		'OPDIV': 'OPERADOR DIVISAO', 				#OPERADOR DIVISAO
 		'OPIGUAL_ATRIB': 'OPERADOR ATRIBUIÇÃO',		#OPERADOR DE IGUAL DE ATRIBUIÇÃO :=
-		'OPIGUAL_COMP': 'OPERADOR COMPARAÇÃO',		#OPERADOR DE IGUAL DE COMPARAÇÃO =
+		'IGUAL': 'OPERADOR COMPARAÇÃO',		#OPERADOR DE IGUAL DE COMPARAÇÃO =
 		'MAIOR': 'OPERADOR MAIOR',
 		'MENOR': 'OPERADOR MENOR',
 		'MAIOR_IGUAL': 'OPERADOR MAIOR OU IGUAL',
@@ -50,6 +52,7 @@ class myLexer(object):
 		'DIV': "FUNÇAO DIVISAO",
 		'AND': "OPERADOR LÓGICO 'E'",
 		'OR': "OPERADOR LÓGICO 'OU'",
+		'NOT': "OPERADOR LÓGICO 'NAO'",
 		'FIM_LINHA': 'FINAL DA LINHA',
 		'SEPARADOR': "SEPARADOR VIRGULA",
 		'PONTO_FINAL': 'PONTO FINAL',
@@ -79,6 +82,7 @@ class myLexer(object):
 			'div': 'DIV', #divisao
 			'and': 'AND',
 			'or': 'OR',
+			'not': 'NOT',
 		}
 	#redeclaring
 	reserved = {
@@ -102,18 +106,19 @@ class myLexer(object):
 			'div': 'DIV', #divisao
 			'and': 'AND',
 			'or': 'OR',
+			'not': 'NOT',
 		}
 	# DEFININDO PARAMETROS DO ANALISADOR LEXICO
 	# listando os tokens
-	tokens = (
-		#'REAL',				#NUMERO REAL
-		#'INT', 				#NUMERO INTEIRO
+	tokens = [
+		'NUM_REAL',					#NUMERO REAL
+		'NUM_INT', 					#NUMERO INTEIRO
 		'OPSOMA',				#OPERADOR SOMA
 		'OPSUB', 				#OPERADOR SUBTRACAO
 		'OPMUL', 				#OPERADOR MULTIPLICACAO
 		'OPDIV', 				#OPERADOR DIVISAO
 		'OPIGUAL_ATRIB',		#OPERADOR DE IGUAL DE ATRIBUIÇÃO :=
-		'OPIGUAL_COMP',			#OPERADOR DE IGUAL DE COMPARAÇÃO =
+		'IGUAL',				#OPERADOR DE IGUAL DE COMPARAÇÃO <>
 		'MAIOR',
 		'MENOR',
 		'MAIOR_IGUAL',
@@ -127,7 +132,7 @@ class myLexer(object):
 		#'PROGRAM',				#PALAVRA QUE INICIA O PROGRAMA
 		#'END', 					#PALAVRA QUE FINALIZA BLOCOS
 		'ID',               	#IDENTIFICADOR
-	) + tuple(reserved.values())
+	] + list(reserved.values())
 
 	# Specifying tokens as regex - AS: METACHARACTERS = . ^ $ * + ? { } [ ] \ | ( )
 	# As a pattern of PLY, any regex has to be defined with the variable name of: 't_NOMEDOTOKEN'
@@ -136,12 +141,12 @@ class myLexer(object):
 	t_OPSUB = r'-'
 	t_OPMUL = r'\*'
 	t_OPDIV = r'/'
-	t_AP = r'\('
-	t_FP = r'\)'
+	t_AP = r'[(]'
+	t_FP = r'[)]'
 
 	t_OPIGUAL_ATRIB = r':='
 	t_DOIS_PONTOS = r':'
-	t_OPIGUAL_COMP = r'='
+	t_IGUAL = r'<>'
 	t_MAIOR_IGUAL = r'>='
 	t_MAIOR = r'>'
 	t_MENOR_IGUAL = r'<='
@@ -149,10 +154,17 @@ class myLexer(object):
 
 	t_FIM_LINHA = r';'
 	t_SEPARADOR = r','
-	t_PONTO_FINAL = r'\.'
+	t_PONTO_FINAL = r'[.]'
 
 	# CARACTERES IGNORADOS - APENAS ESPACOS E TABULACOES
 	t_ignore = ' \t'
+
+	# RESERVADAS
+
+	#t_PROCEDURE = r'\bprocedure\b'
+	# t_INT = r'\bint\b'
+	# t_REAL = r'\breal\b'
+	# t_BOOLEAN = r'\bboolean\b'
 
 
 	def getTokens(self):
@@ -166,17 +178,21 @@ class myLexer(object):
 		return t
 
 	# Especificação em forma de função, pois no caso dos numeros é necessária uma conversão deles
-	def t_REAL(self, t):
-		r'(\d{40}\\.\d{40})' #40 casas decimais
-		# r'[+-]?(\d+\.\d+)'
+	def t_NUM_REAL(self, t):
+		# r'(\d{40}\\.\d{40})' #40 casas decimais
+		r'[+-]?(\d+\.\d+)'
 		t.value = float(t.value)
 		return t
 
-	def t_INT(self, t):
+	def t_NUM_INT(self, t):
 		# r'[+-]?\d+'
 		#r'\d+' # 1 ou mais
 		r'\d{1,40}' #1 ate 40 digitos
-		t.value = int(t.value)
+		try:
+			t.value = int(t.value)
+		except:
+			print("Valor do inteiro muito grande: ", t.value)
+			t.value = 0
 		return t
 
 

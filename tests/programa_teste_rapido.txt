@@ -1,0 +1,13 @@
+program a;
+int a, b, c;
+
+boolean j, k;
+
+procedure funcao(q, j: int; o, p:boolean; f, g:real);
+begin
+    b := 5;
+end;
+
+begin
+    a := 45;
+end.
