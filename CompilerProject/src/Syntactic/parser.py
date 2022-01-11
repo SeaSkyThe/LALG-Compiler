@@ -9,13 +9,18 @@ from Lexic.LALGLex import myLexer
 readFile = 'ReadWrite-Files/read.txt'
 writeFile = 'ReadWrite-Files/write.txt'
 
+# Pegando as estruturas da arvore sintatica
+
+from Syntactic.SymbolTable import *
+
 # FUNÇÕES PARA TRABALHAR COM A PARTE SINTATICA
 # def createTable()
 
 
 # 32 shift/reduce é o normal
 
-identificadores = []
+variaveis = VariableTable()
+
 def createParser():    
     #chamando o lexer
     lexerClass = myLexer()
@@ -31,15 +36,13 @@ def createParser():
         ('left', 'ELSE'),
         ('left', 'BEGIN'),
         ('left', 'INT', 'REAL', 'BOOLEAN'),
-
- 
     )
+
     #Programa e Bloco - POR ENQUANTO ESTÁ OBRIGATORIO O PROGRAMA TER "Begin End."
     def p_programa(p):
-        '''programa : PROGRAM ID FIM_LINHA bloco comando_composto PONTO_FINAL 
-                      
+        '''programa : PROGRAM ID FIM_LINHA bloco comando_composto PONTO_FINAL
         '''
-
+    
         p[0] = p[4]
 
     def p_bloco(p):
@@ -53,17 +56,38 @@ def createParser():
         '''parte_declaracao_de_variaveis :  declaracao_de_variaveis FIM_LINHA parte_declaracao_de_variaveis
                                           | empty
         ''' 
+        temp = [] #vai receber todas as tuplas ('tipo', var1, var2 ,..., varN)
+        if(len(p) > 2):
+            if(p[3] != None):
+                temp.append(p[1])
+                for each in p[3]:
+                    temp.append(each)
+            else:
+                temp.append(p[1])
+
+        p[0] = temp
+
+        print('parte_declaracao_de_variaveis-debug: ', p[0])
 
     def p_declaracao_de_variaveis(p):
         '''declaracao_de_variaveis : tipo_simples lista_de_parametros
         ''' 
-    
+        
+        print('declaracao_de_variaveis-debug: ', p[1], p[2])
+
+        for variavel in p[2]:
+            variaveis.insert(variavel, p[1], False, None)
+
+        print('declaracao_de_variaveis-debug-tabela: ', variaveis.table[0])
+
+        p[0] = (p[1], p[2])
+
     def p_tipo_simples(p):
         '''tipo_simples : INT
                         | REAL
                         | BOOLEAN
         ''' 
-
+        p[0] = p[1];
 
     #-- Declarando subrotinas - caso ocorram erros em declaracao de funcao, prestar atençao nos FIM_LINHA aqui
     def p_parte_declaracao_de_subrotinas(p):
@@ -114,12 +138,18 @@ def createParser():
             p[0] = (p[1], p[2])
 
 
-    #TODO - FAZER O TRATAMENTO DE VARIAVEIS
     def p_atribuicao(p):
         '''atribuicao : variavel OPIGUAL_ATRIB expressao
         ''' 
-        p[0] = p[3]
+        if(variaveis.search(p[1]) != None):
+            variaveis.modify(p[1], p[3])
+            p[0] = variaveis.search(p[1])
 
+        else:
+            p[0] = None
+
+        print('atribuicao-debug', p[0])
+        print('atribuicao-debug-variaveis', variaveis.table[0])
 
     def p_comando_condicional_1(p):
         '''comando_condicional_1 : IF AP expressao FP THEN comandos  %prec IF 
@@ -157,23 +187,42 @@ def createParser():
         '''lista_de_parametros : expressao mais_parametros
                                | empty
         ''' 
-
+        lista_de_parametros1 = []
         if(len(p) > 2):
-            p[0] = (p[1], p[2])
+            if(p[2] != None):
+                lista_de_parametros1.append(p[1])
+                for parametro in p[2]:
+                    lista_de_parametros1.append(parametro)
+            else:
+                lista_de_parametros1.append(p[1])
+
+        p[0] = lista_de_parametros1
+
+        print('lista_de_parametros-debug: ', p[0])
 
     def p_mais_parametros(p):
         '''mais_parametros : SEPARADOR lista_de_parametros
                             | empty
         ''' 
+
         if(len(p) > 2):
-            p[0] = p[1]
+            p[0] = p[2]
 
 
     def p_expressao(p): 
         '''expressao : expressao_simples     
                      | expressao_simples relacao expressao_simples
         ''' 
+
         if(len(p) > 2 and p[1] != None and p[3] != None):
+            print('expressao-debug: ', p[1], p[2], p[3])
+
+            if(isinstance(p[1], str)):  #CASO P[1] ESTEJA SE REFERINDO AO NOME DE UMA VARIAVEL, PEGAMOS SEU VALOR PARA REALIZAR O CALCULO
+                p[1] = variaveis.get_value(p[1])
+            if(isinstance(p[3], str)):  #O MESMO QUE PRO P[1]
+                p[3] = variaveis.get_value(p[3])
+            
+
             if(p[2] == '<>'):
                 if(p[1] == p[3]):
                     p[0] = True
@@ -200,6 +249,7 @@ def createParser():
                 else:
                     p[0] = False 
         else:
+            print('expressao-debug: ', p[1])
             p[0] = p[1]
         
     def p_relacao(p):
@@ -208,6 +258,7 @@ def createParser():
                    | MAIOR
                    | MENOR_IGUAL
                    | MENOR '''
+
         p[0] = p[1]
 
     #seria o "expressao simples" definido no pdf
@@ -219,6 +270,11 @@ def createParser():
                 
          '''
         if(len(p) > 2 and p[1] != None and p[3] != None):
+            if(isinstance(p[1], str)):  #CASO P[1] ESTEJA SE REFERINDO AO NOME DE UMA VARIAVEL, PEGAMOS SEU VALOR PARA REALIZAR O CALCULO
+                p[1] = variaveis.get_value(p[1])
+            if(isinstance(p[3], str)):  #O MESMO QUE PRO P[1]
+                p[3] = variaveis.get_value(p[3])
+
             if(p[2] == '+'):
                 p[0] = p[1] + p[3]
             elif(p[2] == '-'):
@@ -237,12 +293,19 @@ def createParser():
                  | fator
          '''
         if(len(p) > 2 and p[1] != None and p[3] != None):
+            if(isinstance(p[1], str)):  #CASO P[1] ESTEJA SE REFERINDO AO NOME DE UMA VARIAVEL, PEGAMOS SEU VALOR PARA REALIZAR O CALCULO
+                p[1] = variaveis.get_value(p[1])
+            if(isinstance(p[3], str)):  #O MESMO QUE PRO P[1]
+                p[3] = variaveis.get_value(p[3])
+
             if(p[2] == '*'):
                 p[0] = p[1] * p[3]
             elif(p[2] == '/'):
                 p[0] = p[1] / p[3]
             elif(p[2] == 'and'):
                 p[0] = p[1] and p[3]
+            elif(p[2] == 'div'):
+                p[0] = p[1]//p[3]
         else:
             p[0] = p[1]
 
@@ -260,8 +323,16 @@ def createParser():
             if(len(p) == 3): #expressao com NOT
                 p[0] = not p[2]
 
+        elif(p[1] == 'true' or p[1] == 'false'):
+            if(p[1] == 'true'):
+                p[0] = True
+            else:
+                p[0] = False
+
         else: # se for variavel ou numero
-            if(isinstance(p[1], int)):
+            if(isinstance(p[1], int) or isinstance(p[1], float) or isinstance(p[1], bool)): #se for numero
+                p[0] = p[1]
+            else: #se for variavel
                 p[0] = p[1]
 
 
@@ -276,7 +347,7 @@ def createParser():
     def p_variavel(p):
         '''variavel : ID     
         ''' 
-        # p[0] = p[1]
+        p[0] = p[1]
 
    
         
@@ -287,7 +358,10 @@ def createParser():
 
     # Error rule for syntax errors
     def p_error(p):
-        print("Syntax error in input - " + str(p))
+        if(not p):
+            print("Syntax error at EOF\n")
+        else:
+            print("Syntax error in input - " + str(p))
 
 
     parser = yacc.yacc(debug=True) 
