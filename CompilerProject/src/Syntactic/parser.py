@@ -1,4 +1,10 @@
-#TODO, DECLARACAO DE VARIAVEIS
+# PARA CADA ESCOPO EXISTENTE, CASO TAL ESCOPO SEJA UMA PROCEDURE, O SEU REGISTRO
+# ESTARÁ NO ESCOPO MAIS ACIMA.
+# [ESCOPO1, ESCOPO2] - SE ESCOPO 2 FOR UMA PROCEDURE, SUA ASSINATURA ESTÁ REGISTRADA EM ESCOPO 1
+
+
+# TODO - SEMANTICA CHAMADA DE PROCEDIMENTOS, WHILE, IF THEN. E aviso de erros para todos.
+
 
 import ply.yacc as yacc
 
@@ -9,17 +15,19 @@ from Lexic.LALGLex import myLexer
 readFile = 'ReadWrite-Files/read.txt'
 writeFile = 'ReadWrite-Files/write.txt'
 
-# Pegando as estruturas da arvore sintatica
+# ESTRUTURAS DE TABELAS DE SIMBOLO
 
 from Syntactic.SymbolTable import *
+from Syntactic.Scope import *
 
-# FUNÇÕES PARA TRABALHAR COM A PARTE SINTATICA
-# def createTable()
-
+# PARTES DA UI
+from UI.MainWindow import *
 
 # 32 shift/reduce é o normal
 
-variaveis = VariableTable()
+scope_pointer = -1
+scopes = []
+begin_stack = []
 
 def createParser():    
     #chamando o lexer
@@ -46,11 +54,13 @@ def createParser():
         p[0] = p[4]
 
     def p_bloco(p):
-        '''bloco : parte_declaracao_de_variaveis parte_declaracao_de_subrotinas
+        '''bloco : new_scope parte_declaracao_de_variaveis parte_declaracao_de_subrotinas
         ''' 
 
-        p[0] = p[1]
 
+        p[0] = (p[1], p[2])
+
+        
     #-- Declarando variaveis
     def p_parte_declaracao_de_variaveis(p):
         '''parte_declaracao_de_variaveis :  declaracao_de_variaveis FIM_LINHA parte_declaracao_de_variaveis
@@ -67,7 +77,7 @@ def createParser():
 
         p[0] = temp
 
-        print('parte_declaracao_de_variaveis-debug: ', p[0])
+        print('\n\nparte_declaracao_de_variaveis-debug: ', p[0])
 
     def p_declaracao_de_variaveis(p):
         '''declaracao_de_variaveis : tipo_simples lista_de_parametros
@@ -76,9 +86,9 @@ def createParser():
         print('declaracao_de_variaveis-debug: ', p[1], p[2])
 
         for variavel in p[2]:
-            variaveis.insert(variavel, p[1], False, None)
+            scopes[-1].variableTable.insert(variavel, p[1], False, None)
 
-        print('declaracao_de_variaveis-debug-tabela: ', variaveis.table[0])
+        #print('declaracao_de_variaveis-debug-tabela: ', str(variaveis.table))
 
         p[0] = (p[1], p[2])
 
@@ -94,18 +104,33 @@ def createParser():
         '''parte_declaracao_de_subrotinas : declaracao_de_procedimento
                                           | empty
         ''' 
+        if(p[1] != None):
+            p[0] = p[1]
+
+        print('\nparte_declaracao_de_subrotinas-debug: ', p[0])
+
+        print('\nparte_declaracao_de_subrotinas-debug-table: ', str(scopes[-1].procedureTable.table))
+        scopes[-1].procedureTable.print_table()
 
     def p_declaracao_de_procedimento(p):
         '''declaracao_de_procedimento : PROCEDURE ID parametros_formais FIM_LINHA bloco comando_composto FIM_LINHA
         ''' 
 
+        scopes[-1].procedureTable.insert(p[2], p[3], p[5][1])
 
+        p[0] = (p[2], p[3], p[5][1], p[6]) #(id, parametros_formais, bloco, comando_composto)
+
+        print('\ndeclaracao_de_procedimento - debug: ', p[5])
+
+        
     # TALVEZ SEJA NECESSARIO COLOCAR O "VAR"
     def p_parametros_formais(p):
         '''parametros_formais : AP mais_parametros_formais FP
     
         ''' 
+        p[0] = p[2]
 
+        print('parametros_formais-debug: ', p[0])
 
     def p_mais_parametros_formais(p):
         '''mais_parametros_formais : FIM_LINHA lista_de_parametros DOIS_PONTOS tipo_simples mais_parametros_formais
@@ -113,14 +138,42 @@ def createParser():
                                     | empty
     
         '''
-
+        temp = []
+        if(len(p) == 6):
+            temp.append((p[4], p[2])) #(tipo_simples, lista_de_parametros)
+            if(p[5] != None):
+                for each in p[5]:
+                    temp.append(each)
+            p[0] = temp
+        if(len(p) == 5):
+            temp.append((p[3], p[1]))
+            if(p[4] != None):
+                for each in p[4]:
+                    temp.append(each)
+            p[0] = temp
 
     # COMANDOS    
     def p_comando_composto(p):
-        '''comando_composto : BEGIN comandos END 
+        '''comando_composto : BEGIN new_begin comandos END 
                             
         ''' 
         p[0] = p[2]
+
+        begin_stack.pop()
+        if(len(begin_stack) == 0):
+            scopes.pop()
+
+
+    def p_new_scope(p):
+        "new_scope :"
+        temp_scope = Scope()
+        scopes.append(temp_scope)
+
+
+    def p_new_begin(p):
+        "new_begin :"
+        begin_stack.append("begin") 
+        
 
     def p_comandos(p):
         '''comandos : atribuicao FIM_LINHA comandos
@@ -141,15 +194,22 @@ def createParser():
     def p_atribuicao(p):
         '''atribuicao : variavel OPIGUAL_ATRIB expressao
         ''' 
-        if(variaveis.search(p[1]) != None):
-            variaveis.modify(p[1], p[3])
-            p[0] = variaveis.search(p[1])
+        
+        temp = scopes[-1].variableTable.modify(p[1], p[3])
 
+        if(temp != "ERROR: tipo"):
+            p[0] = temp
         else:
-            p[0] = None
+            print("ERROR: O valor atribuido a variável ", str(p[1]) ," não é compatível com o seu tipo - Linha: ", p.lineno(1))
+            p_error("ERROR: O valor atribuido a variável "+ str(p[1]) +" não é compatível com o seu tipo - Linha: " + str(p.lineno(1)))
+            raise SyntaxError
+            
+       
 
-        print('atribuicao-debug', p[0])
-        print('atribuicao-debug-variaveis', variaveis.table[0])
+       
+
+        print('atribuicao-debug', p[1], p[3])
+        #print('atribuicao-debug-variaveis', str(variaveis.table))
 
     def p_comando_condicional_1(p):
         '''comando_condicional_1 : IF AP expressao FP THEN comandos  %prec IF 
@@ -183,6 +243,7 @@ def createParser():
         if(p[1] != None):
             p[0] = p[1]
 
+
     def p_lista_de_parametros(p):
         '''lista_de_parametros : expressao mais_parametros
                                | empty
@@ -214,13 +275,15 @@ def createParser():
                      | expressao_simples relacao expressao_simples
         ''' 
 
+        print("\n\nESCOPOS ATUAIS: ", str(scopes), '\n\n')
+
         if(len(p) > 2 and p[1] != None and p[3] != None):
             print('expressao-debug: ', p[1], p[2], p[3])
 
             if(isinstance(p[1], str)):  #CASO P[1] ESTEJA SE REFERINDO AO NOME DE UMA VARIAVEL, PEGAMOS SEU VALOR PARA REALIZAR O CALCULO
-                p[1] = variaveis.get_value(p[1])
+                p[1] = scopes[-1].variableTable.get_value(p[1])
             if(isinstance(p[3], str)):  #O MESMO QUE PRO P[1]
-                p[3] = variaveis.get_value(p[3])
+                p[3] = scopes[-1].variableTable.get_value(p[3])
             
 
             if(p[2] == '<>'):
@@ -271,9 +334,9 @@ def createParser():
          '''
         if(len(p) > 2 and p[1] != None and p[3] != None):
             if(isinstance(p[1], str)):  #CASO P[1] ESTEJA SE REFERINDO AO NOME DE UMA VARIAVEL, PEGAMOS SEU VALOR PARA REALIZAR O CALCULO
-                p[1] = variaveis.get_value(p[1])
+                p[1] = scopes[-1].variableTable.get_value(p[1])
             if(isinstance(p[3], str)):  #O MESMO QUE PRO P[1]
-                p[3] = variaveis.get_value(p[3])
+                p[3] = scopes[-1].variableTable.get_value(p[3])
 
             if(p[2] == '+'):
                 p[0] = p[1] + p[3]
@@ -294,9 +357,9 @@ def createParser():
          '''
         if(len(p) > 2 and p[1] != None and p[3] != None):
             if(isinstance(p[1], str)):  #CASO P[1] ESTEJA SE REFERINDO AO NOME DE UMA VARIAVEL, PEGAMOS SEU VALOR PARA REALIZAR O CALCULO
-                p[1] = variaveis.get_value(p[1])
+                p[1] = scopes[-1].variableTable.get_value(p[1])
             if(isinstance(p[3], str)):  #O MESMO QUE PRO P[1]
-                p[3] = variaveis.get_value(p[3])
+                p[3] = scopes[-1].variableTable.get_value(p[3])
 
             if(p[2] == '*'):
                 p[0] = p[1] * p[3]
@@ -361,7 +424,7 @@ def createParser():
         if(not p):
             print("Syntax error at EOF\n")
         else:
-            print("Syntax error in input - " + str(p))
+            print(str(p))
 
 
     parser = yacc.yacc(debug=True) 

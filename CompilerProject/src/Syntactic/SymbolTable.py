@@ -18,98 +18,65 @@ class SymbolTable():
 	def print_table(self):
 		pass
 
-
-class x(SymbolTable):
-	def __init__(self):
-		self.fields = ["cadeia", 'token', 'categoria', 'tipo', 'valor', 'utilizada']
-		self.table = [] 
-
-	def insert(self, cadeia, token, utilizada, categoria=None, tipo=None, valor=None): #cadeia se refere à cadeia resgatada do codigo ('a', 1, fat)
-															 				#token se refere ao tipo de token (id, real, OPSUB)
-															 				#categoria se refere ao tipo de estrutura (variavel, procedure, loop)
-															 				#tipo se refere ao tipo de variável (caso a categoria seja variavel)
-															 				#valor se refere ao valor que aquela variavel representa
-															 				# OBS: QUALQUER CAMPO PODE SER NULO
-
-		temp_dict = dict((field, None) for field in self.fields)
-
-		temp_dict['cadeia'] = cadeia
-		temp_dict['token'] = token
-		temp_dict['categoria'] = categoria
-		temp_dict['tipo'] = tipo
-		temp_dict['valor'] = valor
-		temp_dict['utilizada'] = utilizada
-
-		self.table.append(temp_dict)
-
-		return temp_dict
-
-	def search(self, cadeia):
-		for element in self.table:
-			if(element['cadeia'] == cadeia):
-				return element
-		
-		print('O elemento pesquisado não existe na tabela (não foi declarado).\n')
-		return None
-				
-
-
-	def remove(self, cadeia):
-		for element in self.table:
-			if(element['cadeia'] == cadeia):
-				self.table.remove(element)
-				return element
-		
-		print('O elemento o qual tentou-se remover da tabela não existe (não foi declarado).\n')
-		return None
 				
 
 class VariableTable(SymbolTable):
 	def __init__(self):
-		self.fields = ["cadeia", 'tipo', 'valor', 'utilizada']
+		self.fields = ["lexema", 'tipo', 'valor', 'utilizada']
+		self.token = 'id'
 		self.table = [] 
 
-	def insert(self, cadeia, tipo, utilizada, valor=None): #utilizada = True ou False
+	def insert(self, lexema, tipo, utilizada, valor=None): #utilizada = True ou False
 
-		temp_dict = dict((field, None) for field in self.fields)
+		if(self.search(lexema) == None):
+			temp_dict = dict((field, None) for field in self.fields)
 
-		temp_dict['cadeia'] = cadeia
-		temp_dict['tipo'] = tipo
-		temp_dict['valor'] = valor
-		temp_dict['utilizada'] = utilizada
+			temp_dict['lexema'] = lexema
+			temp_dict['tipo'] = tipo
+			temp_dict['valor'] = valor
+			temp_dict['utilizada'] = utilizada
 
-		self.table.append(temp_dict)
+			self.table.append(temp_dict)
 
-		return temp_dict
+			return temp_dict
+		else:
+			print('A variável ',lexema,' já foi declarada.\n')
+			return None
 
-	def search(self, cadeia):
+
+	def search(self, lexema):
 		for element in self.table:
-			if(element['cadeia'] == cadeia):
+			if(element['lexema'] == lexema):
 				return element
 		
-		print('O elemento pesquisado (',cadeia,') não existe na tabela (não foi declarado).\n')
+		print('A variável pesquisada (',lexema,') não existe na tabela (não foi declarada).\n')
 		return None
 				
 
 
-	def remove(self, cadeia):
+	def remove(self, lexema):
 		for element in self.table:
-			if(element['cadeia'] == cadeia):
+			if(element['lexema'] == lexema):
 				self.table.remove(element)
 				return element
 		
-		print('O elemento o qual tentou-se remover da tabela (',cadeia,') não existe (não foi declarado).\n')
+		print('A variável a qual tentou-se remover da tabela (',lexema,') não existe (não foi declarada).\n')
 		return None
 
-	def modify(self, cadeia, valor):
-		variavel = self.search(cadeia)
-		if(variavel != None):
+	def modify(self, lexema, valor):
+		variavel = self.search(lexema)
+		
+		if((variavel['tipo'] == 'real' and isinstance(valor, float)) or (variavel['tipo'] == 'int' and isinstance(valor, int)) or (variavel['tipo'] == 'boolean' and isinstance(valor, bool))):
 			variavel['valor'] = valor
-			return True
-		return False
+			variavel['usada'] = True
+			return variavel
+		else:
+			return "ERROR: tipo"
 
-	def get_value(self, cadeia):
-		variavel = self.search(cadeia)
+		return None
+
+	def get_value(self, lexema):
+		variavel = self.search(lexema)
 		if(variavel != None):
 			if(variavel['tipo'] == 'int'):
 				return int(variavel['valor'])
@@ -126,3 +93,76 @@ class VariableTable(SymbolTable):
 	def print_table(self):
 		for line in self.table:
 			print(line, '\n')
+
+
+class ProcedureTable(SymbolTable):
+	def __init__(self):
+		self.fields = ["lexema", 'parametros','variaveis_locais']
+		self.token = "procedure"
+		self.table = [] 
+		self.tabelaParametros = VariableTable()
+		self.tabelaVariaveisLocais = VariableTable()
+
+	def insert(self, lexema, parametros, variaveis_locais=None): #lexema se refere à lexema resgatada do codigo ('a', 1, fat)
+															 				#token se refere ao tipo de token (id, real, OPSUB)
+															 				#categoria se refere ao tipo de estrutura (variavel, procedure, loop)
+															 				#tipo se refere ao tipo de variável (caso a categoria seja variavel)
+															 				#valor se refere ao valor que aquela variavel representa
+															 				# OBS: QUALQUER CAMPO PODE SER NULO
+
+		if(self.search(lexema) == None):
+			
+
+			temp_dict = dict((field, None) for field in self.fields)
+
+			temp_dict['lexema'] = lexema
+
+			for parametro in parametros:
+				self.tabelaParametros.insert(parametro[1], parametro[0], None, None)
+
+			temp_dict['parametros'] = self.tabelaParametros
+
+			if(variaveis_locais != None):
+				for variavelLocal in variaveis_locais:
+					for variavel in variavelLocal[1]:
+						self.tabelaVariaveisLocais.insert(variavel, variavelLocal[0], False, None)
+
+				temp_dict['variaveis_locais'] = self.tabelaVariaveisLocais
+
+			else:
+				temp_dict['variaveis_locais'] = None
+
+			self.table.append(temp_dict)
+
+			return temp_dict
+
+		else:
+			print('A procedure ',lexema,' já foi declarada.\n')
+			return None
+
+	def search(self, lexema):
+		for element in self.table:
+			if(element['lexema'] == lexema):
+				return element
+		
+		print('A procedure pesquisada (',lexema,') não existe na tabela (não foi declarada).\n')
+		return None
+				
+
+
+	def remove(self, lexema):
+		for element in self.table:
+			if(element['lexema'] == lexema):
+				self.table.remove(element)
+				return element
+		
+		print('A procedure a qual tentou-se remover da tabela (',lexema,') não existe (não foi declarada).\n')
+		return None
+
+	def print_table(self):
+		for line in self.table:
+			for key in line:
+				if(isinstance(line[key], VariableTable)):
+					line[key].print_table()
+				else:
+					print(line[key])

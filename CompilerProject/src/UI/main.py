@@ -380,11 +380,16 @@ class ExecWindow(Ui_MainWindow):
         #pegando o input e jogando no parser que foi criado utilizando o analisador lexico
         text = self.textInput.toPlainText()
 
-        #calculando resultado e exibindo na tela de output
-        result = self.parser.parse(text)
+        #calculando resultado e exibindo na tela de output - se não for "None"
         
-        self.textOutput.setText("")
-        self.textOutput.setText(str(result))
+        result = self.parser.parse(text, tracking=True)
+        
+        if(result != None):
+            self.textOutput.setText("")
+            self.textOutput.setText(str(result))
+        else:
+            self.textOutput.setText("")
+            self.textOutput.setText("Algum erro!")
     
 
     # Opening a File
