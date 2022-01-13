@@ -79,6 +79,7 @@ class VariableTable(SymbolTable):
 	def modify(self, lexema, valor):
 		variavel = self.search(lexema)
 		
+
 		if(variavel != errors.ERROR_VARIAVEL_NAO_DECLARADA):
 			if((variavel['tipo'] == 'real' and isinstance(valor, float)) or (variavel['tipo'] == 'int' and isinstance(valor, int)) or (variavel['tipo'] == 'boolean' and isinstance(valor, bool))):
 				variavel['valor'] = valor
@@ -86,6 +87,20 @@ class VariableTable(SymbolTable):
 				return variavel
 			else:
 				print('O valor atribuido a variavel (',lexema,') não é do seu tipo.\n')
+
+				#tentando tratar o erro
+				if((variavel['tipo'] == 'real' and isinstance(valor, int))):
+					variavel['valor'] = float(valor)
+				elif((variavel['tipo'] == 'int' and isinstance(valor, float))):
+					variavel['valor'] = int(valor)
+				elif((variavel['tipo'] == 'boolean') and (isinstance(valor, float) or isinstance(valor, int))):
+					if(int(valor) == 0):
+						variavel['valor'] = False
+					else:
+						variavel['valor'] = True
+						
+				variavel['utilizada'] = True
+
 				return errors.ERROR_TIPO
 				
 		else:

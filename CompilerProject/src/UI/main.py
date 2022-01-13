@@ -392,6 +392,11 @@ class ExecWindow(Ui_MainWindow):
         if(result != None):  # caso retorne algo diferente de None, ou seja, existe um resultado, não tivemos erros
             result = str(result) + "\n"
 
+            #print(errors.get_errorList())
+            #INCUINDO ERROS NO OUTPUT
+            for error in errors.get_errorList():
+                result = result + error + "\n"
+            errors.clear_errors() 
              # INCLUINDO WARNINGS NO OUTPUT
             for warning in errors.get_warningList():
                 result = result + warning + "\n"
@@ -404,7 +409,6 @@ class ExecWindow(Ui_MainWindow):
 
         else: # caso existirem erros
              # INCLUINDO ERROS NO OUTPUT
-            print(errors.get_errorList())
             for error in errors.get_errorList():
                 error_list = error_list + error + "\n"
             

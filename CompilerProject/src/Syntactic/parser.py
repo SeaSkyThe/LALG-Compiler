@@ -220,14 +220,13 @@ def createParser():
             
             #chama a função de erro
             p_error(error_message)
-            raise SyntaxError
+            #raise SyntaxError
             
         elif(temp == errors.ERROR_VARIAVEL_NAO_DECLARADA):
             error_message = "ERROR: A variavel '" + str(p[1]) +"' não foi declarada - Linha: "+ str(p.lineno(1))
-            
 
             p_error(error_message)
-            raise SyntaxError
+            #raise SyntaxError
         else:
             p[0] = temp
             
@@ -312,10 +311,10 @@ def createParser():
                 
                 if(v1 == errors.ERROR_VARIAVEL_SEM_VALOR): #caso a variavel nao tenha valor - Erro
                     p_error("ERROR: A variavel '" + p[1] + "' não tem valor definido - Linha: " + str(p.lineno(1)))
-                    raise SyntaxError
+                    #raise SyntaxError
                 elif(v1 == errors.ERROR_VARIAVEL_NAO_DECLARADA):
                     p_error("ERROR: A variavel '" + str(p[1]) +"' não foi declarada - Linha: "+ str(p.lineno(1)))
-                    raise SyntaxError
+                    #raise SyntaxError
                 else:
                     p[1] = v1
 
@@ -324,10 +323,10 @@ def createParser():
                 
                 if(v2 == errors.ERROR_VARIAVEL_SEM_VALOR): #caso a variavel nao tenha valor - Erro
                     p_error("ERROR: A variavel '" + p[3] + "' não tem valor definido - Linha: " + str(p.lineno(3)))
-                    raise SyntaxError
+                    #raise SyntaxError
                 elif(v2 == errors.ERROR_VARIAVEL_NAO_DECLARADA):
                     p_error("ERROR: A variavel '" + str(p[3]) +"' não foi declarada - Linha: "+ str(p.lineno(3)))
-                    raise SyntaxError
+                    #raise SyntaxError
                 else: # caso a variavel tenha valor, atribuimos esse valor
                     p[3] = v2
 
@@ -383,10 +382,10 @@ def createParser():
                 
                 if(v1 == errors.ERROR_VARIAVEL_SEM_VALOR): #caso a variavel nao tenha valor - Erro
                     p_error("ERROR: A variavel '" + str(p[1]) + "' não tem valor definido - Linha: " + str(p.lineno(1)))
-                    raise SyntaxError
+                    #raise SyntaxError
                 elif(v1 == errors.ERROR_VARIAVEL_NAO_DECLARADA):
                     p_error("ERROR: A variavel '" + str(p[1]) +"' não foi declarada - Linha: "+ str(p.lineno(1)))
-                    raise SyntaxError
+                    #raise SyntaxError
                 else:
                     p[1] = v1
 
@@ -395,10 +394,10 @@ def createParser():
                 
                 if(v2 == errors.ERROR_VARIAVEL_SEM_VALOR): #caso a variavel nao tenha valor - Erro
                     p_error("ERROR: A variavel '" + p[3] + "' não tem valor definido - Linha: " + str(p.lineno(3)))
-                    raise SyntaxError
+                    #raise SyntaxError
                 elif(v2 == errors.ERROR_VARIAVEL_NAO_DECLARADA):
                     p_error("ERROR: A variavel '" + str(p[3]) +"' não foi declarada - Linha: "+ str(p.lineno(3)))
-                    raise SyntaxError
+                    #raise SyntaxError
                 else: # caso a variavel tenha valor, atribuimos esse valor
                     p[3] = v2
 
@@ -431,10 +430,11 @@ def createParser():
                 
                 if(v1 == errors.ERROR_VARIAVEL_SEM_VALOR): #caso a variavel nao tenha valor - Erro
                     p_error("ERROR: A variavel '" + p[1] + "' não tem valor definido - Linha: " + str(p.lineno(1)))
-                    raise SyntaxError
+                    p[1] = -10000
+                    #raise SyntaxError
                 elif(v1 == errors.ERROR_VARIAVEL_NAO_DECLARADA):
                     p_error("ERROR: A variavel '" + str(p[1]) +"' não foi declarada - Linha: "+ str(p.lineno(1)))
-                    raise SyntaxError
+                    #raise SyntaxError
                 else:
                     p[1] = v1
 
@@ -443,10 +443,11 @@ def createParser():
                 
                 if(v2 == errors.ERROR_VARIAVEL_SEM_VALOR): #caso a variavel nao tenha valor - Erro
                     p_error("ERROR: A variavel '" + p[3] + "' não tem valor definido - Linha: " + str(p.lineno(3)))
-                    raise SyntaxError
+                    p[3] = -10000
+                    #raise SyntaxError
                 elif(v2 == errors.ERROR_VARIAVEL_NAO_DECLARADA):
                     p_error("ERROR: A variavel '" + str(p[3]) +"' não foi declarada - Linha: "+ str(p.lineno(3)))
-                    raise SyntaxError
+                    #raise SyntaxError
                 else: # caso a variavel tenha valor, atribuimos esse valor
                     p[3] = v2
 
@@ -454,11 +455,19 @@ def createParser():
             if(p[2] == '*'):
                 p[0] = p[1] * p[3]
             elif(p[2] == '/'):
-                p[0] = p[1] / p[3]
+                if(p[3] == 0):
+                    p_error("ERROR: Zero Division - Linha: " + str(p.lineno(3)));
+                    p[0] = p[1] #tratamento do erro
+                else:
+                    p[0] = p[1] / p[3]
             elif(p[2] == 'and'):
                 p[0] = p[1] and p[3]
             elif(p[2] == 'div'):
-                p[0] = p[1]//p[3]
+                if(p[3] == 0):
+                    p_error("ERROR: Zero Division - Linha: " + str(p.lineno(3)));
+                    p[0] = p[1] #tratamento do erro
+                else:
+                    p[0] = p[1] // p[3]
         else:
             p[0] = p[1]
 
@@ -510,15 +519,13 @@ def createParser():
          
 
     # Error rule for syntax errors
-    # TODO - mostrar todos os erros ao mesmo tempo pro usuario
+    
     def p_error(p):
-        if(not p):
-            print("Syntax error at EOF\n")
-        elif(isinstance(p, str)):
+        if(isinstance(p, str)):
             print(str(p))
             #adiciona erro à lista de erros para serem exibidos na interface
             errors.add_error(p)
-
+            
             # #tratamento para o parser continuar o trabalho, ignorando o erro, para que seja possivel exibir todos os erros ao mesmo tempo
             # while(True):
             #     tok = parser.token()
@@ -529,14 +536,25 @@ def createParser():
             #     elif(not tok):
             #         break
 
-            tok = parser.token()
+            #tok = parser.token()
+
+            #print(tok)
 
             parser.errok()
 
-            parser.parse()
-            
-            return tok
-            
+            #return tok
+
+        else:
+            if(p != None):
+                print("ERRO DE SINTAXE - Token '" + str(p.value) + "' - LINHA " + str(p.lineno)) 
+                errors.add_error("ERRO DE SINTAXE  - Token '" + str(p.value) + "' - LINHA " + str(p.lineno))
+            else:
+                print("ERRO DE SINTAXE  - EOF") 
+                errors.add_error("ERRO DE SINTAXE  - EOF")
+
+            #parser.errok()
+
+        
 
     parser = yacc.yacc(debug=True) 
 
