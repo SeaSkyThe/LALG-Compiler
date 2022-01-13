@@ -1,3 +1,13 @@
+# ERROS DE VARIAVEIS
+# ERROR: tipo
+# ERROR: variavel-nao-declarada
+
+
+#ERROS
+from Syntactic.Errors import *
+
+errors = Errors()
+
 class SymbolTable():
 	def __init__(self):
 		self.fields = []
@@ -22,18 +32,21 @@ class SymbolTable():
 
 class VariableTable(SymbolTable):
 	def __init__(self):
-		self.fields = ["lexema", 'tipo', 'valor', 'utilizada']
+		self.fields = ["lexema", 'tipo', 'valor', 'linha','utilizada']
 		self.token = 'id'
-		self.table = [] 
+		self.table = []
 
-	def insert(self, lexema, tipo, utilizada, valor=None): #utilizada = True ou False
 
-		if(self.search(lexema) == None):
+
+	def insert(self, lexema, tipo, linha, utilizada, valor=None): #utilizada = True ou False
+
+		if(self.search(lexema) == errors.ERROR_VARIAVEL_NAO_DECLARADA): #queremos que a variavel não exista, ou seja, a pesquisa dela retonra um erro
 			temp_dict = dict((field, None) for field in self.fields)
 
 			temp_dict['lexema'] = lexema
 			temp_dict['tipo'] = tipo
 			temp_dict['valor'] = valor
+			temp_dict['linha'] = linha
 			temp_dict['utilizada'] = utilizada
 
 			self.table.append(temp_dict)
@@ -41,7 +54,7 @@ class VariableTable(SymbolTable):
 			return temp_dict
 		else:
 			print('A variável ',lexema,' já foi declarada.\n')
-			return None
+			return errors.ERROR_VARIAVEL_JA_DECLARADA
 
 
 	def search(self, lexema):
@@ -50,49 +63,66 @@ class VariableTable(SymbolTable):
 				return element
 		
 		print('A variável pesquisada (',lexema,') não existe na tabela (não foi declarada).\n')
-		return None
+		return errors.ERROR_VARIAVEL_NAO_DECLARADA
 				
 
 
 	def remove(self, lexema):
-		for element in self.table:
-			if(element['lexema'] == lexema):
-				self.table.remove(element)
-				return element
+		variavel = self.search(lexema)
+		if(variavel != errors.ERROR_VARIAVEL_NAO_DECLARADA):
+			self.table.remove(variavel)
+			return variavel
 		
 		print('A variável a qual tentou-se remover da tabela (',lexema,') não existe (não foi declarada).\n')
-		return None
+		return variavel #retorna mensagem de erro
 
 	def modify(self, lexema, valor):
 		variavel = self.search(lexema)
 		
-		if((variavel['tipo'] == 'real' and isinstance(valor, float)) or (variavel['tipo'] == 'int' and isinstance(valor, int)) or (variavel['tipo'] == 'boolean' and isinstance(valor, bool))):
-			variavel['valor'] = valor
-			variavel['usada'] = True
-			return variavel
+		if(variavel != errors.ERROR_VARIAVEL_NAO_DECLARADA):
+			if((variavel['tipo'] == 'real' and isinstance(valor, float)) or (variavel['tipo'] == 'int' and isinstance(valor, int)) or (variavel['tipo'] == 'boolean' and isinstance(valor, bool))):
+				variavel['valor'] = valor
+				variavel['utilizada'] = True
+				return variavel
+			else:
+				print('O valor atribuido a variavel (',lexema,') não é do seu tipo.\n')
+				return errors.ERROR_TIPO
+				
 		else:
-			return "ERROR: tipo"
+			print('A variável a qual tentou-se modificar (',lexema,') não existe (não foi declarada).\n')
+			return variavel #quando nao encontrado, o retorno da função de pesquisa é o codigo de erro de variavel nao declarada
 
-		return None
+		
 
-	def get_value(self, lexema):
+	def get_value(self, lexema): 
 		variavel = self.search(lexema)
-		if(variavel != None):
-			if(variavel['tipo'] == 'int'):
-				return int(variavel['valor'])
-			elif(variavel['tipo'] == 'real'):
-				return float(variavel['valor'])
-			elif(variavel['tipo'] == 'boolean'):
-				if(variavel['valor'] == 'false'):
-					return False
-				elif(variavel['valor'] == 'true'):
-					return True
+		if(variavel != errors.ERROR_VARIAVEL_NAO_DECLARADA): #se a variavel existe (ou seja, a busca não retornou um erro)
+			if(variavel['valor'] != None): #se tiver valor
+				if(variavel['tipo'] == 'int'):
+					return int(variavel['valor'])
+				elif(variavel['tipo'] == 'real'):
+					return float(variavel['valor'])
+				elif(variavel['tipo'] == 'boolean'):
+					if(variavel['valor'] == 'false'):
+						return False
+					elif(variavel['valor'] == 'true'):
+						return True
 
-		return None
+			else:
+				return errors.ERROR_VARIAVEL_SEM_VALOR
+			
+		return variavel #retorna mensagem de erro de variavel não declarada
 
 	def print_table(self):
 		for line in self.table:
 			print(line, '\n')
+
+	def get_tipo(self, lexema):
+		variavel = self.search(lexema)
+		if(variavel != errors.ERROR_VARIAVEL_NAO_DECLARADA):
+			return variavel['tipo']
+		else:
+			return variavel #retorna mensagem de erro
 
 
 class ProcedureTable(SymbolTable):
@@ -134,6 +164,7 @@ class ProcedureTable(SymbolTable):
 
 			self.table.append(temp_dict)
 
+			print('INSERt procedure', str(temp_dict))
 			return temp_dict
 
 		else:

@@ -5,17 +5,20 @@ from Lexic.LALGLex import *
 
 #importando parser (analisador sintatico)
 from Syntactic.parser import *
+#importando classe de erros
+from Syntactic.Errors import *
 
 #Importando componentes para a sintaxe
 from PyQt5.QtCore import QFile, QRegExp, Qt
 from PyQt5.QtGui import QFont, QSyntaxHighlighter, QTextCharFormat, QColor
 
 
-
+# Chamando objeto Errors
+errors = Errors()
 
 # Line number Widget definition
 class LineNumberArea(QtWidgets.QWidget):
-    def __init__(self, codeArea):
+    def __init__(self, codeArea): 
         super().__init__(codeArea)
         self.codeArea = codeArea
 
@@ -377,20 +380,44 @@ class ExecWindow(Ui_MainWindow):
     def parse(self):
         self.parser = createParser()
 
+
         #pegando o input e jogando no parser que foi criado utilizando o analisador lexico
         text = self.textInput.toPlainText()
 
         #calculando resultado e exibindo na tela de output - se não for "None"
         
         result = self.parser.parse(text, tracking=True)
-        
-        if(result != None):
+        error_list = ""
+        # condição para exibição na caixa de texto de output
+        if(result != None):  # caso retorne algo diferente de None, ou seja, existe um resultado, não tivemos erros
+            result = str(result) + "\n"
+
+             # INCLUINDO WARNINGS NO OUTPUT
+            for warning in errors.get_warningList():
+                result = result + warning + "\n"
+            errors.clear_warnings()
+
+
             self.textOutput.setText("")
             self.textOutput.setText(str(result))
-        else:
+
+
+        else: # caso existirem erros
+             # INCLUINDO ERROS NO OUTPUT
+            print(errors.get_errorList())
+            for error in errors.get_errorList():
+                error_list = error_list + error + "\n"
+            
+            errors.clear_errors()
+        
+            # INCLUINDO WARNINGS NO OUTPUT
+            for warning in errors.get_warningList():
+                error_list = error_list + warning + "\n"
+            errors.clear_warnings()
+            
             self.textOutput.setText("")
-            self.textOutput.setText("Algum erro!")
-    
+            self.textOutput.setText(error_list)
+        return
 
     # Opening a File
     def openFile(self):

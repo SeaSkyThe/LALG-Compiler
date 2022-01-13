@@ -27,121 +27,123 @@ Rule 15    mais_parametros_formais -> empty
 Rule 16    comando_composto -> BEGIN new_begin comandos END
 Rule 17    new_scope -> <empty>
 Rule 18    new_begin -> <empty>
-Rule 19    comandos -> atribuicao FIM_LINHA comandos
-Rule 20    comandos -> chamada_de_procedimento FIM_LINHA comandos
-Rule 21    comandos -> comando_composto comandos
-Rule 22    comandos -> comando_condicional_1 comandos
-Rule 23    comandos -> comando_repetitivo_1 comandos
-Rule 24    comandos -> empty
-Rule 25    atribuicao -> variavel OPIGUAL_ATRIB expressao
-Rule 26    comando_condicional_1 -> IF AP expressao FP THEN comandos
-Rule 27    comando_condicional_1 -> IF AP expressao FP THEN comandos ELSE comandos
-Rule 28    comando_repetitivo_1 -> WHILE AP expressao FP DO comandos
-Rule 29    chamada_de_procedimento -> variavel AP lista_de_parametros FP
-Rule 30    lista_de_parametros -> expressao mais_parametros
-Rule 31    lista_de_parametros -> empty
-Rule 32    mais_parametros -> SEPARADOR lista_de_parametros
-Rule 33    mais_parametros -> empty
-Rule 34    expressao -> expressao_simples
-Rule 35    expressao -> expressao_simples relacao expressao_simples
-Rule 36    relacao -> IGUAL
-Rule 37    relacao -> MAIOR_IGUAL
-Rule 38    relacao -> MAIOR
-Rule 39    relacao -> MENOR_IGUAL
-Rule 40    relacao -> MENOR
-Rule 41    expressao_simples -> expressao_simples OPSOMA termo
-Rule 42    expressao_simples -> expressao_simples OPSUB termo
-Rule 43    expressao_simples -> expressao_simples OR termo
-Rule 44    expressao_simples -> termo
-Rule 45    termo -> termo OPMUL fator
-Rule 46    termo -> termo OPDIV fator
-Rule 47    termo -> termo DIV fator
-Rule 48    termo -> termo AND fator
-Rule 49    termo -> fator
-Rule 50    fator -> variavel
-Rule 51    fator -> numero
-Rule 52    fator -> TRUE
-Rule 53    fator -> FALSE
-Rule 54    fator -> AP expressao_simples FP
-Rule 55    fator -> NOT fator
-Rule 56    numero -> NUM_INT
-Rule 57    numero -> NUM_REAL
-Rule 58    variavel -> ID
-Rule 59    empty -> <empty>
+Rule 19    warnings -> <empty>
+Rule 20    comandos -> atribuicao FIM_LINHA comandos
+Rule 21    comandos -> chamada_de_procedimento FIM_LINHA comandos
+Rule 22    comandos -> comando_composto comandos
+Rule 23    comandos -> comando_condicional_1 comandos
+Rule 24    comandos -> comando_repetitivo_1 comandos
+Rule 25    comandos -> empty
+Rule 26    atribuicao -> variavel OPIGUAL_ATRIB expressao
+Rule 27    comando_condicional_1 -> IF AP expressao FP THEN comandos
+Rule 28    comando_condicional_1 -> IF AP expressao FP THEN comandos ELSE comandos
+Rule 29    comando_repetitivo_1 -> WHILE AP expressao FP DO comandos
+Rule 30    chamada_de_procedimento -> variavel AP lista_de_parametros FP
+Rule 31    lista_de_parametros -> expressao mais_parametros
+Rule 32    lista_de_parametros -> empty
+Rule 33    mais_parametros -> SEPARADOR lista_de_parametros
+Rule 34    mais_parametros -> empty
+Rule 35    expressao -> expressao_simples
+Rule 36    expressao -> expressao_simples relacao expressao_simples
+Rule 37    relacao -> IGUAL
+Rule 38    relacao -> MAIOR_IGUAL
+Rule 39    relacao -> MAIOR
+Rule 40    relacao -> MENOR_IGUAL
+Rule 41    relacao -> MENOR
+Rule 42    expressao_simples -> expressao_simples OPSOMA termo
+Rule 43    expressao_simples -> expressao_simples OPSUB termo
+Rule 44    expressao_simples -> expressao_simples OR termo
+Rule 45    expressao_simples -> termo
+Rule 46    termo -> termo OPMUL fator
+Rule 47    termo -> termo OPDIV fator
+Rule 48    termo -> termo DIV fator
+Rule 49    termo -> termo AND fator
+Rule 50    termo -> fator
+Rule 51    fator -> variavel
+Rule 52    fator -> numero
+Rule 53    fator -> TRUE
+Rule 54    fator -> FALSE
+Rule 55    fator -> AP expressao_simples FP
+Rule 56    fator -> NOT fator
+Rule 57    numero -> NUM_INT
+Rule 58    numero -> NUM_REAL
+Rule 59    variavel -> ID
+Rule 60    empty -> <empty>
 
 Terminals, with rules where they appear
 
-AND                  : 48
-AP                   : 12 26 27 28 29 54
+AND                  : 49
+AP                   : 12 27 28 29 30 55
 BEGIN                : 16
 BOOLEAN              : 8
-DIV                  : 47
-DO                   : 28
+DIV                  : 48
+DO                   : 29
 DOIS_PONTOS          : 13 14
-ELSE                 : 27
+ELSE                 : 28
 END                  : 16
-FALSE                : 53
-FIM_LINHA            : 1 3 11 11 13 19 20
-FP                   : 12 26 27 28 29 54
-ID                   : 1 11 58
-IF                   : 26 27
-IGUAL                : 36
+FALSE                : 54
+FIM_LINHA            : 1 3 11 11 13 20 21
+FP                   : 12 27 28 29 30 55
+ID                   : 1 11 59
+IF                   : 27 28
+IGUAL                : 37
 INT                  : 6
-MAIOR                : 38
-MAIOR_IGUAL          : 37
-MENOR                : 40
-MENOR_IGUAL          : 39
-NOT                  : 55
-NUM_INT              : 56
-NUM_REAL             : 57
-OPDIV                : 46
-OPIGUAL_ATRIB        : 25
-OPMUL                : 45
-OPSOMA               : 41
-OPSUB                : 42
-OR                   : 43
+MAIOR                : 39
+MAIOR_IGUAL          : 38
+MENOR                : 41
+MENOR_IGUAL          : 40
+NOT                  : 56
+NUM_INT              : 57
+NUM_REAL             : 58
+OPDIV                : 47
+OPIGUAL_ATRIB        : 26
+OPMUL                : 46
+OPSOMA               : 42
+OPSUB                : 43
+OR                   : 44
 PONTO_FINAL          : 1
 PROCEDURE            : 11
 PROGRAM              : 1
 READ                 : 
 REAL                 : 7
-SEPARADOR            : 32
-THEN                 : 26 27
-TRUE                 : 52
+SEPARADOR            : 33
+THEN                 : 27 28
+TRUE                 : 53
 VAR                  : 
-WHILE                : 28
+WHILE                : 29
 WRITE                : 
 error                : 
 
 Nonterminals, with rules where they appear
 
-atribuicao           : 19
+atribuicao           : 20
 bloco                : 1 11
-chamada_de_procedimento : 20
-comando_composto     : 1 11 21
-comando_condicional_1 : 22
-comando_repetitivo_1 : 23
-comandos             : 16 19 20 21 22 23 26 27 27 28
+chamada_de_procedimento : 21
+comando_composto     : 1 11 22
+comando_condicional_1 : 23
+comando_repetitivo_1 : 24
+comandos             : 16 20 21 22 23 24 27 28 28 29
 declaracao_de_procedimento : 9
 declaracao_de_variaveis : 3
-empty                : 4 10 15 24 31 33
-expressao            : 25 26 27 28 30
-expressao_simples    : 34 35 35 41 42 43 54
-fator                : 45 46 47 48 49 55
-lista_de_parametros  : 5 13 14 29 32
-mais_parametros      : 30
+empty                : 4 10 15 25 32 34
+expressao            : 26 27 28 29 31
+expressao_simples    : 35 36 36 42 43 44 55
+fator                : 46 47 48 49 50 56
+lista_de_parametros  : 5 13 14 30 33
+mais_parametros      : 31
 mais_parametros_formais : 12 13 14
 new_begin            : 16
 new_scope            : 2
-numero               : 51
+numero               : 52
 parametros_formais   : 11
 parte_declaracao_de_subrotinas : 2
 parte_declaracao_de_variaveis : 2 3
 programa             : 0
-relacao              : 35
-termo                : 41 42 43 44 45 46 47 48
+relacao              : 36
+termo                : 42 43 44 45 46 47 48 49
 tipo_simples         : 5 13 14
-variavel             : 25 29 50
+variavel             : 26 30 51
+warnings             : 
 
 Parsing method: LALR
 
@@ -204,13 +206,13 @@ state 6
     (3) parte_declaracao_de_variaveis -> . declaracao_de_variaveis FIM_LINHA parte_declaracao_de_variaveis
     (4) parte_declaracao_de_variaveis -> . empty
     (5) declaracao_de_variaveis -> . tipo_simples lista_de_parametros
-    (59) empty -> .
+    (60) empty -> .
     (6) tipo_simples -> . INT
     (7) tipo_simples -> . REAL
     (8) tipo_simples -> . BOOLEAN
 
-    PROCEDURE       reduce using rule 59 (empty -> .)
-    BEGIN           reduce using rule 59 (empty -> .)
+    PROCEDURE       reduce using rule 60 (empty -> .)
+    BEGIN           reduce using rule 60 (empty -> .)
     INT             shift and go to state 13
     REAL            shift and go to state 14
     BOOLEAN         shift and go to state 15
@@ -246,10 +248,10 @@ state 9
     (9) parte_declaracao_de_subrotinas -> . declaracao_de_procedimento
     (10) parte_declaracao_de_subrotinas -> . empty
     (11) declaracao_de_procedimento -> . PROCEDURE ID parametros_formais FIM_LINHA bloco comando_composto FIM_LINHA
-    (59) empty -> .
+    (60) empty -> .
 
     PROCEDURE       shift and go to state 21
-    BEGIN           reduce using rule 59 (empty -> .)
+    BEGIN           reduce using rule 60 (empty -> .)
 
     parte_declaracao_de_subrotinas shift and go to state 18
     declaracao_de_procedimento     shift and go to state 19
@@ -273,31 +275,31 @@ state 11
 state 12
 
     (5) declaracao_de_variaveis -> tipo_simples . lista_de_parametros
-    (30) lista_de_parametros -> . expressao mais_parametros
-    (31) lista_de_parametros -> . empty
-    (34) expressao -> . expressao_simples
-    (35) expressao -> . expressao_simples relacao expressao_simples
-    (59) empty -> .
-    (41) expressao_simples -> . expressao_simples OPSOMA termo
-    (42) expressao_simples -> . expressao_simples OPSUB termo
-    (43) expressao_simples -> . expressao_simples OR termo
-    (44) expressao_simples -> . termo
-    (45) termo -> . termo OPMUL fator
-    (46) termo -> . termo OPDIV fator
-    (47) termo -> . termo DIV fator
-    (48) termo -> . termo AND fator
-    (49) termo -> . fator
-    (50) fator -> . variavel
-    (51) fator -> . numero
-    (52) fator -> . TRUE
-    (53) fator -> . FALSE
-    (54) fator -> . AP expressao_simples FP
-    (55) fator -> . NOT fator
-    (58) variavel -> . ID
-    (56) numero -> . NUM_INT
-    (57) numero -> . NUM_REAL
+    (31) lista_de_parametros -> . expressao mais_parametros
+    (32) lista_de_parametros -> . empty
+    (35) expressao -> . expressao_simples
+    (36) expressao -> . expressao_simples relacao expressao_simples
+    (60) empty -> .
+    (42) expressao_simples -> . expressao_simples OPSOMA termo
+    (43) expressao_simples -> . expressao_simples OPSUB termo
+    (44) expressao_simples -> . expressao_simples OR termo
+    (45) expressao_simples -> . termo
+    (46) termo -> . termo OPMUL fator
+    (47) termo -> . termo OPDIV fator
+    (48) termo -> . termo DIV fator
+    (49) termo -> . termo AND fator
+    (50) termo -> . fator
+    (51) fator -> . variavel
+    (52) fator -> . numero
+    (53) fator -> . TRUE
+    (54) fator -> . FALSE
+    (55) fator -> . AP expressao_simples FP
+    (56) fator -> . NOT fator
+    (59) variavel -> . ID
+    (57) numero -> . NUM_INT
+    (58) numero -> . NUM_REAL
 
-    FIM_LINHA       reduce using rule 59 (empty -> .)
+    FIM_LINHA       reduce using rule 60 (empty -> .)
     TRUE            shift and go to state 31
     FALSE           shift and go to state 32
     AP              shift and go to state 33
@@ -373,25 +375,25 @@ state 16
 state 17
 
     (16) comando_composto -> BEGIN new_begin . comandos END
-    (19) comandos -> . atribuicao FIM_LINHA comandos
-    (20) comandos -> . chamada_de_procedimento FIM_LINHA comandos
-    (21) comandos -> . comando_composto comandos
-    (22) comandos -> . comando_condicional_1 comandos
-    (23) comandos -> . comando_repetitivo_1 comandos
-    (24) comandos -> . empty
-    (25) atribuicao -> . variavel OPIGUAL_ATRIB expressao
-    (29) chamada_de_procedimento -> . variavel AP lista_de_parametros FP
+    (20) comandos -> . atribuicao FIM_LINHA comandos
+    (21) comandos -> . chamada_de_procedimento FIM_LINHA comandos
+    (22) comandos -> . comando_composto comandos
+    (23) comandos -> . comando_condicional_1 comandos
+    (24) comandos -> . comando_repetitivo_1 comandos
+    (25) comandos -> . empty
+    (26) atribuicao -> . variavel OPIGUAL_ATRIB expressao
+    (30) chamada_de_procedimento -> . variavel AP lista_de_parametros FP
     (16) comando_composto -> . BEGIN new_begin comandos END
-    (26) comando_condicional_1 -> . IF AP expressao FP THEN comandos
-    (27) comando_condicional_1 -> . IF AP expressao FP THEN comandos ELSE comandos
-    (28) comando_repetitivo_1 -> . WHILE AP expressao FP DO comandos
-    (59) empty -> .
-    (58) variavel -> . ID
+    (27) comando_condicional_1 -> . IF AP expressao FP THEN comandos
+    (28) comando_condicional_1 -> . IF AP expressao FP THEN comandos ELSE comandos
+    (29) comando_repetitivo_1 -> . WHILE AP expressao FP DO comandos
+    (60) empty -> .
+    (59) variavel -> . ID
 
     BEGIN           shift and go to state 8
     IF              shift and go to state 46
     WHILE           shift and go to state 47
-    END             reduce using rule 59 (empty -> .)
+    END             reduce using rule 60 (empty -> .)
     ID              shift and go to state 35
 
     comandos                       shift and go to state 38
@@ -437,13 +439,13 @@ state 22
     (3) parte_declaracao_de_variaveis -> . declaracao_de_variaveis FIM_LINHA parte_declaracao_de_variaveis
     (4) parte_declaracao_de_variaveis -> . empty
     (5) declaracao_de_variaveis -> . tipo_simples lista_de_parametros
-    (59) empty -> .
+    (60) empty -> .
     (6) tipo_simples -> . INT
     (7) tipo_simples -> . REAL
     (8) tipo_simples -> . BOOLEAN
 
-    PROCEDURE       reduce using rule 59 (empty -> .)
-    BEGIN           reduce using rule 59 (empty -> .)
+    PROCEDURE       reduce using rule 60 (empty -> .)
+    BEGIN           reduce using rule 60 (empty -> .)
     INT             shift and go to state 13
     REAL            shift and go to state 14
     BOOLEAN         shift and go to state 15
@@ -462,45 +464,45 @@ state 23
 
 state 24
 
-    (30) lista_de_parametros -> expressao . mais_parametros
-    (32) mais_parametros -> . SEPARADOR lista_de_parametros
-    (33) mais_parametros -> . empty
-    (59) empty -> .
+    (31) lista_de_parametros -> expressao . mais_parametros
+    (33) mais_parametros -> . SEPARADOR lista_de_parametros
+    (34) mais_parametros -> . empty
+    (60) empty -> .
 
     SEPARADOR       shift and go to state 51
-    FIM_LINHA       reduce using rule 59 (empty -> .)
-    FP              reduce using rule 59 (empty -> .)
-    DOIS_PONTOS     reduce using rule 59 (empty -> .)
+    FIM_LINHA       reduce using rule 60 (empty -> .)
+    FP              reduce using rule 60 (empty -> .)
+    DOIS_PONTOS     reduce using rule 60 (empty -> .)
 
     mais_parametros                shift and go to state 50
     empty                          shift and go to state 52
 
 state 25
 
-    (31) lista_de_parametros -> empty .
+    (32) lista_de_parametros -> empty .
 
-    FIM_LINHA       reduce using rule 31 (lista_de_parametros -> empty .)
-    FP              reduce using rule 31 (lista_de_parametros -> empty .)
-    DOIS_PONTOS     reduce using rule 31 (lista_de_parametros -> empty .)
+    FIM_LINHA       reduce using rule 32 (lista_de_parametros -> empty .)
+    FP              reduce using rule 32 (lista_de_parametros -> empty .)
+    DOIS_PONTOS     reduce using rule 32 (lista_de_parametros -> empty .)
 
 
 state 26
 
-    (34) expressao -> expressao_simples .
-    (35) expressao -> expressao_simples . relacao expressao_simples
-    (41) expressao_simples -> expressao_simples . OPSOMA termo
-    (42) expressao_simples -> expressao_simples . OPSUB termo
-    (43) expressao_simples -> expressao_simples . OR termo
-    (36) relacao -> . IGUAL
-    (37) relacao -> . MAIOR_IGUAL
-    (38) relacao -> . MAIOR
-    (39) relacao -> . MENOR_IGUAL
-    (40) relacao -> . MENOR
+    (35) expressao -> expressao_simples .
+    (36) expressao -> expressao_simples . relacao expressao_simples
+    (42) expressao_simples -> expressao_simples . OPSOMA termo
+    (43) expressao_simples -> expressao_simples . OPSUB termo
+    (44) expressao_simples -> expressao_simples . OR termo
+    (37) relacao -> . IGUAL
+    (38) relacao -> . MAIOR_IGUAL
+    (39) relacao -> . MAIOR
+    (40) relacao -> . MENOR_IGUAL
+    (41) relacao -> . MENOR
 
-    SEPARADOR       reduce using rule 34 (expressao -> expressao_simples .)
-    FIM_LINHA       reduce using rule 34 (expressao -> expressao_simples .)
-    FP              reduce using rule 34 (expressao -> expressao_simples .)
-    DOIS_PONTOS     reduce using rule 34 (expressao -> expressao_simples .)
+    SEPARADOR       reduce using rule 35 (expressao -> expressao_simples .)
+    FIM_LINHA       reduce using rule 35 (expressao -> expressao_simples .)
+    FP              reduce using rule 35 (expressao -> expressao_simples .)
+    DOIS_PONTOS     reduce using rule 35 (expressao -> expressao_simples .)
     OPSOMA          shift and go to state 54
     OPSUB           shift and go to state 55
     OR              shift and go to state 56
@@ -514,24 +516,24 @@ state 26
 
 state 27
 
-    (44) expressao_simples -> termo .
-    (45) termo -> termo . OPMUL fator
-    (46) termo -> termo . OPDIV fator
-    (47) termo -> termo . DIV fator
-    (48) termo -> termo . AND fator
+    (45) expressao_simples -> termo .
+    (46) termo -> termo . OPMUL fator
+    (47) termo -> termo . OPDIV fator
+    (48) termo -> termo . DIV fator
+    (49) termo -> termo . AND fator
 
-    OPSOMA          reduce using rule 44 (expressao_simples -> termo .)
-    OPSUB           reduce using rule 44 (expressao_simples -> termo .)
-    OR              reduce using rule 44 (expressao_simples -> termo .)
-    IGUAL           reduce using rule 44 (expressao_simples -> termo .)
-    MAIOR_IGUAL     reduce using rule 44 (expressao_simples -> termo .)
-    MAIOR           reduce using rule 44 (expressao_simples -> termo .)
-    MENOR_IGUAL     reduce using rule 44 (expressao_simples -> termo .)
-    MENOR           reduce using rule 44 (expressao_simples -> termo .)
-    SEPARADOR       reduce using rule 44 (expressao_simples -> termo .)
-    FIM_LINHA       reduce using rule 44 (expressao_simples -> termo .)
-    FP              reduce using rule 44 (expressao_simples -> termo .)
-    DOIS_PONTOS     reduce using rule 44 (expressao_simples -> termo .)
+    OPSOMA          reduce using rule 45 (expressao_simples -> termo .)
+    OPSUB           reduce using rule 45 (expressao_simples -> termo .)
+    OR              reduce using rule 45 (expressao_simples -> termo .)
+    IGUAL           reduce using rule 45 (expressao_simples -> termo .)
+    MAIOR_IGUAL     reduce using rule 45 (expressao_simples -> termo .)
+    MAIOR           reduce using rule 45 (expressao_simples -> termo .)
+    MENOR_IGUAL     reduce using rule 45 (expressao_simples -> termo .)
+    MENOR           reduce using rule 45 (expressao_simples -> termo .)
+    SEPARADOR       reduce using rule 45 (expressao_simples -> termo .)
+    FIM_LINHA       reduce using rule 45 (expressao_simples -> termo .)
+    FP              reduce using rule 45 (expressao_simples -> termo .)
+    DOIS_PONTOS     reduce using rule 45 (expressao_simples -> termo .)
     OPMUL           shift and go to state 62
     OPDIV           shift and go to state 63
     DIV             shift and go to state 64
@@ -540,135 +542,135 @@ state 27
 
 state 28
 
-    (49) termo -> fator .
+    (50) termo -> fator .
 
-    OPMUL           reduce using rule 49 (termo -> fator .)
-    OPDIV           reduce using rule 49 (termo -> fator .)
-    DIV             reduce using rule 49 (termo -> fator .)
-    AND             reduce using rule 49 (termo -> fator .)
-    OPSOMA          reduce using rule 49 (termo -> fator .)
-    OPSUB           reduce using rule 49 (termo -> fator .)
-    OR              reduce using rule 49 (termo -> fator .)
-    IGUAL           reduce using rule 49 (termo -> fator .)
-    MAIOR_IGUAL     reduce using rule 49 (termo -> fator .)
-    MAIOR           reduce using rule 49 (termo -> fator .)
-    MENOR_IGUAL     reduce using rule 49 (termo -> fator .)
-    MENOR           reduce using rule 49 (termo -> fator .)
-    SEPARADOR       reduce using rule 49 (termo -> fator .)
-    FIM_LINHA       reduce using rule 49 (termo -> fator .)
-    FP              reduce using rule 49 (termo -> fator .)
-    DOIS_PONTOS     reduce using rule 49 (termo -> fator .)
+    OPMUL           reduce using rule 50 (termo -> fator .)
+    OPDIV           reduce using rule 50 (termo -> fator .)
+    DIV             reduce using rule 50 (termo -> fator .)
+    AND             reduce using rule 50 (termo -> fator .)
+    OPSOMA          reduce using rule 50 (termo -> fator .)
+    OPSUB           reduce using rule 50 (termo -> fator .)
+    OR              reduce using rule 50 (termo -> fator .)
+    IGUAL           reduce using rule 50 (termo -> fator .)
+    MAIOR_IGUAL     reduce using rule 50 (termo -> fator .)
+    MAIOR           reduce using rule 50 (termo -> fator .)
+    MENOR_IGUAL     reduce using rule 50 (termo -> fator .)
+    MENOR           reduce using rule 50 (termo -> fator .)
+    SEPARADOR       reduce using rule 50 (termo -> fator .)
+    FIM_LINHA       reduce using rule 50 (termo -> fator .)
+    FP              reduce using rule 50 (termo -> fator .)
+    DOIS_PONTOS     reduce using rule 50 (termo -> fator .)
 
 
 state 29
 
-    (50) fator -> variavel .
+    (51) fator -> variavel .
 
-    OPMUL           reduce using rule 50 (fator -> variavel .)
-    OPDIV           reduce using rule 50 (fator -> variavel .)
-    DIV             reduce using rule 50 (fator -> variavel .)
-    AND             reduce using rule 50 (fator -> variavel .)
-    OPSOMA          reduce using rule 50 (fator -> variavel .)
-    OPSUB           reduce using rule 50 (fator -> variavel .)
-    OR              reduce using rule 50 (fator -> variavel .)
-    IGUAL           reduce using rule 50 (fator -> variavel .)
-    MAIOR_IGUAL     reduce using rule 50 (fator -> variavel .)
-    MAIOR           reduce using rule 50 (fator -> variavel .)
-    MENOR_IGUAL     reduce using rule 50 (fator -> variavel .)
-    MENOR           reduce using rule 50 (fator -> variavel .)
-    SEPARADOR       reduce using rule 50 (fator -> variavel .)
-    FIM_LINHA       reduce using rule 50 (fator -> variavel .)
-    FP              reduce using rule 50 (fator -> variavel .)
-    DOIS_PONTOS     reduce using rule 50 (fator -> variavel .)
+    OPMUL           reduce using rule 51 (fator -> variavel .)
+    OPDIV           reduce using rule 51 (fator -> variavel .)
+    DIV             reduce using rule 51 (fator -> variavel .)
+    AND             reduce using rule 51 (fator -> variavel .)
+    OPSOMA          reduce using rule 51 (fator -> variavel .)
+    OPSUB           reduce using rule 51 (fator -> variavel .)
+    OR              reduce using rule 51 (fator -> variavel .)
+    IGUAL           reduce using rule 51 (fator -> variavel .)
+    MAIOR_IGUAL     reduce using rule 51 (fator -> variavel .)
+    MAIOR           reduce using rule 51 (fator -> variavel .)
+    MENOR_IGUAL     reduce using rule 51 (fator -> variavel .)
+    MENOR           reduce using rule 51 (fator -> variavel .)
+    SEPARADOR       reduce using rule 51 (fator -> variavel .)
+    FIM_LINHA       reduce using rule 51 (fator -> variavel .)
+    FP              reduce using rule 51 (fator -> variavel .)
+    DOIS_PONTOS     reduce using rule 51 (fator -> variavel .)
 
 
 state 30
 
-    (51) fator -> numero .
+    (52) fator -> numero .
 
-    OPMUL           reduce using rule 51 (fator -> numero .)
-    OPDIV           reduce using rule 51 (fator -> numero .)
-    DIV             reduce using rule 51 (fator -> numero .)
-    AND             reduce using rule 51 (fator -> numero .)
-    OPSOMA          reduce using rule 51 (fator -> numero .)
-    OPSUB           reduce using rule 51 (fator -> numero .)
-    OR              reduce using rule 51 (fator -> numero .)
-    IGUAL           reduce using rule 51 (fator -> numero .)
-    MAIOR_IGUAL     reduce using rule 51 (fator -> numero .)
-    MAIOR           reduce using rule 51 (fator -> numero .)
-    MENOR_IGUAL     reduce using rule 51 (fator -> numero .)
-    MENOR           reduce using rule 51 (fator -> numero .)
-    SEPARADOR       reduce using rule 51 (fator -> numero .)
-    FIM_LINHA       reduce using rule 51 (fator -> numero .)
-    FP              reduce using rule 51 (fator -> numero .)
-    DOIS_PONTOS     reduce using rule 51 (fator -> numero .)
+    OPMUL           reduce using rule 52 (fator -> numero .)
+    OPDIV           reduce using rule 52 (fator -> numero .)
+    DIV             reduce using rule 52 (fator -> numero .)
+    AND             reduce using rule 52 (fator -> numero .)
+    OPSOMA          reduce using rule 52 (fator -> numero .)
+    OPSUB           reduce using rule 52 (fator -> numero .)
+    OR              reduce using rule 52 (fator -> numero .)
+    IGUAL           reduce using rule 52 (fator -> numero .)
+    MAIOR_IGUAL     reduce using rule 52 (fator -> numero .)
+    MAIOR           reduce using rule 52 (fator -> numero .)
+    MENOR_IGUAL     reduce using rule 52 (fator -> numero .)
+    MENOR           reduce using rule 52 (fator -> numero .)
+    SEPARADOR       reduce using rule 52 (fator -> numero .)
+    FIM_LINHA       reduce using rule 52 (fator -> numero .)
+    FP              reduce using rule 52 (fator -> numero .)
+    DOIS_PONTOS     reduce using rule 52 (fator -> numero .)
 
 
 state 31
 
-    (52) fator -> TRUE .
+    (53) fator -> TRUE .
 
-    OPMUL           reduce using rule 52 (fator -> TRUE .)
-    OPDIV           reduce using rule 52 (fator -> TRUE .)
-    DIV             reduce using rule 52 (fator -> TRUE .)
-    AND             reduce using rule 52 (fator -> TRUE .)
-    OPSOMA          reduce using rule 52 (fator -> TRUE .)
-    OPSUB           reduce using rule 52 (fator -> TRUE .)
-    OR              reduce using rule 52 (fator -> TRUE .)
-    IGUAL           reduce using rule 52 (fator -> TRUE .)
-    MAIOR_IGUAL     reduce using rule 52 (fator -> TRUE .)
-    MAIOR           reduce using rule 52 (fator -> TRUE .)
-    MENOR_IGUAL     reduce using rule 52 (fator -> TRUE .)
-    MENOR           reduce using rule 52 (fator -> TRUE .)
-    SEPARADOR       reduce using rule 52 (fator -> TRUE .)
-    FIM_LINHA       reduce using rule 52 (fator -> TRUE .)
-    FP              reduce using rule 52 (fator -> TRUE .)
-    DOIS_PONTOS     reduce using rule 52 (fator -> TRUE .)
+    OPMUL           reduce using rule 53 (fator -> TRUE .)
+    OPDIV           reduce using rule 53 (fator -> TRUE .)
+    DIV             reduce using rule 53 (fator -> TRUE .)
+    AND             reduce using rule 53 (fator -> TRUE .)
+    OPSOMA          reduce using rule 53 (fator -> TRUE .)
+    OPSUB           reduce using rule 53 (fator -> TRUE .)
+    OR              reduce using rule 53 (fator -> TRUE .)
+    IGUAL           reduce using rule 53 (fator -> TRUE .)
+    MAIOR_IGUAL     reduce using rule 53 (fator -> TRUE .)
+    MAIOR           reduce using rule 53 (fator -> TRUE .)
+    MENOR_IGUAL     reduce using rule 53 (fator -> TRUE .)
+    MENOR           reduce using rule 53 (fator -> TRUE .)
+    SEPARADOR       reduce using rule 53 (fator -> TRUE .)
+    FIM_LINHA       reduce using rule 53 (fator -> TRUE .)
+    FP              reduce using rule 53 (fator -> TRUE .)
+    DOIS_PONTOS     reduce using rule 53 (fator -> TRUE .)
 
 
 state 32
 
-    (53) fator -> FALSE .
+    (54) fator -> FALSE .
 
-    OPMUL           reduce using rule 53 (fator -> FALSE .)
-    OPDIV           reduce using rule 53 (fator -> FALSE .)
-    DIV             reduce using rule 53 (fator -> FALSE .)
-    AND             reduce using rule 53 (fator -> FALSE .)
-    OPSOMA          reduce using rule 53 (fator -> FALSE .)
-    OPSUB           reduce using rule 53 (fator -> FALSE .)
-    OR              reduce using rule 53 (fator -> FALSE .)
-    IGUAL           reduce using rule 53 (fator -> FALSE .)
-    MAIOR_IGUAL     reduce using rule 53 (fator -> FALSE .)
-    MAIOR           reduce using rule 53 (fator -> FALSE .)
-    MENOR_IGUAL     reduce using rule 53 (fator -> FALSE .)
-    MENOR           reduce using rule 53 (fator -> FALSE .)
-    SEPARADOR       reduce using rule 53 (fator -> FALSE .)
-    FIM_LINHA       reduce using rule 53 (fator -> FALSE .)
-    FP              reduce using rule 53 (fator -> FALSE .)
-    DOIS_PONTOS     reduce using rule 53 (fator -> FALSE .)
+    OPMUL           reduce using rule 54 (fator -> FALSE .)
+    OPDIV           reduce using rule 54 (fator -> FALSE .)
+    DIV             reduce using rule 54 (fator -> FALSE .)
+    AND             reduce using rule 54 (fator -> FALSE .)
+    OPSOMA          reduce using rule 54 (fator -> FALSE .)
+    OPSUB           reduce using rule 54 (fator -> FALSE .)
+    OR              reduce using rule 54 (fator -> FALSE .)
+    IGUAL           reduce using rule 54 (fator -> FALSE .)
+    MAIOR_IGUAL     reduce using rule 54 (fator -> FALSE .)
+    MAIOR           reduce using rule 54 (fator -> FALSE .)
+    MENOR_IGUAL     reduce using rule 54 (fator -> FALSE .)
+    MENOR           reduce using rule 54 (fator -> FALSE .)
+    SEPARADOR       reduce using rule 54 (fator -> FALSE .)
+    FIM_LINHA       reduce using rule 54 (fator -> FALSE .)
+    FP              reduce using rule 54 (fator -> FALSE .)
+    DOIS_PONTOS     reduce using rule 54 (fator -> FALSE .)
 
 
 state 33
 
-    (54) fator -> AP . expressao_simples FP
-    (41) expressao_simples -> . expressao_simples OPSOMA termo
-    (42) expressao_simples -> . expressao_simples OPSUB termo
-    (43) expressao_simples -> . expressao_simples OR termo
-    (44) expressao_simples -> . termo
-    (45) termo -> . termo OPMUL fator
-    (46) termo -> . termo OPDIV fator
-    (47) termo -> . termo DIV fator
-    (48) termo -> . termo AND fator
-    (49) termo -> . fator
-    (50) fator -> . variavel
-    (51) fator -> . numero
-    (52) fator -> . TRUE
-    (53) fator -> . FALSE
-    (54) fator -> . AP expressao_simples FP
-    (55) fator -> . NOT fator
-    (58) variavel -> . ID
-    (56) numero -> . NUM_INT
-    (57) numero -> . NUM_REAL
+    (55) fator -> AP . expressao_simples FP
+    (42) expressao_simples -> . expressao_simples OPSOMA termo
+    (43) expressao_simples -> . expressao_simples OPSUB termo
+    (44) expressao_simples -> . expressao_simples OR termo
+    (45) expressao_simples -> . termo
+    (46) termo -> . termo OPMUL fator
+    (47) termo -> . termo OPDIV fator
+    (48) termo -> . termo DIV fator
+    (49) termo -> . termo AND fator
+    (50) termo -> . fator
+    (51) fator -> . variavel
+    (52) fator -> . numero
+    (53) fator -> . TRUE
+    (54) fator -> . FALSE
+    (55) fator -> . AP expressao_simples FP
+    (56) fator -> . NOT fator
+    (59) variavel -> . ID
+    (57) numero -> . NUM_INT
+    (58) numero -> . NUM_REAL
 
     TRUE            shift and go to state 31
     FALSE           shift and go to state 32
@@ -686,16 +688,16 @@ state 33
 
 state 34
 
-    (55) fator -> NOT . fator
-    (50) fator -> . variavel
-    (51) fator -> . numero
-    (52) fator -> . TRUE
-    (53) fator -> . FALSE
-    (54) fator -> . AP expressao_simples FP
-    (55) fator -> . NOT fator
-    (58) variavel -> . ID
-    (56) numero -> . NUM_INT
-    (57) numero -> . NUM_REAL
+    (56) fator -> NOT . fator
+    (51) fator -> . variavel
+    (52) fator -> . numero
+    (53) fator -> . TRUE
+    (54) fator -> . FALSE
+    (55) fator -> . AP expressao_simples FP
+    (56) fator -> . NOT fator
+    (59) variavel -> . ID
+    (57) numero -> . NUM_INT
+    (58) numero -> . NUM_REAL
 
     TRUE            shift and go to state 31
     FALSE           shift and go to state 32
@@ -711,70 +713,70 @@ state 34
 
 state 35
 
-    (58) variavel -> ID .
+    (59) variavel -> ID .
 
-    OPMUL           reduce using rule 58 (variavel -> ID .)
-    OPDIV           reduce using rule 58 (variavel -> ID .)
-    DIV             reduce using rule 58 (variavel -> ID .)
-    AND             reduce using rule 58 (variavel -> ID .)
-    OPSOMA          reduce using rule 58 (variavel -> ID .)
-    OPSUB           reduce using rule 58 (variavel -> ID .)
-    OR              reduce using rule 58 (variavel -> ID .)
-    IGUAL           reduce using rule 58 (variavel -> ID .)
-    MAIOR_IGUAL     reduce using rule 58 (variavel -> ID .)
-    MAIOR           reduce using rule 58 (variavel -> ID .)
-    MENOR_IGUAL     reduce using rule 58 (variavel -> ID .)
-    MENOR           reduce using rule 58 (variavel -> ID .)
-    SEPARADOR       reduce using rule 58 (variavel -> ID .)
-    FIM_LINHA       reduce using rule 58 (variavel -> ID .)
-    OPIGUAL_ATRIB   reduce using rule 58 (variavel -> ID .)
-    AP              reduce using rule 58 (variavel -> ID .)
-    FP              reduce using rule 58 (variavel -> ID .)
-    DOIS_PONTOS     reduce using rule 58 (variavel -> ID .)
+    OPMUL           reduce using rule 59 (variavel -> ID .)
+    OPDIV           reduce using rule 59 (variavel -> ID .)
+    DIV             reduce using rule 59 (variavel -> ID .)
+    AND             reduce using rule 59 (variavel -> ID .)
+    OPSOMA          reduce using rule 59 (variavel -> ID .)
+    OPSUB           reduce using rule 59 (variavel -> ID .)
+    OR              reduce using rule 59 (variavel -> ID .)
+    IGUAL           reduce using rule 59 (variavel -> ID .)
+    MAIOR_IGUAL     reduce using rule 59 (variavel -> ID .)
+    MAIOR           reduce using rule 59 (variavel -> ID .)
+    MENOR_IGUAL     reduce using rule 59 (variavel -> ID .)
+    MENOR           reduce using rule 59 (variavel -> ID .)
+    SEPARADOR       reduce using rule 59 (variavel -> ID .)
+    FIM_LINHA       reduce using rule 59 (variavel -> ID .)
+    OPIGUAL_ATRIB   reduce using rule 59 (variavel -> ID .)
+    AP              reduce using rule 59 (variavel -> ID .)
+    FP              reduce using rule 59 (variavel -> ID .)
+    DOIS_PONTOS     reduce using rule 59 (variavel -> ID .)
 
 
 state 36
 
-    (56) numero -> NUM_INT .
+    (57) numero -> NUM_INT .
 
-    OPMUL           reduce using rule 56 (numero -> NUM_INT .)
-    OPDIV           reduce using rule 56 (numero -> NUM_INT .)
-    DIV             reduce using rule 56 (numero -> NUM_INT .)
-    AND             reduce using rule 56 (numero -> NUM_INT .)
-    OPSOMA          reduce using rule 56 (numero -> NUM_INT .)
-    OPSUB           reduce using rule 56 (numero -> NUM_INT .)
-    OR              reduce using rule 56 (numero -> NUM_INT .)
-    IGUAL           reduce using rule 56 (numero -> NUM_INT .)
-    MAIOR_IGUAL     reduce using rule 56 (numero -> NUM_INT .)
-    MAIOR           reduce using rule 56 (numero -> NUM_INT .)
-    MENOR_IGUAL     reduce using rule 56 (numero -> NUM_INT .)
-    MENOR           reduce using rule 56 (numero -> NUM_INT .)
-    SEPARADOR       reduce using rule 56 (numero -> NUM_INT .)
-    FIM_LINHA       reduce using rule 56 (numero -> NUM_INT .)
-    FP              reduce using rule 56 (numero -> NUM_INT .)
-    DOIS_PONTOS     reduce using rule 56 (numero -> NUM_INT .)
+    OPMUL           reduce using rule 57 (numero -> NUM_INT .)
+    OPDIV           reduce using rule 57 (numero -> NUM_INT .)
+    DIV             reduce using rule 57 (numero -> NUM_INT .)
+    AND             reduce using rule 57 (numero -> NUM_INT .)
+    OPSOMA          reduce using rule 57 (numero -> NUM_INT .)
+    OPSUB           reduce using rule 57 (numero -> NUM_INT .)
+    OR              reduce using rule 57 (numero -> NUM_INT .)
+    IGUAL           reduce using rule 57 (numero -> NUM_INT .)
+    MAIOR_IGUAL     reduce using rule 57 (numero -> NUM_INT .)
+    MAIOR           reduce using rule 57 (numero -> NUM_INT .)
+    MENOR_IGUAL     reduce using rule 57 (numero -> NUM_INT .)
+    MENOR           reduce using rule 57 (numero -> NUM_INT .)
+    SEPARADOR       reduce using rule 57 (numero -> NUM_INT .)
+    FIM_LINHA       reduce using rule 57 (numero -> NUM_INT .)
+    FP              reduce using rule 57 (numero -> NUM_INT .)
+    DOIS_PONTOS     reduce using rule 57 (numero -> NUM_INT .)
 
 
 state 37
 
-    (57) numero -> NUM_REAL .
+    (58) numero -> NUM_REAL .
 
-    OPMUL           reduce using rule 57 (numero -> NUM_REAL .)
-    OPDIV           reduce using rule 57 (numero -> NUM_REAL .)
-    DIV             reduce using rule 57 (numero -> NUM_REAL .)
-    AND             reduce using rule 57 (numero -> NUM_REAL .)
-    OPSOMA          reduce using rule 57 (numero -> NUM_REAL .)
-    OPSUB           reduce using rule 57 (numero -> NUM_REAL .)
-    OR              reduce using rule 57 (numero -> NUM_REAL .)
-    IGUAL           reduce using rule 57 (numero -> NUM_REAL .)
-    MAIOR_IGUAL     reduce using rule 57 (numero -> NUM_REAL .)
-    MAIOR           reduce using rule 57 (numero -> NUM_REAL .)
-    MENOR_IGUAL     reduce using rule 57 (numero -> NUM_REAL .)
-    MENOR           reduce using rule 57 (numero -> NUM_REAL .)
-    SEPARADOR       reduce using rule 57 (numero -> NUM_REAL .)
-    FIM_LINHA       reduce using rule 57 (numero -> NUM_REAL .)
-    FP              reduce using rule 57 (numero -> NUM_REAL .)
-    DOIS_PONTOS     reduce using rule 57 (numero -> NUM_REAL .)
+    OPMUL           reduce using rule 58 (numero -> NUM_REAL .)
+    OPDIV           reduce using rule 58 (numero -> NUM_REAL .)
+    DIV             reduce using rule 58 (numero -> NUM_REAL .)
+    AND             reduce using rule 58 (numero -> NUM_REAL .)
+    OPSOMA          reduce using rule 58 (numero -> NUM_REAL .)
+    OPSUB           reduce using rule 58 (numero -> NUM_REAL .)
+    OR              reduce using rule 58 (numero -> NUM_REAL .)
+    IGUAL           reduce using rule 58 (numero -> NUM_REAL .)
+    MAIOR_IGUAL     reduce using rule 58 (numero -> NUM_REAL .)
+    MAIOR           reduce using rule 58 (numero -> NUM_REAL .)
+    MENOR_IGUAL     reduce using rule 58 (numero -> NUM_REAL .)
+    MENOR           reduce using rule 58 (numero -> NUM_REAL .)
+    SEPARADOR       reduce using rule 58 (numero -> NUM_REAL .)
+    FIM_LINHA       reduce using rule 58 (numero -> NUM_REAL .)
+    FP              reduce using rule 58 (numero -> NUM_REAL .)
+    DOIS_PONTOS     reduce using rule 58 (numero -> NUM_REAL .)
 
 
 state 38
@@ -786,35 +788,35 @@ state 38
 
 state 39
 
-    (19) comandos -> atribuicao . FIM_LINHA comandos
+    (20) comandos -> atribuicao . FIM_LINHA comandos
 
     FIM_LINHA       shift and go to state 69
 
 
 state 40
 
-    (20) comandos -> chamada_de_procedimento . FIM_LINHA comandos
+    (21) comandos -> chamada_de_procedimento . FIM_LINHA comandos
 
     FIM_LINHA       shift and go to state 70
 
 
 state 41
 
-    (21) comandos -> comando_composto . comandos
-    (19) comandos -> . atribuicao FIM_LINHA comandos
-    (20) comandos -> . chamada_de_procedimento FIM_LINHA comandos
-    (21) comandos -> . comando_composto comandos
-    (22) comandos -> . comando_condicional_1 comandos
-    (23) comandos -> . comando_repetitivo_1 comandos
-    (24) comandos -> . empty
-    (25) atribuicao -> . variavel OPIGUAL_ATRIB expressao
-    (29) chamada_de_procedimento -> . variavel AP lista_de_parametros FP
+    (22) comandos -> comando_composto . comandos
+    (20) comandos -> . atribuicao FIM_LINHA comandos
+    (21) comandos -> . chamada_de_procedimento FIM_LINHA comandos
+    (22) comandos -> . comando_composto comandos
+    (23) comandos -> . comando_condicional_1 comandos
+    (24) comandos -> . comando_repetitivo_1 comandos
+    (25) comandos -> . empty
+    (26) atribuicao -> . variavel OPIGUAL_ATRIB expressao
+    (30) chamada_de_procedimento -> . variavel AP lista_de_parametros FP
     (16) comando_composto -> . BEGIN new_begin comandos END
-    (26) comando_condicional_1 -> . IF AP expressao FP THEN comandos
-    (27) comando_condicional_1 -> . IF AP expressao FP THEN comandos ELSE comandos
-    (28) comando_repetitivo_1 -> . WHILE AP expressao FP DO comandos
-    (59) empty -> .
-    (58) variavel -> . ID
+    (27) comando_condicional_1 -> . IF AP expressao FP THEN comandos
+    (28) comando_condicional_1 -> . IF AP expressao FP THEN comandos ELSE comandos
+    (29) comando_repetitivo_1 -> . WHILE AP expressao FP DO comandos
+    (60) empty -> .
+    (59) variavel -> . ID
 
   ! shift/reduce conflict for BEGIN resolved as shift
   ! shift/reduce conflict for IF resolved as shift
@@ -823,14 +825,14 @@ state 41
     BEGIN           shift and go to state 8
     IF              shift and go to state 46
     WHILE           shift and go to state 47
-    END             reduce using rule 59 (empty -> .)
-    ELSE            reduce using rule 59 (empty -> .)
+    END             reduce using rule 60 (empty -> .)
+    ELSE            reduce using rule 60 (empty -> .)
     ID              shift and go to state 35
 
-  ! BEGIN           [ reduce using rule 59 (empty -> .) ]
-  ! IF              [ reduce using rule 59 (empty -> .) ]
-  ! WHILE           [ reduce using rule 59 (empty -> .) ]
-  ! ID              [ reduce using rule 59 (empty -> .) ]
+  ! BEGIN           [ reduce using rule 60 (empty -> .) ]
+  ! IF              [ reduce using rule 60 (empty -> .) ]
+  ! WHILE           [ reduce using rule 60 (empty -> .) ]
+  ! ID              [ reduce using rule 60 (empty -> .) ]
 
     comando_composto               shift and go to state 41
     comandos                       shift and go to state 71
@@ -843,21 +845,21 @@ state 41
 
 state 42
 
-    (22) comandos -> comando_condicional_1 . comandos
-    (19) comandos -> . atribuicao FIM_LINHA comandos
-    (20) comandos -> . chamada_de_procedimento FIM_LINHA comandos
-    (21) comandos -> . comando_composto comandos
-    (22) comandos -> . comando_condicional_1 comandos
-    (23) comandos -> . comando_repetitivo_1 comandos
-    (24) comandos -> . empty
-    (25) atribuicao -> . variavel OPIGUAL_ATRIB expressao
-    (29) chamada_de_procedimento -> . variavel AP lista_de_parametros FP
+    (23) comandos -> comando_condicional_1 . comandos
+    (20) comandos -> . atribuicao FIM_LINHA comandos
+    (21) comandos -> . chamada_de_procedimento FIM_LINHA comandos
+    (22) comandos -> . comando_composto comandos
+    (23) comandos -> . comando_condicional_1 comandos
+    (24) comandos -> . comando_repetitivo_1 comandos
+    (25) comandos -> . empty
+    (26) atribuicao -> . variavel OPIGUAL_ATRIB expressao
+    (30) chamada_de_procedimento -> . variavel AP lista_de_parametros FP
     (16) comando_composto -> . BEGIN new_begin comandos END
-    (26) comando_condicional_1 -> . IF AP expressao FP THEN comandos
-    (27) comando_condicional_1 -> . IF AP expressao FP THEN comandos ELSE comandos
-    (28) comando_repetitivo_1 -> . WHILE AP expressao FP DO comandos
-    (59) empty -> .
-    (58) variavel -> . ID
+    (27) comando_condicional_1 -> . IF AP expressao FP THEN comandos
+    (28) comando_condicional_1 -> . IF AP expressao FP THEN comandos ELSE comandos
+    (29) comando_repetitivo_1 -> . WHILE AP expressao FP DO comandos
+    (60) empty -> .
+    (59) variavel -> . ID
 
   ! shift/reduce conflict for BEGIN resolved as shift
   ! shift/reduce conflict for IF resolved as shift
@@ -866,14 +868,14 @@ state 42
     BEGIN           shift and go to state 8
     IF              shift and go to state 46
     WHILE           shift and go to state 47
-    END             reduce using rule 59 (empty -> .)
-    ELSE            reduce using rule 59 (empty -> .)
+    END             reduce using rule 60 (empty -> .)
+    ELSE            reduce using rule 60 (empty -> .)
     ID              shift and go to state 35
 
-  ! BEGIN           [ reduce using rule 59 (empty -> .) ]
-  ! IF              [ reduce using rule 59 (empty -> .) ]
-  ! WHILE           [ reduce using rule 59 (empty -> .) ]
-  ! ID              [ reduce using rule 59 (empty -> .) ]
+  ! BEGIN           [ reduce using rule 60 (empty -> .) ]
+  ! IF              [ reduce using rule 60 (empty -> .) ]
+  ! WHILE           [ reduce using rule 60 (empty -> .) ]
+  ! ID              [ reduce using rule 60 (empty -> .) ]
 
     comando_condicional_1          shift and go to state 42
     comandos                       shift and go to state 72
@@ -886,21 +888,21 @@ state 42
 
 state 43
 
-    (23) comandos -> comando_repetitivo_1 . comandos
-    (19) comandos -> . atribuicao FIM_LINHA comandos
-    (20) comandos -> . chamada_de_procedimento FIM_LINHA comandos
-    (21) comandos -> . comando_composto comandos
-    (22) comandos -> . comando_condicional_1 comandos
-    (23) comandos -> . comando_repetitivo_1 comandos
-    (24) comandos -> . empty
-    (25) atribuicao -> . variavel OPIGUAL_ATRIB expressao
-    (29) chamada_de_procedimento -> . variavel AP lista_de_parametros FP
+    (24) comandos -> comando_repetitivo_1 . comandos
+    (20) comandos -> . atribuicao FIM_LINHA comandos
+    (21) comandos -> . chamada_de_procedimento FIM_LINHA comandos
+    (22) comandos -> . comando_composto comandos
+    (23) comandos -> . comando_condicional_1 comandos
+    (24) comandos -> . comando_repetitivo_1 comandos
+    (25) comandos -> . empty
+    (26) atribuicao -> . variavel OPIGUAL_ATRIB expressao
+    (30) chamada_de_procedimento -> . variavel AP lista_de_parametros FP
     (16) comando_composto -> . BEGIN new_begin comandos END
-    (26) comando_condicional_1 -> . IF AP expressao FP THEN comandos
-    (27) comando_condicional_1 -> . IF AP expressao FP THEN comandos ELSE comandos
-    (28) comando_repetitivo_1 -> . WHILE AP expressao FP DO comandos
-    (59) empty -> .
-    (58) variavel -> . ID
+    (27) comando_condicional_1 -> . IF AP expressao FP THEN comandos
+    (28) comando_condicional_1 -> . IF AP expressao FP THEN comandos ELSE comandos
+    (29) comando_repetitivo_1 -> . WHILE AP expressao FP DO comandos
+    (60) empty -> .
+    (59) variavel -> . ID
 
   ! shift/reduce conflict for BEGIN resolved as shift
   ! shift/reduce conflict for IF resolved as shift
@@ -909,14 +911,14 @@ state 43
     BEGIN           shift and go to state 8
     IF              shift and go to state 46
     WHILE           shift and go to state 47
-    END             reduce using rule 59 (empty -> .)
-    ELSE            reduce using rule 59 (empty -> .)
+    END             reduce using rule 60 (empty -> .)
+    ELSE            reduce using rule 60 (empty -> .)
     ID              shift and go to state 35
 
-  ! BEGIN           [ reduce using rule 59 (empty -> .) ]
-  ! IF              [ reduce using rule 59 (empty -> .) ]
-  ! WHILE           [ reduce using rule 59 (empty -> .) ]
-  ! ID              [ reduce using rule 59 (empty -> .) ]
+  ! BEGIN           [ reduce using rule 60 (empty -> .) ]
+  ! IF              [ reduce using rule 60 (empty -> .) ]
+  ! WHILE           [ reduce using rule 60 (empty -> .) ]
+  ! ID              [ reduce using rule 60 (empty -> .) ]
 
     comando_repetitivo_1           shift and go to state 43
     comandos                       shift and go to state 73
@@ -929,20 +931,20 @@ state 43
 
 state 44
 
-    (24) comandos -> empty .
+    (25) comandos -> empty .
 
-    END             reduce using rule 24 (comandos -> empty .)
-    ELSE            reduce using rule 24 (comandos -> empty .)
-    BEGIN           reduce using rule 24 (comandos -> empty .)
-    IF              reduce using rule 24 (comandos -> empty .)
-    WHILE           reduce using rule 24 (comandos -> empty .)
-    ID              reduce using rule 24 (comandos -> empty .)
+    END             reduce using rule 25 (comandos -> empty .)
+    ELSE            reduce using rule 25 (comandos -> empty .)
+    BEGIN           reduce using rule 25 (comandos -> empty .)
+    IF              reduce using rule 25 (comandos -> empty .)
+    WHILE           reduce using rule 25 (comandos -> empty .)
+    ID              reduce using rule 25 (comandos -> empty .)
 
 
 state 45
 
-    (25) atribuicao -> variavel . OPIGUAL_ATRIB expressao
-    (29) chamada_de_procedimento -> variavel . AP lista_de_parametros FP
+    (26) atribuicao -> variavel . OPIGUAL_ATRIB expressao
+    (30) chamada_de_procedimento -> variavel . AP lista_de_parametros FP
 
     OPIGUAL_ATRIB   shift and go to state 74
     AP              shift and go to state 75
@@ -950,15 +952,15 @@ state 45
 
 state 46
 
-    (26) comando_condicional_1 -> IF . AP expressao FP THEN comandos
-    (27) comando_condicional_1 -> IF . AP expressao FP THEN comandos ELSE comandos
+    (27) comando_condicional_1 -> IF . AP expressao FP THEN comandos
+    (28) comando_condicional_1 -> IF . AP expressao FP THEN comandos ELSE comandos
 
     AP              shift and go to state 76
 
 
 state 47
 
-    (28) comando_repetitivo_1 -> WHILE . AP expressao FP DO comandos
+    (29) comando_repetitivo_1 -> WHILE . AP expressao FP DO comandos
 
     AP              shift and go to state 77
 
@@ -982,43 +984,43 @@ state 49
 
 state 50
 
-    (30) lista_de_parametros -> expressao mais_parametros .
+    (31) lista_de_parametros -> expressao mais_parametros .
 
-    FIM_LINHA       reduce using rule 30 (lista_de_parametros -> expressao mais_parametros .)
-    FP              reduce using rule 30 (lista_de_parametros -> expressao mais_parametros .)
-    DOIS_PONTOS     reduce using rule 30 (lista_de_parametros -> expressao mais_parametros .)
+    FIM_LINHA       reduce using rule 31 (lista_de_parametros -> expressao mais_parametros .)
+    FP              reduce using rule 31 (lista_de_parametros -> expressao mais_parametros .)
+    DOIS_PONTOS     reduce using rule 31 (lista_de_parametros -> expressao mais_parametros .)
 
 
 state 51
 
-    (32) mais_parametros -> SEPARADOR . lista_de_parametros
-    (30) lista_de_parametros -> . expressao mais_parametros
-    (31) lista_de_parametros -> . empty
-    (34) expressao -> . expressao_simples
-    (35) expressao -> . expressao_simples relacao expressao_simples
-    (59) empty -> .
-    (41) expressao_simples -> . expressao_simples OPSOMA termo
-    (42) expressao_simples -> . expressao_simples OPSUB termo
-    (43) expressao_simples -> . expressao_simples OR termo
-    (44) expressao_simples -> . termo
-    (45) termo -> . termo OPMUL fator
-    (46) termo -> . termo OPDIV fator
-    (47) termo -> . termo DIV fator
-    (48) termo -> . termo AND fator
-    (49) termo -> . fator
-    (50) fator -> . variavel
-    (51) fator -> . numero
-    (52) fator -> . TRUE
-    (53) fator -> . FALSE
-    (54) fator -> . AP expressao_simples FP
-    (55) fator -> . NOT fator
-    (58) variavel -> . ID
-    (56) numero -> . NUM_INT
-    (57) numero -> . NUM_REAL
+    (33) mais_parametros -> SEPARADOR . lista_de_parametros
+    (31) lista_de_parametros -> . expressao mais_parametros
+    (32) lista_de_parametros -> . empty
+    (35) expressao -> . expressao_simples
+    (36) expressao -> . expressao_simples relacao expressao_simples
+    (60) empty -> .
+    (42) expressao_simples -> . expressao_simples OPSOMA termo
+    (43) expressao_simples -> . expressao_simples OPSUB termo
+    (44) expressao_simples -> . expressao_simples OR termo
+    (45) expressao_simples -> . termo
+    (46) termo -> . termo OPMUL fator
+    (47) termo -> . termo OPDIV fator
+    (48) termo -> . termo DIV fator
+    (49) termo -> . termo AND fator
+    (50) termo -> . fator
+    (51) fator -> . variavel
+    (52) fator -> . numero
+    (53) fator -> . TRUE
+    (54) fator -> . FALSE
+    (55) fator -> . AP expressao_simples FP
+    (56) fator -> . NOT fator
+    (59) variavel -> . ID
+    (57) numero -> . NUM_INT
+    (58) numero -> . NUM_REAL
 
-    FIM_LINHA       reduce using rule 59 (empty -> .)
-    FP              reduce using rule 59 (empty -> .)
-    DOIS_PONTOS     reduce using rule 59 (empty -> .)
+    FIM_LINHA       reduce using rule 60 (empty -> .)
+    FP              reduce using rule 60 (empty -> .)
+    DOIS_PONTOS     reduce using rule 60 (empty -> .)
     TRUE            shift and go to state 31
     FALSE           shift and go to state 32
     AP              shift and go to state 33
@@ -1038,34 +1040,34 @@ state 51
 
 state 52
 
-    (33) mais_parametros -> empty .
+    (34) mais_parametros -> empty .
 
-    FIM_LINHA       reduce using rule 33 (mais_parametros -> empty .)
-    FP              reduce using rule 33 (mais_parametros -> empty .)
-    DOIS_PONTOS     reduce using rule 33 (mais_parametros -> empty .)
+    FIM_LINHA       reduce using rule 34 (mais_parametros -> empty .)
+    FP              reduce using rule 34 (mais_parametros -> empty .)
+    DOIS_PONTOS     reduce using rule 34 (mais_parametros -> empty .)
 
 
 state 53
 
-    (35) expressao -> expressao_simples relacao . expressao_simples
-    (41) expressao_simples -> . expressao_simples OPSOMA termo
-    (42) expressao_simples -> . expressao_simples OPSUB termo
-    (43) expressao_simples -> . expressao_simples OR termo
-    (44) expressao_simples -> . termo
-    (45) termo -> . termo OPMUL fator
-    (46) termo -> . termo OPDIV fator
-    (47) termo -> . termo DIV fator
-    (48) termo -> . termo AND fator
-    (49) termo -> . fator
-    (50) fator -> . variavel
-    (51) fator -> . numero
-    (52) fator -> . TRUE
-    (53) fator -> . FALSE
-    (54) fator -> . AP expressao_simples FP
-    (55) fator -> . NOT fator
-    (58) variavel -> . ID
-    (56) numero -> . NUM_INT
-    (57) numero -> . NUM_REAL
+    (36) expressao -> expressao_simples relacao . expressao_simples
+    (42) expressao_simples -> . expressao_simples OPSOMA termo
+    (43) expressao_simples -> . expressao_simples OPSUB termo
+    (44) expressao_simples -> . expressao_simples OR termo
+    (45) expressao_simples -> . termo
+    (46) termo -> . termo OPMUL fator
+    (47) termo -> . termo OPDIV fator
+    (48) termo -> . termo DIV fator
+    (49) termo -> . termo AND fator
+    (50) termo -> . fator
+    (51) fator -> . variavel
+    (52) fator -> . numero
+    (53) fator -> . TRUE
+    (54) fator -> . FALSE
+    (55) fator -> . AP expressao_simples FP
+    (56) fator -> . NOT fator
+    (59) variavel -> . ID
+    (57) numero -> . NUM_INT
+    (58) numero -> . NUM_REAL
 
     TRUE            shift and go to state 31
     FALSE           shift and go to state 32
@@ -1083,21 +1085,21 @@ state 53
 
 state 54
 
-    (41) expressao_simples -> expressao_simples OPSOMA . termo
-    (45) termo -> . termo OPMUL fator
-    (46) termo -> . termo OPDIV fator
-    (47) termo -> . termo DIV fator
-    (48) termo -> . termo AND fator
-    (49) termo -> . fator
-    (50) fator -> . variavel
-    (51) fator -> . numero
-    (52) fator -> . TRUE
-    (53) fator -> . FALSE
-    (54) fator -> . AP expressao_simples FP
-    (55) fator -> . NOT fator
-    (58) variavel -> . ID
-    (56) numero -> . NUM_INT
-    (57) numero -> . NUM_REAL
+    (42) expressao_simples -> expressao_simples OPSOMA . termo
+    (46) termo -> . termo OPMUL fator
+    (47) termo -> . termo OPDIV fator
+    (48) termo -> . termo DIV fator
+    (49) termo -> . termo AND fator
+    (50) termo -> . fator
+    (51) fator -> . variavel
+    (52) fator -> . numero
+    (53) fator -> . TRUE
+    (54) fator -> . FALSE
+    (55) fator -> . AP expressao_simples FP
+    (56) fator -> . NOT fator
+    (59) variavel -> . ID
+    (57) numero -> . NUM_INT
+    (58) numero -> . NUM_REAL
 
     TRUE            shift and go to state 31
     FALSE           shift and go to state 32
@@ -1114,21 +1116,21 @@ state 54
 
 state 55
 
-    (42) expressao_simples -> expressao_simples OPSUB . termo
-    (45) termo -> . termo OPMUL fator
-    (46) termo -> . termo OPDIV fator
-    (47) termo -> . termo DIV fator
-    (48) termo -> . termo AND fator
-    (49) termo -> . fator
-    (50) fator -> . variavel
-    (51) fator -> . numero
-    (52) fator -> . TRUE
-    (53) fator -> . FALSE
-    (54) fator -> . AP expressao_simples FP
-    (55) fator -> . NOT fator
-    (58) variavel -> . ID
-    (56) numero -> . NUM_INT
-    (57) numero -> . NUM_REAL
+    (43) expressao_simples -> expressao_simples OPSUB . termo
+    (46) termo -> . termo OPMUL fator
+    (47) termo -> . termo OPDIV fator
+    (48) termo -> . termo DIV fator
+    (49) termo -> . termo AND fator
+    (50) termo -> . fator
+    (51) fator -> . variavel
+    (52) fator -> . numero
+    (53) fator -> . TRUE
+    (54) fator -> . FALSE
+    (55) fator -> . AP expressao_simples FP
+    (56) fator -> . NOT fator
+    (59) variavel -> . ID
+    (57) numero -> . NUM_INT
+    (58) numero -> . NUM_REAL
 
     TRUE            shift and go to state 31
     FALSE           shift and go to state 32
@@ -1145,21 +1147,21 @@ state 55
 
 state 56
 
-    (43) expressao_simples -> expressao_simples OR . termo
-    (45) termo -> . termo OPMUL fator
-    (46) termo -> . termo OPDIV fator
-    (47) termo -> . termo DIV fator
-    (48) termo -> . termo AND fator
-    (49) termo -> . fator
-    (50) fator -> . variavel
-    (51) fator -> . numero
-    (52) fator -> . TRUE
-    (53) fator -> . FALSE
-    (54) fator -> . AP expressao_simples FP
-    (55) fator -> . NOT fator
-    (58) variavel -> . ID
-    (56) numero -> . NUM_INT
-    (57) numero -> . NUM_REAL
+    (44) expressao_simples -> expressao_simples OR . termo
+    (46) termo -> . termo OPMUL fator
+    (47) termo -> . termo OPDIV fator
+    (48) termo -> . termo DIV fator
+    (49) termo -> . termo AND fator
+    (50) termo -> . fator
+    (51) fator -> . variavel
+    (52) fator -> . numero
+    (53) fator -> . TRUE
+    (54) fator -> . FALSE
+    (55) fator -> . AP expressao_simples FP
+    (56) fator -> . NOT fator
+    (59) variavel -> . ID
+    (57) numero -> . NUM_INT
+    (58) numero -> . NUM_REAL
 
     TRUE            shift and go to state 31
     FALSE           shift and go to state 32
@@ -1176,81 +1178,81 @@ state 56
 
 state 57
 
-    (36) relacao -> IGUAL .
+    (37) relacao -> IGUAL .
 
-    TRUE            reduce using rule 36 (relacao -> IGUAL .)
-    FALSE           reduce using rule 36 (relacao -> IGUAL .)
-    AP              reduce using rule 36 (relacao -> IGUAL .)
-    NOT             reduce using rule 36 (relacao -> IGUAL .)
-    ID              reduce using rule 36 (relacao -> IGUAL .)
-    NUM_INT         reduce using rule 36 (relacao -> IGUAL .)
-    NUM_REAL        reduce using rule 36 (relacao -> IGUAL .)
+    TRUE            reduce using rule 37 (relacao -> IGUAL .)
+    FALSE           reduce using rule 37 (relacao -> IGUAL .)
+    AP              reduce using rule 37 (relacao -> IGUAL .)
+    NOT             reduce using rule 37 (relacao -> IGUAL .)
+    ID              reduce using rule 37 (relacao -> IGUAL .)
+    NUM_INT         reduce using rule 37 (relacao -> IGUAL .)
+    NUM_REAL        reduce using rule 37 (relacao -> IGUAL .)
 
 
 state 58
 
-    (37) relacao -> MAIOR_IGUAL .
+    (38) relacao -> MAIOR_IGUAL .
 
-    TRUE            reduce using rule 37 (relacao -> MAIOR_IGUAL .)
-    FALSE           reduce using rule 37 (relacao -> MAIOR_IGUAL .)
-    AP              reduce using rule 37 (relacao -> MAIOR_IGUAL .)
-    NOT             reduce using rule 37 (relacao -> MAIOR_IGUAL .)
-    ID              reduce using rule 37 (relacao -> MAIOR_IGUAL .)
-    NUM_INT         reduce using rule 37 (relacao -> MAIOR_IGUAL .)
-    NUM_REAL        reduce using rule 37 (relacao -> MAIOR_IGUAL .)
+    TRUE            reduce using rule 38 (relacao -> MAIOR_IGUAL .)
+    FALSE           reduce using rule 38 (relacao -> MAIOR_IGUAL .)
+    AP              reduce using rule 38 (relacao -> MAIOR_IGUAL .)
+    NOT             reduce using rule 38 (relacao -> MAIOR_IGUAL .)
+    ID              reduce using rule 38 (relacao -> MAIOR_IGUAL .)
+    NUM_INT         reduce using rule 38 (relacao -> MAIOR_IGUAL .)
+    NUM_REAL        reduce using rule 38 (relacao -> MAIOR_IGUAL .)
 
 
 state 59
 
-    (38) relacao -> MAIOR .
+    (39) relacao -> MAIOR .
 
-    TRUE            reduce using rule 38 (relacao -> MAIOR .)
-    FALSE           reduce using rule 38 (relacao -> MAIOR .)
-    AP              reduce using rule 38 (relacao -> MAIOR .)
-    NOT             reduce using rule 38 (relacao -> MAIOR .)
-    ID              reduce using rule 38 (relacao -> MAIOR .)
-    NUM_INT         reduce using rule 38 (relacao -> MAIOR .)
-    NUM_REAL        reduce using rule 38 (relacao -> MAIOR .)
+    TRUE            reduce using rule 39 (relacao -> MAIOR .)
+    FALSE           reduce using rule 39 (relacao -> MAIOR .)
+    AP              reduce using rule 39 (relacao -> MAIOR .)
+    NOT             reduce using rule 39 (relacao -> MAIOR .)
+    ID              reduce using rule 39 (relacao -> MAIOR .)
+    NUM_INT         reduce using rule 39 (relacao -> MAIOR .)
+    NUM_REAL        reduce using rule 39 (relacao -> MAIOR .)
 
 
 state 60
 
-    (39) relacao -> MENOR_IGUAL .
+    (40) relacao -> MENOR_IGUAL .
 
-    TRUE            reduce using rule 39 (relacao -> MENOR_IGUAL .)
-    FALSE           reduce using rule 39 (relacao -> MENOR_IGUAL .)
-    AP              reduce using rule 39 (relacao -> MENOR_IGUAL .)
-    NOT             reduce using rule 39 (relacao -> MENOR_IGUAL .)
-    ID              reduce using rule 39 (relacao -> MENOR_IGUAL .)
-    NUM_INT         reduce using rule 39 (relacao -> MENOR_IGUAL .)
-    NUM_REAL        reduce using rule 39 (relacao -> MENOR_IGUAL .)
+    TRUE            reduce using rule 40 (relacao -> MENOR_IGUAL .)
+    FALSE           reduce using rule 40 (relacao -> MENOR_IGUAL .)
+    AP              reduce using rule 40 (relacao -> MENOR_IGUAL .)
+    NOT             reduce using rule 40 (relacao -> MENOR_IGUAL .)
+    ID              reduce using rule 40 (relacao -> MENOR_IGUAL .)
+    NUM_INT         reduce using rule 40 (relacao -> MENOR_IGUAL .)
+    NUM_REAL        reduce using rule 40 (relacao -> MENOR_IGUAL .)
 
 
 state 61
 
-    (40) relacao -> MENOR .
+    (41) relacao -> MENOR .
 
-    TRUE            reduce using rule 40 (relacao -> MENOR .)
-    FALSE           reduce using rule 40 (relacao -> MENOR .)
-    AP              reduce using rule 40 (relacao -> MENOR .)
-    NOT             reduce using rule 40 (relacao -> MENOR .)
-    ID              reduce using rule 40 (relacao -> MENOR .)
-    NUM_INT         reduce using rule 40 (relacao -> MENOR .)
-    NUM_REAL        reduce using rule 40 (relacao -> MENOR .)
+    TRUE            reduce using rule 41 (relacao -> MENOR .)
+    FALSE           reduce using rule 41 (relacao -> MENOR .)
+    AP              reduce using rule 41 (relacao -> MENOR .)
+    NOT             reduce using rule 41 (relacao -> MENOR .)
+    ID              reduce using rule 41 (relacao -> MENOR .)
+    NUM_INT         reduce using rule 41 (relacao -> MENOR .)
+    NUM_REAL        reduce using rule 41 (relacao -> MENOR .)
 
 
 state 62
 
-    (45) termo -> termo OPMUL . fator
-    (50) fator -> . variavel
-    (51) fator -> . numero
-    (52) fator -> . TRUE
-    (53) fator -> . FALSE
-    (54) fator -> . AP expressao_simples FP
-    (55) fator -> . NOT fator
-    (58) variavel -> . ID
-    (56) numero -> . NUM_INT
-    (57) numero -> . NUM_REAL
+    (46) termo -> termo OPMUL . fator
+    (51) fator -> . variavel
+    (52) fator -> . numero
+    (53) fator -> . TRUE
+    (54) fator -> . FALSE
+    (55) fator -> . AP expressao_simples FP
+    (56) fator -> . NOT fator
+    (59) variavel -> . ID
+    (57) numero -> . NUM_INT
+    (58) numero -> . NUM_REAL
 
     TRUE            shift and go to state 31
     FALSE           shift and go to state 32
@@ -1266,16 +1268,16 @@ state 62
 
 state 63
 
-    (46) termo -> termo OPDIV . fator
-    (50) fator -> . variavel
-    (51) fator -> . numero
-    (52) fator -> . TRUE
-    (53) fator -> . FALSE
-    (54) fator -> . AP expressao_simples FP
-    (55) fator -> . NOT fator
-    (58) variavel -> . ID
-    (56) numero -> . NUM_INT
-    (57) numero -> . NUM_REAL
+    (47) termo -> termo OPDIV . fator
+    (51) fator -> . variavel
+    (52) fator -> . numero
+    (53) fator -> . TRUE
+    (54) fator -> . FALSE
+    (55) fator -> . AP expressao_simples FP
+    (56) fator -> . NOT fator
+    (59) variavel -> . ID
+    (57) numero -> . NUM_INT
+    (58) numero -> . NUM_REAL
 
     TRUE            shift and go to state 31
     FALSE           shift and go to state 32
@@ -1291,16 +1293,16 @@ state 63
 
 state 64
 
-    (47) termo -> termo DIV . fator
-    (50) fator -> . variavel
-    (51) fator -> . numero
-    (52) fator -> . TRUE
-    (53) fator -> . FALSE
-    (54) fator -> . AP expressao_simples FP
-    (55) fator -> . NOT fator
-    (58) variavel -> . ID
-    (56) numero -> . NUM_INT
-    (57) numero -> . NUM_REAL
+    (48) termo -> termo DIV . fator
+    (51) fator -> . variavel
+    (52) fator -> . numero
+    (53) fator -> . TRUE
+    (54) fator -> . FALSE
+    (55) fator -> . AP expressao_simples FP
+    (56) fator -> . NOT fator
+    (59) variavel -> . ID
+    (57) numero -> . NUM_INT
+    (58) numero -> . NUM_REAL
 
     TRUE            shift and go to state 31
     FALSE           shift and go to state 32
@@ -1316,16 +1318,16 @@ state 64
 
 state 65
 
-    (48) termo -> termo AND . fator
-    (50) fator -> . variavel
-    (51) fator -> . numero
-    (52) fator -> . TRUE
-    (53) fator -> . FALSE
-    (54) fator -> . AP expressao_simples FP
-    (55) fator -> . NOT fator
-    (58) variavel -> . ID
-    (56) numero -> . NUM_INT
-    (57) numero -> . NUM_REAL
+    (49) termo -> termo AND . fator
+    (51) fator -> . variavel
+    (52) fator -> . numero
+    (53) fator -> . TRUE
+    (54) fator -> . FALSE
+    (55) fator -> . AP expressao_simples FP
+    (56) fator -> . NOT fator
+    (59) variavel -> . ID
+    (57) numero -> . NUM_INT
+    (58) numero -> . NUM_REAL
 
     TRUE            shift and go to state 31
     FALSE           shift and go to state 32
@@ -1341,10 +1343,10 @@ state 65
 
 state 66
 
-    (54) fator -> AP expressao_simples . FP
-    (41) expressao_simples -> expressao_simples . OPSOMA termo
-    (42) expressao_simples -> expressao_simples . OPSUB termo
-    (43) expressao_simples -> expressao_simples . OR termo
+    (55) fator -> AP expressao_simples . FP
+    (42) expressao_simples -> expressao_simples . OPSOMA termo
+    (43) expressao_simples -> expressao_simples . OPSUB termo
+    (44) expressao_simples -> expressao_simples . OR termo
 
     FP              shift and go to state 89
     OPSOMA          shift and go to state 54
@@ -1354,24 +1356,24 @@ state 66
 
 state 67
 
-    (55) fator -> NOT fator .
+    (56) fator -> NOT fator .
 
-    OPMUL           reduce using rule 55 (fator -> NOT fator .)
-    OPDIV           reduce using rule 55 (fator -> NOT fator .)
-    DIV             reduce using rule 55 (fator -> NOT fator .)
-    AND             reduce using rule 55 (fator -> NOT fator .)
-    OPSOMA          reduce using rule 55 (fator -> NOT fator .)
-    OPSUB           reduce using rule 55 (fator -> NOT fator .)
-    OR              reduce using rule 55 (fator -> NOT fator .)
-    IGUAL           reduce using rule 55 (fator -> NOT fator .)
-    MAIOR_IGUAL     reduce using rule 55 (fator -> NOT fator .)
-    MAIOR           reduce using rule 55 (fator -> NOT fator .)
-    MENOR_IGUAL     reduce using rule 55 (fator -> NOT fator .)
-    MENOR           reduce using rule 55 (fator -> NOT fator .)
-    SEPARADOR       reduce using rule 55 (fator -> NOT fator .)
-    FIM_LINHA       reduce using rule 55 (fator -> NOT fator .)
-    FP              reduce using rule 55 (fator -> NOT fator .)
-    DOIS_PONTOS     reduce using rule 55 (fator -> NOT fator .)
+    OPMUL           reduce using rule 56 (fator -> NOT fator .)
+    OPDIV           reduce using rule 56 (fator -> NOT fator .)
+    DIV             reduce using rule 56 (fator -> NOT fator .)
+    AND             reduce using rule 56 (fator -> NOT fator .)
+    OPSOMA          reduce using rule 56 (fator -> NOT fator .)
+    OPSUB           reduce using rule 56 (fator -> NOT fator .)
+    OR              reduce using rule 56 (fator -> NOT fator .)
+    IGUAL           reduce using rule 56 (fator -> NOT fator .)
+    MAIOR_IGUAL     reduce using rule 56 (fator -> NOT fator .)
+    MAIOR           reduce using rule 56 (fator -> NOT fator .)
+    MENOR_IGUAL     reduce using rule 56 (fator -> NOT fator .)
+    MENOR           reduce using rule 56 (fator -> NOT fator .)
+    SEPARADOR       reduce using rule 56 (fator -> NOT fator .)
+    FIM_LINHA       reduce using rule 56 (fator -> NOT fator .)
+    FP              reduce using rule 56 (fator -> NOT fator .)
+    DOIS_PONTOS     reduce using rule 56 (fator -> NOT fator .)
 
 
 state 68
@@ -1390,21 +1392,21 @@ state 68
 
 state 69
 
-    (19) comandos -> atribuicao FIM_LINHA . comandos
-    (19) comandos -> . atribuicao FIM_LINHA comandos
-    (20) comandos -> . chamada_de_procedimento FIM_LINHA comandos
-    (21) comandos -> . comando_composto comandos
-    (22) comandos -> . comando_condicional_1 comandos
-    (23) comandos -> . comando_repetitivo_1 comandos
-    (24) comandos -> . empty
-    (25) atribuicao -> . variavel OPIGUAL_ATRIB expressao
-    (29) chamada_de_procedimento -> . variavel AP lista_de_parametros FP
+    (20) comandos -> atribuicao FIM_LINHA . comandos
+    (20) comandos -> . atribuicao FIM_LINHA comandos
+    (21) comandos -> . chamada_de_procedimento FIM_LINHA comandos
+    (22) comandos -> . comando_composto comandos
+    (23) comandos -> . comando_condicional_1 comandos
+    (24) comandos -> . comando_repetitivo_1 comandos
+    (25) comandos -> . empty
+    (26) atribuicao -> . variavel OPIGUAL_ATRIB expressao
+    (30) chamada_de_procedimento -> . variavel AP lista_de_parametros FP
     (16) comando_composto -> . BEGIN new_begin comandos END
-    (26) comando_condicional_1 -> . IF AP expressao FP THEN comandos
-    (27) comando_condicional_1 -> . IF AP expressao FP THEN comandos ELSE comandos
-    (28) comando_repetitivo_1 -> . WHILE AP expressao FP DO comandos
-    (59) empty -> .
-    (58) variavel -> . ID
+    (27) comando_condicional_1 -> . IF AP expressao FP THEN comandos
+    (28) comando_condicional_1 -> . IF AP expressao FP THEN comandos ELSE comandos
+    (29) comando_repetitivo_1 -> . WHILE AP expressao FP DO comandos
+    (60) empty -> .
+    (59) variavel -> . ID
 
   ! shift/reduce conflict for BEGIN resolved as shift
   ! shift/reduce conflict for IF resolved as shift
@@ -1413,14 +1415,14 @@ state 69
     BEGIN           shift and go to state 8
     IF              shift and go to state 46
     WHILE           shift and go to state 47
-    END             reduce using rule 59 (empty -> .)
-    ELSE            reduce using rule 59 (empty -> .)
+    END             reduce using rule 60 (empty -> .)
+    ELSE            reduce using rule 60 (empty -> .)
     ID              shift and go to state 35
 
-  ! BEGIN           [ reduce using rule 59 (empty -> .) ]
-  ! IF              [ reduce using rule 59 (empty -> .) ]
-  ! WHILE           [ reduce using rule 59 (empty -> .) ]
-  ! ID              [ reduce using rule 59 (empty -> .) ]
+  ! BEGIN           [ reduce using rule 60 (empty -> .) ]
+  ! IF              [ reduce using rule 60 (empty -> .) ]
+  ! WHILE           [ reduce using rule 60 (empty -> .) ]
+  ! ID              [ reduce using rule 60 (empty -> .) ]
 
     atribuicao                     shift and go to state 39
     comandos                       shift and go to state 90
@@ -1433,21 +1435,21 @@ state 69
 
 state 70
 
-    (20) comandos -> chamada_de_procedimento FIM_LINHA . comandos
-    (19) comandos -> . atribuicao FIM_LINHA comandos
-    (20) comandos -> . chamada_de_procedimento FIM_LINHA comandos
-    (21) comandos -> . comando_composto comandos
-    (22) comandos -> . comando_condicional_1 comandos
-    (23) comandos -> . comando_repetitivo_1 comandos
-    (24) comandos -> . empty
-    (25) atribuicao -> . variavel OPIGUAL_ATRIB expressao
-    (29) chamada_de_procedimento -> . variavel AP lista_de_parametros FP
+    (21) comandos -> chamada_de_procedimento FIM_LINHA . comandos
+    (20) comandos -> . atribuicao FIM_LINHA comandos
+    (21) comandos -> . chamada_de_procedimento FIM_LINHA comandos
+    (22) comandos -> . comando_composto comandos
+    (23) comandos -> . comando_condicional_1 comandos
+    (24) comandos -> . comando_repetitivo_1 comandos
+    (25) comandos -> . empty
+    (26) atribuicao -> . variavel OPIGUAL_ATRIB expressao
+    (30) chamada_de_procedimento -> . variavel AP lista_de_parametros FP
     (16) comando_composto -> . BEGIN new_begin comandos END
-    (26) comando_condicional_1 -> . IF AP expressao FP THEN comandos
-    (27) comando_condicional_1 -> . IF AP expressao FP THEN comandos ELSE comandos
-    (28) comando_repetitivo_1 -> . WHILE AP expressao FP DO comandos
-    (59) empty -> .
-    (58) variavel -> . ID
+    (27) comando_condicional_1 -> . IF AP expressao FP THEN comandos
+    (28) comando_condicional_1 -> . IF AP expressao FP THEN comandos ELSE comandos
+    (29) comando_repetitivo_1 -> . WHILE AP expressao FP DO comandos
+    (60) empty -> .
+    (59) variavel -> . ID
 
   ! shift/reduce conflict for BEGIN resolved as shift
   ! shift/reduce conflict for IF resolved as shift
@@ -1456,14 +1458,14 @@ state 70
     BEGIN           shift and go to state 8
     IF              shift and go to state 46
     WHILE           shift and go to state 47
-    END             reduce using rule 59 (empty -> .)
-    ELSE            reduce using rule 59 (empty -> .)
+    END             reduce using rule 60 (empty -> .)
+    ELSE            reduce using rule 60 (empty -> .)
     ID              shift and go to state 35
 
-  ! BEGIN           [ reduce using rule 59 (empty -> .) ]
-  ! IF              [ reduce using rule 59 (empty -> .) ]
-  ! WHILE           [ reduce using rule 59 (empty -> .) ]
-  ! ID              [ reduce using rule 59 (empty -> .) ]
+  ! BEGIN           [ reduce using rule 60 (empty -> .) ]
+  ! IF              [ reduce using rule 60 (empty -> .) ]
+  ! WHILE           [ reduce using rule 60 (empty -> .) ]
+  ! ID              [ reduce using rule 60 (empty -> .) ]
 
     chamada_de_procedimento        shift and go to state 40
     comandos                       shift and go to state 91
@@ -1476,63 +1478,63 @@ state 70
 
 state 71
 
-    (21) comandos -> comando_composto comandos .
+    (22) comandos -> comando_composto comandos .
 
-    END             reduce using rule 21 (comandos -> comando_composto comandos .)
-    ELSE            reduce using rule 21 (comandos -> comando_composto comandos .)
-    BEGIN           reduce using rule 21 (comandos -> comando_composto comandos .)
-    IF              reduce using rule 21 (comandos -> comando_composto comandos .)
-    WHILE           reduce using rule 21 (comandos -> comando_composto comandos .)
-    ID              reduce using rule 21 (comandos -> comando_composto comandos .)
+    END             reduce using rule 22 (comandos -> comando_composto comandos .)
+    ELSE            reduce using rule 22 (comandos -> comando_composto comandos .)
+    BEGIN           reduce using rule 22 (comandos -> comando_composto comandos .)
+    IF              reduce using rule 22 (comandos -> comando_composto comandos .)
+    WHILE           reduce using rule 22 (comandos -> comando_composto comandos .)
+    ID              reduce using rule 22 (comandos -> comando_composto comandos .)
 
 
 state 72
 
-    (22) comandos -> comando_condicional_1 comandos .
+    (23) comandos -> comando_condicional_1 comandos .
 
-    END             reduce using rule 22 (comandos -> comando_condicional_1 comandos .)
-    ELSE            reduce using rule 22 (comandos -> comando_condicional_1 comandos .)
-    BEGIN           reduce using rule 22 (comandos -> comando_condicional_1 comandos .)
-    IF              reduce using rule 22 (comandos -> comando_condicional_1 comandos .)
-    WHILE           reduce using rule 22 (comandos -> comando_condicional_1 comandos .)
-    ID              reduce using rule 22 (comandos -> comando_condicional_1 comandos .)
+    END             reduce using rule 23 (comandos -> comando_condicional_1 comandos .)
+    ELSE            reduce using rule 23 (comandos -> comando_condicional_1 comandos .)
+    BEGIN           reduce using rule 23 (comandos -> comando_condicional_1 comandos .)
+    IF              reduce using rule 23 (comandos -> comando_condicional_1 comandos .)
+    WHILE           reduce using rule 23 (comandos -> comando_condicional_1 comandos .)
+    ID              reduce using rule 23 (comandos -> comando_condicional_1 comandos .)
 
 
 state 73
 
-    (23) comandos -> comando_repetitivo_1 comandos .
+    (24) comandos -> comando_repetitivo_1 comandos .
 
-    END             reduce using rule 23 (comandos -> comando_repetitivo_1 comandos .)
-    ELSE            reduce using rule 23 (comandos -> comando_repetitivo_1 comandos .)
-    BEGIN           reduce using rule 23 (comandos -> comando_repetitivo_1 comandos .)
-    IF              reduce using rule 23 (comandos -> comando_repetitivo_1 comandos .)
-    WHILE           reduce using rule 23 (comandos -> comando_repetitivo_1 comandos .)
-    ID              reduce using rule 23 (comandos -> comando_repetitivo_1 comandos .)
+    END             reduce using rule 24 (comandos -> comando_repetitivo_1 comandos .)
+    ELSE            reduce using rule 24 (comandos -> comando_repetitivo_1 comandos .)
+    BEGIN           reduce using rule 24 (comandos -> comando_repetitivo_1 comandos .)
+    IF              reduce using rule 24 (comandos -> comando_repetitivo_1 comandos .)
+    WHILE           reduce using rule 24 (comandos -> comando_repetitivo_1 comandos .)
+    ID              reduce using rule 24 (comandos -> comando_repetitivo_1 comandos .)
 
 
 state 74
 
-    (25) atribuicao -> variavel OPIGUAL_ATRIB . expressao
-    (34) expressao -> . expressao_simples
-    (35) expressao -> . expressao_simples relacao expressao_simples
-    (41) expressao_simples -> . expressao_simples OPSOMA termo
-    (42) expressao_simples -> . expressao_simples OPSUB termo
-    (43) expressao_simples -> . expressao_simples OR termo
-    (44) expressao_simples -> . termo
-    (45) termo -> . termo OPMUL fator
-    (46) termo -> . termo OPDIV fator
-    (47) termo -> . termo DIV fator
-    (48) termo -> . termo AND fator
-    (49) termo -> . fator
-    (50) fator -> . variavel
-    (51) fator -> . numero
-    (52) fator -> . TRUE
-    (53) fator -> . FALSE
-    (54) fator -> . AP expressao_simples FP
-    (55) fator -> . NOT fator
-    (58) variavel -> . ID
-    (56) numero -> . NUM_INT
-    (57) numero -> . NUM_REAL
+    (26) atribuicao -> variavel OPIGUAL_ATRIB . expressao
+    (35) expressao -> . expressao_simples
+    (36) expressao -> . expressao_simples relacao expressao_simples
+    (42) expressao_simples -> . expressao_simples OPSOMA termo
+    (43) expressao_simples -> . expressao_simples OPSUB termo
+    (44) expressao_simples -> . expressao_simples OR termo
+    (45) expressao_simples -> . termo
+    (46) termo -> . termo OPMUL fator
+    (47) termo -> . termo OPDIV fator
+    (48) termo -> . termo DIV fator
+    (49) termo -> . termo AND fator
+    (50) termo -> . fator
+    (51) fator -> . variavel
+    (52) fator -> . numero
+    (53) fator -> . TRUE
+    (54) fator -> . FALSE
+    (55) fator -> . AP expressao_simples FP
+    (56) fator -> . NOT fator
+    (59) variavel -> . ID
+    (57) numero -> . NUM_INT
+    (58) numero -> . NUM_REAL
 
     TRUE            shift and go to state 31
     FALSE           shift and go to state 32
@@ -1551,32 +1553,32 @@ state 74
 
 state 75
 
-    (29) chamada_de_procedimento -> variavel AP . lista_de_parametros FP
-    (30) lista_de_parametros -> . expressao mais_parametros
-    (31) lista_de_parametros -> . empty
-    (34) expressao -> . expressao_simples
-    (35) expressao -> . expressao_simples relacao expressao_simples
-    (59) empty -> .
-    (41) expressao_simples -> . expressao_simples OPSOMA termo
-    (42) expressao_simples -> . expressao_simples OPSUB termo
-    (43) expressao_simples -> . expressao_simples OR termo
-    (44) expressao_simples -> . termo
-    (45) termo -> . termo OPMUL fator
-    (46) termo -> . termo OPDIV fator
-    (47) termo -> . termo DIV fator
-    (48) termo -> . termo AND fator
-    (49) termo -> . fator
-    (50) fator -> . variavel
-    (51) fator -> . numero
-    (52) fator -> . TRUE
-    (53) fator -> . FALSE
-    (54) fator -> . AP expressao_simples FP
-    (55) fator -> . NOT fator
-    (58) variavel -> . ID
-    (56) numero -> . NUM_INT
-    (57) numero -> . NUM_REAL
+    (30) chamada_de_procedimento -> variavel AP . lista_de_parametros FP
+    (31) lista_de_parametros -> . expressao mais_parametros
+    (32) lista_de_parametros -> . empty
+    (35) expressao -> . expressao_simples
+    (36) expressao -> . expressao_simples relacao expressao_simples
+    (60) empty -> .
+    (42) expressao_simples -> . expressao_simples OPSOMA termo
+    (43) expressao_simples -> . expressao_simples OPSUB termo
+    (44) expressao_simples -> . expressao_simples OR termo
+    (45) expressao_simples -> . termo
+    (46) termo -> . termo OPMUL fator
+    (47) termo -> . termo OPDIV fator
+    (48) termo -> . termo DIV fator
+    (49) termo -> . termo AND fator
+    (50) termo -> . fator
+    (51) fator -> . variavel
+    (52) fator -> . numero
+    (53) fator -> . TRUE
+    (54) fator -> . FALSE
+    (55) fator -> . AP expressao_simples FP
+    (56) fator -> . NOT fator
+    (59) variavel -> . ID
+    (57) numero -> . NUM_INT
+    (58) numero -> . NUM_REAL
 
-    FP              reduce using rule 59 (empty -> .)
+    FP              reduce using rule 60 (empty -> .)
     TRUE            shift and go to state 31
     FALSE           shift and go to state 32
     AP              shift and go to state 33
@@ -1596,28 +1598,28 @@ state 75
 
 state 76
 
-    (26) comando_condicional_1 -> IF AP . expressao FP THEN comandos
-    (27) comando_condicional_1 -> IF AP . expressao FP THEN comandos ELSE comandos
-    (34) expressao -> . expressao_simples
-    (35) expressao -> . expressao_simples relacao expressao_simples
-    (41) expressao_simples -> . expressao_simples OPSOMA termo
-    (42) expressao_simples -> . expressao_simples OPSUB termo
-    (43) expressao_simples -> . expressao_simples OR termo
-    (44) expressao_simples -> . termo
-    (45) termo -> . termo OPMUL fator
-    (46) termo -> . termo OPDIV fator
-    (47) termo -> . termo DIV fator
-    (48) termo -> . termo AND fator
-    (49) termo -> . fator
-    (50) fator -> . variavel
-    (51) fator -> . numero
-    (52) fator -> . TRUE
-    (53) fator -> . FALSE
-    (54) fator -> . AP expressao_simples FP
-    (55) fator -> . NOT fator
-    (58) variavel -> . ID
-    (56) numero -> . NUM_INT
-    (57) numero -> . NUM_REAL
+    (27) comando_condicional_1 -> IF AP . expressao FP THEN comandos
+    (28) comando_condicional_1 -> IF AP . expressao FP THEN comandos ELSE comandos
+    (35) expressao -> . expressao_simples
+    (36) expressao -> . expressao_simples relacao expressao_simples
+    (42) expressao_simples -> . expressao_simples OPSOMA termo
+    (43) expressao_simples -> . expressao_simples OPSUB termo
+    (44) expressao_simples -> . expressao_simples OR termo
+    (45) expressao_simples -> . termo
+    (46) termo -> . termo OPMUL fator
+    (47) termo -> . termo OPDIV fator
+    (48) termo -> . termo DIV fator
+    (49) termo -> . termo AND fator
+    (50) termo -> . fator
+    (51) fator -> . variavel
+    (52) fator -> . numero
+    (53) fator -> . TRUE
+    (54) fator -> . FALSE
+    (55) fator -> . AP expressao_simples FP
+    (56) fator -> . NOT fator
+    (59) variavel -> . ID
+    (57) numero -> . NUM_INT
+    (58) numero -> . NUM_REAL
 
     TRUE            shift and go to state 31
     FALSE           shift and go to state 32
@@ -1636,27 +1638,27 @@ state 76
 
 state 77
 
-    (28) comando_repetitivo_1 -> WHILE AP . expressao FP DO comandos
-    (34) expressao -> . expressao_simples
-    (35) expressao -> . expressao_simples relacao expressao_simples
-    (41) expressao_simples -> . expressao_simples OPSOMA termo
-    (42) expressao_simples -> . expressao_simples OPSUB termo
-    (43) expressao_simples -> . expressao_simples OR termo
-    (44) expressao_simples -> . termo
-    (45) termo -> . termo OPMUL fator
-    (46) termo -> . termo OPDIV fator
-    (47) termo -> . termo DIV fator
-    (48) termo -> . termo AND fator
-    (49) termo -> . fator
-    (50) fator -> . variavel
-    (51) fator -> . numero
-    (52) fator -> . TRUE
-    (53) fator -> . FALSE
-    (54) fator -> . AP expressao_simples FP
-    (55) fator -> . NOT fator
-    (58) variavel -> . ID
-    (56) numero -> . NUM_INT
-    (57) numero -> . NUM_REAL
+    (29) comando_repetitivo_1 -> WHILE AP . expressao FP DO comandos
+    (35) expressao -> . expressao_simples
+    (36) expressao -> . expressao_simples relacao expressao_simples
+    (42) expressao_simples -> . expressao_simples OPSOMA termo
+    (43) expressao_simples -> . expressao_simples OPSUB termo
+    (44) expressao_simples -> . expressao_simples OR termo
+    (45) expressao_simples -> . termo
+    (46) termo -> . termo OPMUL fator
+    (47) termo -> . termo OPDIV fator
+    (48) termo -> . termo DIV fator
+    (49) termo -> . termo AND fator
+    (50) termo -> . fator
+    (51) fator -> . variavel
+    (52) fator -> . numero
+    (53) fator -> . TRUE
+    (54) fator -> . FALSE
+    (55) fator -> . AP expressao_simples FP
+    (56) fator -> . NOT fator
+    (59) variavel -> . ID
+    (57) numero -> . NUM_INT
+    (58) numero -> . NUM_REAL
 
     TRUE            shift and go to state 31
     FALSE           shift and go to state 32
@@ -1686,33 +1688,33 @@ state 79
     (13) mais_parametros_formais -> . FIM_LINHA lista_de_parametros DOIS_PONTOS tipo_simples mais_parametros_formais
     (14) mais_parametros_formais -> . lista_de_parametros DOIS_PONTOS tipo_simples mais_parametros_formais
     (15) mais_parametros_formais -> . empty
-    (30) lista_de_parametros -> . expressao mais_parametros
-    (31) lista_de_parametros -> . empty
-    (59) empty -> .
-    (34) expressao -> . expressao_simples
-    (35) expressao -> . expressao_simples relacao expressao_simples
-    (41) expressao_simples -> . expressao_simples OPSOMA termo
-    (42) expressao_simples -> . expressao_simples OPSUB termo
-    (43) expressao_simples -> . expressao_simples OR termo
-    (44) expressao_simples -> . termo
-    (45) termo -> . termo OPMUL fator
-    (46) termo -> . termo OPDIV fator
-    (47) termo -> . termo DIV fator
-    (48) termo -> . termo AND fator
-    (49) termo -> . fator
-    (50) fator -> . variavel
-    (51) fator -> . numero
-    (52) fator -> . TRUE
-    (53) fator -> . FALSE
-    (54) fator -> . AP expressao_simples FP
-    (55) fator -> . NOT fator
-    (58) variavel -> . ID
-    (56) numero -> . NUM_INT
-    (57) numero -> . NUM_REAL
+    (31) lista_de_parametros -> . expressao mais_parametros
+    (32) lista_de_parametros -> . empty
+    (60) empty -> .
+    (35) expressao -> . expressao_simples
+    (36) expressao -> . expressao_simples relacao expressao_simples
+    (42) expressao_simples -> . expressao_simples OPSOMA termo
+    (43) expressao_simples -> . expressao_simples OPSUB termo
+    (44) expressao_simples -> . expressao_simples OR termo
+    (45) expressao_simples -> . termo
+    (46) termo -> . termo OPMUL fator
+    (47) termo -> . termo OPDIV fator
+    (48) termo -> . termo DIV fator
+    (49) termo -> . termo AND fator
+    (50) termo -> . fator
+    (51) fator -> . variavel
+    (52) fator -> . numero
+    (53) fator -> . TRUE
+    (54) fator -> . FALSE
+    (55) fator -> . AP expressao_simples FP
+    (56) fator -> . NOT fator
+    (59) variavel -> . ID
+    (57) numero -> . NUM_INT
+    (58) numero -> . NUM_REAL
 
     FIM_LINHA       shift and go to state 98
-    FP              reduce using rule 59 (empty -> .)
-    DOIS_PONTOS     reduce using rule 59 (empty -> .)
+    FP              reduce using rule 60 (empty -> .)
+    DOIS_PONTOS     reduce using rule 60 (empty -> .)
     TRUE            shift and go to state 31
     FALSE           shift and go to state 32
     AP              shift and go to state 33
@@ -1733,24 +1735,24 @@ state 79
 
 state 80
 
-    (32) mais_parametros -> SEPARADOR lista_de_parametros .
+    (33) mais_parametros -> SEPARADOR lista_de_parametros .
 
-    FIM_LINHA       reduce using rule 32 (mais_parametros -> SEPARADOR lista_de_parametros .)
-    FP              reduce using rule 32 (mais_parametros -> SEPARADOR lista_de_parametros .)
-    DOIS_PONTOS     reduce using rule 32 (mais_parametros -> SEPARADOR lista_de_parametros .)
+    FIM_LINHA       reduce using rule 33 (mais_parametros -> SEPARADOR lista_de_parametros .)
+    FP              reduce using rule 33 (mais_parametros -> SEPARADOR lista_de_parametros .)
+    DOIS_PONTOS     reduce using rule 33 (mais_parametros -> SEPARADOR lista_de_parametros .)
 
 
 state 81
 
-    (35) expressao -> expressao_simples relacao expressao_simples .
-    (41) expressao_simples -> expressao_simples . OPSOMA termo
-    (42) expressao_simples -> expressao_simples . OPSUB termo
-    (43) expressao_simples -> expressao_simples . OR termo
+    (36) expressao -> expressao_simples relacao expressao_simples .
+    (42) expressao_simples -> expressao_simples . OPSOMA termo
+    (43) expressao_simples -> expressao_simples . OPSUB termo
+    (44) expressao_simples -> expressao_simples . OR termo
 
-    SEPARADOR       reduce using rule 35 (expressao -> expressao_simples relacao expressao_simples .)
-    FIM_LINHA       reduce using rule 35 (expressao -> expressao_simples relacao expressao_simples .)
-    FP              reduce using rule 35 (expressao -> expressao_simples relacao expressao_simples .)
-    DOIS_PONTOS     reduce using rule 35 (expressao -> expressao_simples relacao expressao_simples .)
+    SEPARADOR       reduce using rule 36 (expressao -> expressao_simples relacao expressao_simples .)
+    FIM_LINHA       reduce using rule 36 (expressao -> expressao_simples relacao expressao_simples .)
+    FP              reduce using rule 36 (expressao -> expressao_simples relacao expressao_simples .)
+    DOIS_PONTOS     reduce using rule 36 (expressao -> expressao_simples relacao expressao_simples .)
     OPSOMA          shift and go to state 54
     OPSUB           shift and go to state 55
     OR              shift and go to state 56
@@ -1758,24 +1760,24 @@ state 81
 
 state 82
 
-    (41) expressao_simples -> expressao_simples OPSOMA termo .
-    (45) termo -> termo . OPMUL fator
-    (46) termo -> termo . OPDIV fator
-    (47) termo -> termo . DIV fator
-    (48) termo -> termo . AND fator
+    (42) expressao_simples -> expressao_simples OPSOMA termo .
+    (46) termo -> termo . OPMUL fator
+    (47) termo -> termo . OPDIV fator
+    (48) termo -> termo . DIV fator
+    (49) termo -> termo . AND fator
 
-    OPSOMA          reduce using rule 41 (expressao_simples -> expressao_simples OPSOMA termo .)
-    OPSUB           reduce using rule 41 (expressao_simples -> expressao_simples OPSOMA termo .)
-    OR              reduce using rule 41 (expressao_simples -> expressao_simples OPSOMA termo .)
-    IGUAL           reduce using rule 41 (expressao_simples -> expressao_simples OPSOMA termo .)
-    MAIOR_IGUAL     reduce using rule 41 (expressao_simples -> expressao_simples OPSOMA termo .)
-    MAIOR           reduce using rule 41 (expressao_simples -> expressao_simples OPSOMA termo .)
-    MENOR_IGUAL     reduce using rule 41 (expressao_simples -> expressao_simples OPSOMA termo .)
-    MENOR           reduce using rule 41 (expressao_simples -> expressao_simples OPSOMA termo .)
-    SEPARADOR       reduce using rule 41 (expressao_simples -> expressao_simples OPSOMA termo .)
-    FIM_LINHA       reduce using rule 41 (expressao_simples -> expressao_simples OPSOMA termo .)
-    FP              reduce using rule 41 (expressao_simples -> expressao_simples OPSOMA termo .)
-    DOIS_PONTOS     reduce using rule 41 (expressao_simples -> expressao_simples OPSOMA termo .)
+    OPSOMA          reduce using rule 42 (expressao_simples -> expressao_simples OPSOMA termo .)
+    OPSUB           reduce using rule 42 (expressao_simples -> expressao_simples OPSOMA termo .)
+    OR              reduce using rule 42 (expressao_simples -> expressao_simples OPSOMA termo .)
+    IGUAL           reduce using rule 42 (expressao_simples -> expressao_simples OPSOMA termo .)
+    MAIOR_IGUAL     reduce using rule 42 (expressao_simples -> expressao_simples OPSOMA termo .)
+    MAIOR           reduce using rule 42 (expressao_simples -> expressao_simples OPSOMA termo .)
+    MENOR_IGUAL     reduce using rule 42 (expressao_simples -> expressao_simples OPSOMA termo .)
+    MENOR           reduce using rule 42 (expressao_simples -> expressao_simples OPSOMA termo .)
+    SEPARADOR       reduce using rule 42 (expressao_simples -> expressao_simples OPSOMA termo .)
+    FIM_LINHA       reduce using rule 42 (expressao_simples -> expressao_simples OPSOMA termo .)
+    FP              reduce using rule 42 (expressao_simples -> expressao_simples OPSOMA termo .)
+    DOIS_PONTOS     reduce using rule 42 (expressao_simples -> expressao_simples OPSOMA termo .)
     OPMUL           shift and go to state 62
     OPDIV           shift and go to state 63
     DIV             shift and go to state 64
@@ -1784,24 +1786,24 @@ state 82
 
 state 83
 
-    (42) expressao_simples -> expressao_simples OPSUB termo .
-    (45) termo -> termo . OPMUL fator
-    (46) termo -> termo . OPDIV fator
-    (47) termo -> termo . DIV fator
-    (48) termo -> termo . AND fator
+    (43) expressao_simples -> expressao_simples OPSUB termo .
+    (46) termo -> termo . OPMUL fator
+    (47) termo -> termo . OPDIV fator
+    (48) termo -> termo . DIV fator
+    (49) termo -> termo . AND fator
 
-    OPSOMA          reduce using rule 42 (expressao_simples -> expressao_simples OPSUB termo .)
-    OPSUB           reduce using rule 42 (expressao_simples -> expressao_simples OPSUB termo .)
-    OR              reduce using rule 42 (expressao_simples -> expressao_simples OPSUB termo .)
-    IGUAL           reduce using rule 42 (expressao_simples -> expressao_simples OPSUB termo .)
-    MAIOR_IGUAL     reduce using rule 42 (expressao_simples -> expressao_simples OPSUB termo .)
-    MAIOR           reduce using rule 42 (expressao_simples -> expressao_simples OPSUB termo .)
-    MENOR_IGUAL     reduce using rule 42 (expressao_simples -> expressao_simples OPSUB termo .)
-    MENOR           reduce using rule 42 (expressao_simples -> expressao_simples OPSUB termo .)
-    SEPARADOR       reduce using rule 42 (expressao_simples -> expressao_simples OPSUB termo .)
-    FIM_LINHA       reduce using rule 42 (expressao_simples -> expressao_simples OPSUB termo .)
-    FP              reduce using rule 42 (expressao_simples -> expressao_simples OPSUB termo .)
-    DOIS_PONTOS     reduce using rule 42 (expressao_simples -> expressao_simples OPSUB termo .)
+    OPSOMA          reduce using rule 43 (expressao_simples -> expressao_simples OPSUB termo .)
+    OPSUB           reduce using rule 43 (expressao_simples -> expressao_simples OPSUB termo .)
+    OR              reduce using rule 43 (expressao_simples -> expressao_simples OPSUB termo .)
+    IGUAL           reduce using rule 43 (expressao_simples -> expressao_simples OPSUB termo .)
+    MAIOR_IGUAL     reduce using rule 43 (expressao_simples -> expressao_simples OPSUB termo .)
+    MAIOR           reduce using rule 43 (expressao_simples -> expressao_simples OPSUB termo .)
+    MENOR_IGUAL     reduce using rule 43 (expressao_simples -> expressao_simples OPSUB termo .)
+    MENOR           reduce using rule 43 (expressao_simples -> expressao_simples OPSUB termo .)
+    SEPARADOR       reduce using rule 43 (expressao_simples -> expressao_simples OPSUB termo .)
+    FIM_LINHA       reduce using rule 43 (expressao_simples -> expressao_simples OPSUB termo .)
+    FP              reduce using rule 43 (expressao_simples -> expressao_simples OPSUB termo .)
+    DOIS_PONTOS     reduce using rule 43 (expressao_simples -> expressao_simples OPSUB termo .)
     OPMUL           shift and go to state 62
     OPDIV           shift and go to state 63
     DIV             shift and go to state 64
@@ -1810,24 +1812,24 @@ state 83
 
 state 84
 
-    (43) expressao_simples -> expressao_simples OR termo .
-    (45) termo -> termo . OPMUL fator
-    (46) termo -> termo . OPDIV fator
-    (47) termo -> termo . DIV fator
-    (48) termo -> termo . AND fator
+    (44) expressao_simples -> expressao_simples OR termo .
+    (46) termo -> termo . OPMUL fator
+    (47) termo -> termo . OPDIV fator
+    (48) termo -> termo . DIV fator
+    (49) termo -> termo . AND fator
 
-    OPSOMA          reduce using rule 43 (expressao_simples -> expressao_simples OR termo .)
-    OPSUB           reduce using rule 43 (expressao_simples -> expressao_simples OR termo .)
-    OR              reduce using rule 43 (expressao_simples -> expressao_simples OR termo .)
-    IGUAL           reduce using rule 43 (expressao_simples -> expressao_simples OR termo .)
-    MAIOR_IGUAL     reduce using rule 43 (expressao_simples -> expressao_simples OR termo .)
-    MAIOR           reduce using rule 43 (expressao_simples -> expressao_simples OR termo .)
-    MENOR_IGUAL     reduce using rule 43 (expressao_simples -> expressao_simples OR termo .)
-    MENOR           reduce using rule 43 (expressao_simples -> expressao_simples OR termo .)
-    SEPARADOR       reduce using rule 43 (expressao_simples -> expressao_simples OR termo .)
-    FIM_LINHA       reduce using rule 43 (expressao_simples -> expressao_simples OR termo .)
-    FP              reduce using rule 43 (expressao_simples -> expressao_simples OR termo .)
-    DOIS_PONTOS     reduce using rule 43 (expressao_simples -> expressao_simples OR termo .)
+    OPSOMA          reduce using rule 44 (expressao_simples -> expressao_simples OR termo .)
+    OPSUB           reduce using rule 44 (expressao_simples -> expressao_simples OR termo .)
+    OR              reduce using rule 44 (expressao_simples -> expressao_simples OR termo .)
+    IGUAL           reduce using rule 44 (expressao_simples -> expressao_simples OR termo .)
+    MAIOR_IGUAL     reduce using rule 44 (expressao_simples -> expressao_simples OR termo .)
+    MAIOR           reduce using rule 44 (expressao_simples -> expressao_simples OR termo .)
+    MENOR_IGUAL     reduce using rule 44 (expressao_simples -> expressao_simples OR termo .)
+    MENOR           reduce using rule 44 (expressao_simples -> expressao_simples OR termo .)
+    SEPARADOR       reduce using rule 44 (expressao_simples -> expressao_simples OR termo .)
+    FIM_LINHA       reduce using rule 44 (expressao_simples -> expressao_simples OR termo .)
+    FP              reduce using rule 44 (expressao_simples -> expressao_simples OR termo .)
+    DOIS_PONTOS     reduce using rule 44 (expressao_simples -> expressao_simples OR termo .)
     OPMUL           shift and go to state 62
     OPDIV           shift and go to state 63
     DIV             shift and go to state 64
@@ -1836,163 +1838,163 @@ state 84
 
 state 85
 
-    (45) termo -> termo OPMUL fator .
+    (46) termo -> termo OPMUL fator .
 
-    OPMUL           reduce using rule 45 (termo -> termo OPMUL fator .)
-    OPDIV           reduce using rule 45 (termo -> termo OPMUL fator .)
-    DIV             reduce using rule 45 (termo -> termo OPMUL fator .)
-    AND             reduce using rule 45 (termo -> termo OPMUL fator .)
-    OPSOMA          reduce using rule 45 (termo -> termo OPMUL fator .)
-    OPSUB           reduce using rule 45 (termo -> termo OPMUL fator .)
-    OR              reduce using rule 45 (termo -> termo OPMUL fator .)
-    IGUAL           reduce using rule 45 (termo -> termo OPMUL fator .)
-    MAIOR_IGUAL     reduce using rule 45 (termo -> termo OPMUL fator .)
-    MAIOR           reduce using rule 45 (termo -> termo OPMUL fator .)
-    MENOR_IGUAL     reduce using rule 45 (termo -> termo OPMUL fator .)
-    MENOR           reduce using rule 45 (termo -> termo OPMUL fator .)
-    SEPARADOR       reduce using rule 45 (termo -> termo OPMUL fator .)
-    FIM_LINHA       reduce using rule 45 (termo -> termo OPMUL fator .)
-    FP              reduce using rule 45 (termo -> termo OPMUL fator .)
-    DOIS_PONTOS     reduce using rule 45 (termo -> termo OPMUL fator .)
+    OPMUL           reduce using rule 46 (termo -> termo OPMUL fator .)
+    OPDIV           reduce using rule 46 (termo -> termo OPMUL fator .)
+    DIV             reduce using rule 46 (termo -> termo OPMUL fator .)
+    AND             reduce using rule 46 (termo -> termo OPMUL fator .)
+    OPSOMA          reduce using rule 46 (termo -> termo OPMUL fator .)
+    OPSUB           reduce using rule 46 (termo -> termo OPMUL fator .)
+    OR              reduce using rule 46 (termo -> termo OPMUL fator .)
+    IGUAL           reduce using rule 46 (termo -> termo OPMUL fator .)
+    MAIOR_IGUAL     reduce using rule 46 (termo -> termo OPMUL fator .)
+    MAIOR           reduce using rule 46 (termo -> termo OPMUL fator .)
+    MENOR_IGUAL     reduce using rule 46 (termo -> termo OPMUL fator .)
+    MENOR           reduce using rule 46 (termo -> termo OPMUL fator .)
+    SEPARADOR       reduce using rule 46 (termo -> termo OPMUL fator .)
+    FIM_LINHA       reduce using rule 46 (termo -> termo OPMUL fator .)
+    FP              reduce using rule 46 (termo -> termo OPMUL fator .)
+    DOIS_PONTOS     reduce using rule 46 (termo -> termo OPMUL fator .)
 
 
 state 86
 
-    (46) termo -> termo OPDIV fator .
+    (47) termo -> termo OPDIV fator .
 
-    OPMUL           reduce using rule 46 (termo -> termo OPDIV fator .)
-    OPDIV           reduce using rule 46 (termo -> termo OPDIV fator .)
-    DIV             reduce using rule 46 (termo -> termo OPDIV fator .)
-    AND             reduce using rule 46 (termo -> termo OPDIV fator .)
-    OPSOMA          reduce using rule 46 (termo -> termo OPDIV fator .)
-    OPSUB           reduce using rule 46 (termo -> termo OPDIV fator .)
-    OR              reduce using rule 46 (termo -> termo OPDIV fator .)
-    IGUAL           reduce using rule 46 (termo -> termo OPDIV fator .)
-    MAIOR_IGUAL     reduce using rule 46 (termo -> termo OPDIV fator .)
-    MAIOR           reduce using rule 46 (termo -> termo OPDIV fator .)
-    MENOR_IGUAL     reduce using rule 46 (termo -> termo OPDIV fator .)
-    MENOR           reduce using rule 46 (termo -> termo OPDIV fator .)
-    SEPARADOR       reduce using rule 46 (termo -> termo OPDIV fator .)
-    FIM_LINHA       reduce using rule 46 (termo -> termo OPDIV fator .)
-    FP              reduce using rule 46 (termo -> termo OPDIV fator .)
-    DOIS_PONTOS     reduce using rule 46 (termo -> termo OPDIV fator .)
+    OPMUL           reduce using rule 47 (termo -> termo OPDIV fator .)
+    OPDIV           reduce using rule 47 (termo -> termo OPDIV fator .)
+    DIV             reduce using rule 47 (termo -> termo OPDIV fator .)
+    AND             reduce using rule 47 (termo -> termo OPDIV fator .)
+    OPSOMA          reduce using rule 47 (termo -> termo OPDIV fator .)
+    OPSUB           reduce using rule 47 (termo -> termo OPDIV fator .)
+    OR              reduce using rule 47 (termo -> termo OPDIV fator .)
+    IGUAL           reduce using rule 47 (termo -> termo OPDIV fator .)
+    MAIOR_IGUAL     reduce using rule 47 (termo -> termo OPDIV fator .)
+    MAIOR           reduce using rule 47 (termo -> termo OPDIV fator .)
+    MENOR_IGUAL     reduce using rule 47 (termo -> termo OPDIV fator .)
+    MENOR           reduce using rule 47 (termo -> termo OPDIV fator .)
+    SEPARADOR       reduce using rule 47 (termo -> termo OPDIV fator .)
+    FIM_LINHA       reduce using rule 47 (termo -> termo OPDIV fator .)
+    FP              reduce using rule 47 (termo -> termo OPDIV fator .)
+    DOIS_PONTOS     reduce using rule 47 (termo -> termo OPDIV fator .)
 
 
 state 87
 
-    (47) termo -> termo DIV fator .
+    (48) termo -> termo DIV fator .
 
-    OPMUL           reduce using rule 47 (termo -> termo DIV fator .)
-    OPDIV           reduce using rule 47 (termo -> termo DIV fator .)
-    DIV             reduce using rule 47 (termo -> termo DIV fator .)
-    AND             reduce using rule 47 (termo -> termo DIV fator .)
-    OPSOMA          reduce using rule 47 (termo -> termo DIV fator .)
-    OPSUB           reduce using rule 47 (termo -> termo DIV fator .)
-    OR              reduce using rule 47 (termo -> termo DIV fator .)
-    IGUAL           reduce using rule 47 (termo -> termo DIV fator .)
-    MAIOR_IGUAL     reduce using rule 47 (termo -> termo DIV fator .)
-    MAIOR           reduce using rule 47 (termo -> termo DIV fator .)
-    MENOR_IGUAL     reduce using rule 47 (termo -> termo DIV fator .)
-    MENOR           reduce using rule 47 (termo -> termo DIV fator .)
-    SEPARADOR       reduce using rule 47 (termo -> termo DIV fator .)
-    FIM_LINHA       reduce using rule 47 (termo -> termo DIV fator .)
-    FP              reduce using rule 47 (termo -> termo DIV fator .)
-    DOIS_PONTOS     reduce using rule 47 (termo -> termo DIV fator .)
+    OPMUL           reduce using rule 48 (termo -> termo DIV fator .)
+    OPDIV           reduce using rule 48 (termo -> termo DIV fator .)
+    DIV             reduce using rule 48 (termo -> termo DIV fator .)
+    AND             reduce using rule 48 (termo -> termo DIV fator .)
+    OPSOMA          reduce using rule 48 (termo -> termo DIV fator .)
+    OPSUB           reduce using rule 48 (termo -> termo DIV fator .)
+    OR              reduce using rule 48 (termo -> termo DIV fator .)
+    IGUAL           reduce using rule 48 (termo -> termo DIV fator .)
+    MAIOR_IGUAL     reduce using rule 48 (termo -> termo DIV fator .)
+    MAIOR           reduce using rule 48 (termo -> termo DIV fator .)
+    MENOR_IGUAL     reduce using rule 48 (termo -> termo DIV fator .)
+    MENOR           reduce using rule 48 (termo -> termo DIV fator .)
+    SEPARADOR       reduce using rule 48 (termo -> termo DIV fator .)
+    FIM_LINHA       reduce using rule 48 (termo -> termo DIV fator .)
+    FP              reduce using rule 48 (termo -> termo DIV fator .)
+    DOIS_PONTOS     reduce using rule 48 (termo -> termo DIV fator .)
 
 
 state 88
 
-    (48) termo -> termo AND fator .
+    (49) termo -> termo AND fator .
 
-    OPMUL           reduce using rule 48 (termo -> termo AND fator .)
-    OPDIV           reduce using rule 48 (termo -> termo AND fator .)
-    DIV             reduce using rule 48 (termo -> termo AND fator .)
-    AND             reduce using rule 48 (termo -> termo AND fator .)
-    OPSOMA          reduce using rule 48 (termo -> termo AND fator .)
-    OPSUB           reduce using rule 48 (termo -> termo AND fator .)
-    OR              reduce using rule 48 (termo -> termo AND fator .)
-    IGUAL           reduce using rule 48 (termo -> termo AND fator .)
-    MAIOR_IGUAL     reduce using rule 48 (termo -> termo AND fator .)
-    MAIOR           reduce using rule 48 (termo -> termo AND fator .)
-    MENOR_IGUAL     reduce using rule 48 (termo -> termo AND fator .)
-    MENOR           reduce using rule 48 (termo -> termo AND fator .)
-    SEPARADOR       reduce using rule 48 (termo -> termo AND fator .)
-    FIM_LINHA       reduce using rule 48 (termo -> termo AND fator .)
-    FP              reduce using rule 48 (termo -> termo AND fator .)
-    DOIS_PONTOS     reduce using rule 48 (termo -> termo AND fator .)
+    OPMUL           reduce using rule 49 (termo -> termo AND fator .)
+    OPDIV           reduce using rule 49 (termo -> termo AND fator .)
+    DIV             reduce using rule 49 (termo -> termo AND fator .)
+    AND             reduce using rule 49 (termo -> termo AND fator .)
+    OPSOMA          reduce using rule 49 (termo -> termo AND fator .)
+    OPSUB           reduce using rule 49 (termo -> termo AND fator .)
+    OR              reduce using rule 49 (termo -> termo AND fator .)
+    IGUAL           reduce using rule 49 (termo -> termo AND fator .)
+    MAIOR_IGUAL     reduce using rule 49 (termo -> termo AND fator .)
+    MAIOR           reduce using rule 49 (termo -> termo AND fator .)
+    MENOR_IGUAL     reduce using rule 49 (termo -> termo AND fator .)
+    MENOR           reduce using rule 49 (termo -> termo AND fator .)
+    SEPARADOR       reduce using rule 49 (termo -> termo AND fator .)
+    FIM_LINHA       reduce using rule 49 (termo -> termo AND fator .)
+    FP              reduce using rule 49 (termo -> termo AND fator .)
+    DOIS_PONTOS     reduce using rule 49 (termo -> termo AND fator .)
 
 
 state 89
 
-    (54) fator -> AP expressao_simples FP .
+    (55) fator -> AP expressao_simples FP .
 
-    OPMUL           reduce using rule 54 (fator -> AP expressao_simples FP .)
-    OPDIV           reduce using rule 54 (fator -> AP expressao_simples FP .)
-    DIV             reduce using rule 54 (fator -> AP expressao_simples FP .)
-    AND             reduce using rule 54 (fator -> AP expressao_simples FP .)
-    OPSOMA          reduce using rule 54 (fator -> AP expressao_simples FP .)
-    OPSUB           reduce using rule 54 (fator -> AP expressao_simples FP .)
-    OR              reduce using rule 54 (fator -> AP expressao_simples FP .)
-    IGUAL           reduce using rule 54 (fator -> AP expressao_simples FP .)
-    MAIOR_IGUAL     reduce using rule 54 (fator -> AP expressao_simples FP .)
-    MAIOR           reduce using rule 54 (fator -> AP expressao_simples FP .)
-    MENOR_IGUAL     reduce using rule 54 (fator -> AP expressao_simples FP .)
-    MENOR           reduce using rule 54 (fator -> AP expressao_simples FP .)
-    SEPARADOR       reduce using rule 54 (fator -> AP expressao_simples FP .)
-    FIM_LINHA       reduce using rule 54 (fator -> AP expressao_simples FP .)
-    FP              reduce using rule 54 (fator -> AP expressao_simples FP .)
-    DOIS_PONTOS     reduce using rule 54 (fator -> AP expressao_simples FP .)
+    OPMUL           reduce using rule 55 (fator -> AP expressao_simples FP .)
+    OPDIV           reduce using rule 55 (fator -> AP expressao_simples FP .)
+    DIV             reduce using rule 55 (fator -> AP expressao_simples FP .)
+    AND             reduce using rule 55 (fator -> AP expressao_simples FP .)
+    OPSOMA          reduce using rule 55 (fator -> AP expressao_simples FP .)
+    OPSUB           reduce using rule 55 (fator -> AP expressao_simples FP .)
+    OR              reduce using rule 55 (fator -> AP expressao_simples FP .)
+    IGUAL           reduce using rule 55 (fator -> AP expressao_simples FP .)
+    MAIOR_IGUAL     reduce using rule 55 (fator -> AP expressao_simples FP .)
+    MAIOR           reduce using rule 55 (fator -> AP expressao_simples FP .)
+    MENOR_IGUAL     reduce using rule 55 (fator -> AP expressao_simples FP .)
+    MENOR           reduce using rule 55 (fator -> AP expressao_simples FP .)
+    SEPARADOR       reduce using rule 55 (fator -> AP expressao_simples FP .)
+    FIM_LINHA       reduce using rule 55 (fator -> AP expressao_simples FP .)
+    FP              reduce using rule 55 (fator -> AP expressao_simples FP .)
+    DOIS_PONTOS     reduce using rule 55 (fator -> AP expressao_simples FP .)
 
 
 state 90
 
-    (19) comandos -> atribuicao FIM_LINHA comandos .
+    (20) comandos -> atribuicao FIM_LINHA comandos .
 
-    END             reduce using rule 19 (comandos -> atribuicao FIM_LINHA comandos .)
-    ELSE            reduce using rule 19 (comandos -> atribuicao FIM_LINHA comandos .)
-    BEGIN           reduce using rule 19 (comandos -> atribuicao FIM_LINHA comandos .)
-    IF              reduce using rule 19 (comandos -> atribuicao FIM_LINHA comandos .)
-    WHILE           reduce using rule 19 (comandos -> atribuicao FIM_LINHA comandos .)
-    ID              reduce using rule 19 (comandos -> atribuicao FIM_LINHA comandos .)
+    END             reduce using rule 20 (comandos -> atribuicao FIM_LINHA comandos .)
+    ELSE            reduce using rule 20 (comandos -> atribuicao FIM_LINHA comandos .)
+    BEGIN           reduce using rule 20 (comandos -> atribuicao FIM_LINHA comandos .)
+    IF              reduce using rule 20 (comandos -> atribuicao FIM_LINHA comandos .)
+    WHILE           reduce using rule 20 (comandos -> atribuicao FIM_LINHA comandos .)
+    ID              reduce using rule 20 (comandos -> atribuicao FIM_LINHA comandos .)
 
 
 state 91
 
-    (20) comandos -> chamada_de_procedimento FIM_LINHA comandos .
+    (21) comandos -> chamada_de_procedimento FIM_LINHA comandos .
 
-    END             reduce using rule 20 (comandos -> chamada_de_procedimento FIM_LINHA comandos .)
-    ELSE            reduce using rule 20 (comandos -> chamada_de_procedimento FIM_LINHA comandos .)
-    BEGIN           reduce using rule 20 (comandos -> chamada_de_procedimento FIM_LINHA comandos .)
-    IF              reduce using rule 20 (comandos -> chamada_de_procedimento FIM_LINHA comandos .)
-    WHILE           reduce using rule 20 (comandos -> chamada_de_procedimento FIM_LINHA comandos .)
-    ID              reduce using rule 20 (comandos -> chamada_de_procedimento FIM_LINHA comandos .)
+    END             reduce using rule 21 (comandos -> chamada_de_procedimento FIM_LINHA comandos .)
+    ELSE            reduce using rule 21 (comandos -> chamada_de_procedimento FIM_LINHA comandos .)
+    BEGIN           reduce using rule 21 (comandos -> chamada_de_procedimento FIM_LINHA comandos .)
+    IF              reduce using rule 21 (comandos -> chamada_de_procedimento FIM_LINHA comandos .)
+    WHILE           reduce using rule 21 (comandos -> chamada_de_procedimento FIM_LINHA comandos .)
+    ID              reduce using rule 21 (comandos -> chamada_de_procedimento FIM_LINHA comandos .)
 
 
 state 92
 
-    (25) atribuicao -> variavel OPIGUAL_ATRIB expressao .
+    (26) atribuicao -> variavel OPIGUAL_ATRIB expressao .
 
-    FIM_LINHA       reduce using rule 25 (atribuicao -> variavel OPIGUAL_ATRIB expressao .)
+    FIM_LINHA       reduce using rule 26 (atribuicao -> variavel OPIGUAL_ATRIB expressao .)
 
 
 state 93
 
-    (29) chamada_de_procedimento -> variavel AP lista_de_parametros . FP
+    (30) chamada_de_procedimento -> variavel AP lista_de_parametros . FP
 
     FP              shift and go to state 101
 
 
 state 94
 
-    (26) comando_condicional_1 -> IF AP expressao . FP THEN comandos
-    (27) comando_condicional_1 -> IF AP expressao . FP THEN comandos ELSE comandos
+    (27) comando_condicional_1 -> IF AP expressao . FP THEN comandos
+    (28) comando_condicional_1 -> IF AP expressao . FP THEN comandos ELSE comandos
 
     FP              shift and go to state 102
 
 
 state 95
 
-    (28) comando_repetitivo_1 -> WHILE AP expressao . FP DO comandos
+    (29) comando_repetitivo_1 -> WHILE AP expressao . FP DO comandos
 
     FP              shift and go to state 103
 
@@ -2022,31 +2024,31 @@ state 97
 state 98
 
     (13) mais_parametros_formais -> FIM_LINHA . lista_de_parametros DOIS_PONTOS tipo_simples mais_parametros_formais
-    (30) lista_de_parametros -> . expressao mais_parametros
-    (31) lista_de_parametros -> . empty
-    (34) expressao -> . expressao_simples
-    (35) expressao -> . expressao_simples relacao expressao_simples
-    (59) empty -> .
-    (41) expressao_simples -> . expressao_simples OPSOMA termo
-    (42) expressao_simples -> . expressao_simples OPSUB termo
-    (43) expressao_simples -> . expressao_simples OR termo
-    (44) expressao_simples -> . termo
-    (45) termo -> . termo OPMUL fator
-    (46) termo -> . termo OPDIV fator
-    (47) termo -> . termo DIV fator
-    (48) termo -> . termo AND fator
-    (49) termo -> . fator
-    (50) fator -> . variavel
-    (51) fator -> . numero
-    (52) fator -> . TRUE
-    (53) fator -> . FALSE
-    (54) fator -> . AP expressao_simples FP
-    (55) fator -> . NOT fator
-    (58) variavel -> . ID
-    (56) numero -> . NUM_INT
-    (57) numero -> . NUM_REAL
+    (31) lista_de_parametros -> . expressao mais_parametros
+    (32) lista_de_parametros -> . empty
+    (35) expressao -> . expressao_simples
+    (36) expressao -> . expressao_simples relacao expressao_simples
+    (60) empty -> .
+    (42) expressao_simples -> . expressao_simples OPSOMA termo
+    (43) expressao_simples -> . expressao_simples OPSUB termo
+    (44) expressao_simples -> . expressao_simples OR termo
+    (45) expressao_simples -> . termo
+    (46) termo -> . termo OPMUL fator
+    (47) termo -> . termo OPDIV fator
+    (48) termo -> . termo DIV fator
+    (49) termo -> . termo AND fator
+    (50) termo -> . fator
+    (51) fator -> . variavel
+    (52) fator -> . numero
+    (53) fator -> . TRUE
+    (54) fator -> . FALSE
+    (55) fator -> . AP expressao_simples FP
+    (56) fator -> . NOT fator
+    (59) variavel -> . ID
+    (57) numero -> . NUM_INT
+    (58) numero -> . NUM_REAL
 
-    DOIS_PONTOS     reduce using rule 59 (empty -> .)
+    DOIS_PONTOS     reduce using rule 60 (empty -> .)
     TRUE            shift and go to state 31
     FALSE           shift and go to state 32
     AP              shift and go to state 33
@@ -2074,30 +2076,30 @@ state 99
 state 100
 
     (15) mais_parametros_formais -> empty .
-    (31) lista_de_parametros -> empty .
+    (32) lista_de_parametros -> empty .
 
     FP              reduce using rule 15 (mais_parametros_formais -> empty .)
-    DOIS_PONTOS     reduce using rule 31 (lista_de_parametros -> empty .)
+    DOIS_PONTOS     reduce using rule 32 (lista_de_parametros -> empty .)
 
 
 state 101
 
-    (29) chamada_de_procedimento -> variavel AP lista_de_parametros FP .
+    (30) chamada_de_procedimento -> variavel AP lista_de_parametros FP .
 
-    FIM_LINHA       reduce using rule 29 (chamada_de_procedimento -> variavel AP lista_de_parametros FP .)
+    FIM_LINHA       reduce using rule 30 (chamada_de_procedimento -> variavel AP lista_de_parametros FP .)
 
 
 state 102
 
-    (26) comando_condicional_1 -> IF AP expressao FP . THEN comandos
-    (27) comando_condicional_1 -> IF AP expressao FP . THEN comandos ELSE comandos
+    (27) comando_condicional_1 -> IF AP expressao FP . THEN comandos
+    (28) comando_condicional_1 -> IF AP expressao FP . THEN comandos ELSE comandos
 
     THEN            shift and go to state 108
 
 
 state 103
 
-    (28) comando_repetitivo_1 -> WHILE AP expressao FP . DO comandos
+    (29) comando_repetitivo_1 -> WHILE AP expressao FP . DO comandos
 
     DO              shift and go to state 109
 
@@ -2140,22 +2142,22 @@ state 107
 
 state 108
 
-    (26) comando_condicional_1 -> IF AP expressao FP THEN . comandos
-    (27) comando_condicional_1 -> IF AP expressao FP THEN . comandos ELSE comandos
-    (19) comandos -> . atribuicao FIM_LINHA comandos
-    (20) comandos -> . chamada_de_procedimento FIM_LINHA comandos
-    (21) comandos -> . comando_composto comandos
-    (22) comandos -> . comando_condicional_1 comandos
-    (23) comandos -> . comando_repetitivo_1 comandos
-    (24) comandos -> . empty
-    (25) atribuicao -> . variavel OPIGUAL_ATRIB expressao
-    (29) chamada_de_procedimento -> . variavel AP lista_de_parametros FP
+    (27) comando_condicional_1 -> IF AP expressao FP THEN . comandos
+    (28) comando_condicional_1 -> IF AP expressao FP THEN . comandos ELSE comandos
+    (20) comandos -> . atribuicao FIM_LINHA comandos
+    (21) comandos -> . chamada_de_procedimento FIM_LINHA comandos
+    (22) comandos -> . comando_composto comandos
+    (23) comandos -> . comando_condicional_1 comandos
+    (24) comandos -> . comando_repetitivo_1 comandos
+    (25) comandos -> . empty
+    (26) atribuicao -> . variavel OPIGUAL_ATRIB expressao
+    (30) chamada_de_procedimento -> . variavel AP lista_de_parametros FP
     (16) comando_composto -> . BEGIN new_begin comandos END
-    (26) comando_condicional_1 -> . IF AP expressao FP THEN comandos
-    (27) comando_condicional_1 -> . IF AP expressao FP THEN comandos ELSE comandos
-    (28) comando_repetitivo_1 -> . WHILE AP expressao FP DO comandos
-    (59) empty -> .
-    (58) variavel -> . ID
+    (27) comando_condicional_1 -> . IF AP expressao FP THEN comandos
+    (28) comando_condicional_1 -> . IF AP expressao FP THEN comandos ELSE comandos
+    (29) comando_repetitivo_1 -> . WHILE AP expressao FP DO comandos
+    (60) empty -> .
+    (59) variavel -> . ID
 
   ! shift/reduce conflict for BEGIN resolved as shift
   ! shift/reduce conflict for IF resolved as shift
@@ -2164,14 +2166,14 @@ state 108
     BEGIN           shift and go to state 8
     IF              shift and go to state 46
     WHILE           shift and go to state 47
-    END             reduce using rule 59 (empty -> .)
-    ELSE            reduce using rule 59 (empty -> .)
+    END             reduce using rule 60 (empty -> .)
+    ELSE            reduce using rule 60 (empty -> .)
     ID              shift and go to state 35
 
-  ! BEGIN           [ reduce using rule 59 (empty -> .) ]
-  ! IF              [ reduce using rule 59 (empty -> .) ]
-  ! WHILE           [ reduce using rule 59 (empty -> .) ]
-  ! ID              [ reduce using rule 59 (empty -> .) ]
+  ! BEGIN           [ reduce using rule 60 (empty -> .) ]
+  ! IF              [ reduce using rule 60 (empty -> .) ]
+  ! WHILE           [ reduce using rule 60 (empty -> .) ]
+  ! ID              [ reduce using rule 60 (empty -> .) ]
 
     comandos                       shift and go to state 113
     atribuicao                     shift and go to state 39
@@ -2184,21 +2186,21 @@ state 108
 
 state 109
 
-    (28) comando_repetitivo_1 -> WHILE AP expressao FP DO . comandos
-    (19) comandos -> . atribuicao FIM_LINHA comandos
-    (20) comandos -> . chamada_de_procedimento FIM_LINHA comandos
-    (21) comandos -> . comando_composto comandos
-    (22) comandos -> . comando_condicional_1 comandos
-    (23) comandos -> . comando_repetitivo_1 comandos
-    (24) comandos -> . empty
-    (25) atribuicao -> . variavel OPIGUAL_ATRIB expressao
-    (29) chamada_de_procedimento -> . variavel AP lista_de_parametros FP
+    (29) comando_repetitivo_1 -> WHILE AP expressao FP DO . comandos
+    (20) comandos -> . atribuicao FIM_LINHA comandos
+    (21) comandos -> . chamada_de_procedimento FIM_LINHA comandos
+    (22) comandos -> . comando_composto comandos
+    (23) comandos -> . comando_condicional_1 comandos
+    (24) comandos -> . comando_repetitivo_1 comandos
+    (25) comandos -> . empty
+    (26) atribuicao -> . variavel OPIGUAL_ATRIB expressao
+    (30) chamada_de_procedimento -> . variavel AP lista_de_parametros FP
     (16) comando_composto -> . BEGIN new_begin comandos END
-    (26) comando_condicional_1 -> . IF AP expressao FP THEN comandos
-    (27) comando_condicional_1 -> . IF AP expressao FP THEN comandos ELSE comandos
-    (28) comando_repetitivo_1 -> . WHILE AP expressao FP DO comandos
-    (59) empty -> .
-    (58) variavel -> . ID
+    (27) comando_condicional_1 -> . IF AP expressao FP THEN comandos
+    (28) comando_condicional_1 -> . IF AP expressao FP THEN comandos ELSE comandos
+    (29) comando_repetitivo_1 -> . WHILE AP expressao FP DO comandos
+    (60) empty -> .
+    (59) variavel -> . ID
 
   ! shift/reduce conflict for BEGIN resolved as shift
   ! shift/reduce conflict for IF resolved as shift
@@ -2207,14 +2209,14 @@ state 109
     BEGIN           shift and go to state 8
     IF              shift and go to state 46
     WHILE           shift and go to state 47
-    END             reduce using rule 59 (empty -> .)
-    ELSE            reduce using rule 59 (empty -> .)
+    END             reduce using rule 60 (empty -> .)
+    ELSE            reduce using rule 60 (empty -> .)
     ID              shift and go to state 35
 
-  ! BEGIN           [ reduce using rule 59 (empty -> .) ]
-  ! IF              [ reduce using rule 59 (empty -> .) ]
-  ! WHILE           [ reduce using rule 59 (empty -> .) ]
-  ! ID              [ reduce using rule 59 (empty -> .) ]
+  ! BEGIN           [ reduce using rule 60 (empty -> .) ]
+  ! IF              [ reduce using rule 60 (empty -> .) ]
+  ! WHILE           [ reduce using rule 60 (empty -> .) ]
+  ! ID              [ reduce using rule 60 (empty -> .) ]
 
     comandos                       shift and go to state 114
     atribuicao                     shift and go to state 39
@@ -2251,33 +2253,33 @@ state 112
     (13) mais_parametros_formais -> . FIM_LINHA lista_de_parametros DOIS_PONTOS tipo_simples mais_parametros_formais
     (14) mais_parametros_formais -> . lista_de_parametros DOIS_PONTOS tipo_simples mais_parametros_formais
     (15) mais_parametros_formais -> . empty
-    (30) lista_de_parametros -> . expressao mais_parametros
-    (31) lista_de_parametros -> . empty
-    (59) empty -> .
-    (34) expressao -> . expressao_simples
-    (35) expressao -> . expressao_simples relacao expressao_simples
-    (41) expressao_simples -> . expressao_simples OPSOMA termo
-    (42) expressao_simples -> . expressao_simples OPSUB termo
-    (43) expressao_simples -> . expressao_simples OR termo
-    (44) expressao_simples -> . termo
-    (45) termo -> . termo OPMUL fator
-    (46) termo -> . termo OPDIV fator
-    (47) termo -> . termo DIV fator
-    (48) termo -> . termo AND fator
-    (49) termo -> . fator
-    (50) fator -> . variavel
-    (51) fator -> . numero
-    (52) fator -> . TRUE
-    (53) fator -> . FALSE
-    (54) fator -> . AP expressao_simples FP
-    (55) fator -> . NOT fator
-    (58) variavel -> . ID
-    (56) numero -> . NUM_INT
-    (57) numero -> . NUM_REAL
+    (31) lista_de_parametros -> . expressao mais_parametros
+    (32) lista_de_parametros -> . empty
+    (60) empty -> .
+    (35) expressao -> . expressao_simples
+    (36) expressao -> . expressao_simples relacao expressao_simples
+    (42) expressao_simples -> . expressao_simples OPSOMA termo
+    (43) expressao_simples -> . expressao_simples OPSUB termo
+    (44) expressao_simples -> . expressao_simples OR termo
+    (45) expressao_simples -> . termo
+    (46) termo -> . termo OPMUL fator
+    (47) termo -> . termo OPDIV fator
+    (48) termo -> . termo DIV fator
+    (49) termo -> . termo AND fator
+    (50) termo -> . fator
+    (51) fator -> . variavel
+    (52) fator -> . numero
+    (53) fator -> . TRUE
+    (54) fator -> . FALSE
+    (55) fator -> . AP expressao_simples FP
+    (56) fator -> . NOT fator
+    (59) variavel -> . ID
+    (57) numero -> . NUM_INT
+    (58) numero -> . NUM_REAL
 
     FIM_LINHA       shift and go to state 98
-    FP              reduce using rule 59 (empty -> .)
-    DOIS_PONTOS     reduce using rule 59 (empty -> .)
+    FP              reduce using rule 60 (empty -> .)
+    DOIS_PONTOS     reduce using rule 60 (empty -> .)
     TRUE            shift and go to state 31
     FALSE           shift and go to state 32
     AP              shift and go to state 33
@@ -2298,29 +2300,29 @@ state 112
 
 state 113
 
-    (26) comando_condicional_1 -> IF AP expressao FP THEN comandos .
-    (27) comando_condicional_1 -> IF AP expressao FP THEN comandos . ELSE comandos
+    (27) comando_condicional_1 -> IF AP expressao FP THEN comandos .
+    (28) comando_condicional_1 -> IF AP expressao FP THEN comandos . ELSE comandos
 
-    BEGIN           reduce using rule 26 (comando_condicional_1 -> IF AP expressao FP THEN comandos .)
-    IF              reduce using rule 26 (comando_condicional_1 -> IF AP expressao FP THEN comandos .)
-    WHILE           reduce using rule 26 (comando_condicional_1 -> IF AP expressao FP THEN comandos .)
-    ID              reduce using rule 26 (comando_condicional_1 -> IF AP expressao FP THEN comandos .)
-    END             reduce using rule 26 (comando_condicional_1 -> IF AP expressao FP THEN comandos .)
+    BEGIN           reduce using rule 27 (comando_condicional_1 -> IF AP expressao FP THEN comandos .)
+    IF              reduce using rule 27 (comando_condicional_1 -> IF AP expressao FP THEN comandos .)
+    WHILE           reduce using rule 27 (comando_condicional_1 -> IF AP expressao FP THEN comandos .)
+    ID              reduce using rule 27 (comando_condicional_1 -> IF AP expressao FP THEN comandos .)
+    END             reduce using rule 27 (comando_condicional_1 -> IF AP expressao FP THEN comandos .)
     ELSE            shift and go to state 118
 
-  ! ELSE            [ reduce using rule 26 (comando_condicional_1 -> IF AP expressao FP THEN comandos .) ]
+  ! ELSE            [ reduce using rule 27 (comando_condicional_1 -> IF AP expressao FP THEN comandos .) ]
 
 
 state 114
 
-    (28) comando_repetitivo_1 -> WHILE AP expressao FP DO comandos .
+    (29) comando_repetitivo_1 -> WHILE AP expressao FP DO comandos .
 
-    BEGIN           reduce using rule 28 (comando_repetitivo_1 -> WHILE AP expressao FP DO comandos .)
-    IF              reduce using rule 28 (comando_repetitivo_1 -> WHILE AP expressao FP DO comandos .)
-    WHILE           reduce using rule 28 (comando_repetitivo_1 -> WHILE AP expressao FP DO comandos .)
-    ID              reduce using rule 28 (comando_repetitivo_1 -> WHILE AP expressao FP DO comandos .)
-    END             reduce using rule 28 (comando_repetitivo_1 -> WHILE AP expressao FP DO comandos .)
-    ELSE            reduce using rule 28 (comando_repetitivo_1 -> WHILE AP expressao FP DO comandos .)
+    BEGIN           reduce using rule 29 (comando_repetitivo_1 -> WHILE AP expressao FP DO comandos .)
+    IF              reduce using rule 29 (comando_repetitivo_1 -> WHILE AP expressao FP DO comandos .)
+    WHILE           reduce using rule 29 (comando_repetitivo_1 -> WHILE AP expressao FP DO comandos .)
+    ID              reduce using rule 29 (comando_repetitivo_1 -> WHILE AP expressao FP DO comandos .)
+    END             reduce using rule 29 (comando_repetitivo_1 -> WHILE AP expressao FP DO comandos .)
+    ELSE            reduce using rule 29 (comando_repetitivo_1 -> WHILE AP expressao FP DO comandos .)
 
 
 state 115
@@ -2336,33 +2338,33 @@ state 116
     (13) mais_parametros_formais -> . FIM_LINHA lista_de_parametros DOIS_PONTOS tipo_simples mais_parametros_formais
     (14) mais_parametros_formais -> . lista_de_parametros DOIS_PONTOS tipo_simples mais_parametros_formais
     (15) mais_parametros_formais -> . empty
-    (30) lista_de_parametros -> . expressao mais_parametros
-    (31) lista_de_parametros -> . empty
-    (59) empty -> .
-    (34) expressao -> . expressao_simples
-    (35) expressao -> . expressao_simples relacao expressao_simples
-    (41) expressao_simples -> . expressao_simples OPSOMA termo
-    (42) expressao_simples -> . expressao_simples OPSUB termo
-    (43) expressao_simples -> . expressao_simples OR termo
-    (44) expressao_simples -> . termo
-    (45) termo -> . termo OPMUL fator
-    (46) termo -> . termo OPDIV fator
-    (47) termo -> . termo DIV fator
-    (48) termo -> . termo AND fator
-    (49) termo -> . fator
-    (50) fator -> . variavel
-    (51) fator -> . numero
-    (52) fator -> . TRUE
-    (53) fator -> . FALSE
-    (54) fator -> . AP expressao_simples FP
-    (55) fator -> . NOT fator
-    (58) variavel -> . ID
-    (56) numero -> . NUM_INT
-    (57) numero -> . NUM_REAL
+    (31) lista_de_parametros -> . expressao mais_parametros
+    (32) lista_de_parametros -> . empty
+    (60) empty -> .
+    (35) expressao -> . expressao_simples
+    (36) expressao -> . expressao_simples relacao expressao_simples
+    (42) expressao_simples -> . expressao_simples OPSOMA termo
+    (43) expressao_simples -> . expressao_simples OPSUB termo
+    (44) expressao_simples -> . expressao_simples OR termo
+    (45) expressao_simples -> . termo
+    (46) termo -> . termo OPMUL fator
+    (47) termo -> . termo OPDIV fator
+    (48) termo -> . termo DIV fator
+    (49) termo -> . termo AND fator
+    (50) termo -> . fator
+    (51) fator -> . variavel
+    (52) fator -> . numero
+    (53) fator -> . TRUE
+    (54) fator -> . FALSE
+    (55) fator -> . AP expressao_simples FP
+    (56) fator -> . NOT fator
+    (59) variavel -> . ID
+    (57) numero -> . NUM_INT
+    (58) numero -> . NUM_REAL
 
     FIM_LINHA       shift and go to state 98
-    FP              reduce using rule 59 (empty -> .)
-    DOIS_PONTOS     reduce using rule 59 (empty -> .)
+    FP              reduce using rule 60 (empty -> .)
+    DOIS_PONTOS     reduce using rule 60 (empty -> .)
     TRUE            shift and go to state 31
     FALSE           shift and go to state 32
     AP              shift and go to state 33
@@ -2390,21 +2392,21 @@ state 117
 
 state 118
 
-    (27) comando_condicional_1 -> IF AP expressao FP THEN comandos ELSE . comandos
-    (19) comandos -> . atribuicao FIM_LINHA comandos
-    (20) comandos -> . chamada_de_procedimento FIM_LINHA comandos
-    (21) comandos -> . comando_composto comandos
-    (22) comandos -> . comando_condicional_1 comandos
-    (23) comandos -> . comando_repetitivo_1 comandos
-    (24) comandos -> . empty
-    (25) atribuicao -> . variavel OPIGUAL_ATRIB expressao
-    (29) chamada_de_procedimento -> . variavel AP lista_de_parametros FP
+    (28) comando_condicional_1 -> IF AP expressao FP THEN comandos ELSE . comandos
+    (20) comandos -> . atribuicao FIM_LINHA comandos
+    (21) comandos -> . chamada_de_procedimento FIM_LINHA comandos
+    (22) comandos -> . comando_composto comandos
+    (23) comandos -> . comando_condicional_1 comandos
+    (24) comandos -> . comando_repetitivo_1 comandos
+    (25) comandos -> . empty
+    (26) atribuicao -> . variavel OPIGUAL_ATRIB expressao
+    (30) chamada_de_procedimento -> . variavel AP lista_de_parametros FP
     (16) comando_composto -> . BEGIN new_begin comandos END
-    (26) comando_condicional_1 -> . IF AP expressao FP THEN comandos
-    (27) comando_condicional_1 -> . IF AP expressao FP THEN comandos ELSE comandos
-    (28) comando_repetitivo_1 -> . WHILE AP expressao FP DO comandos
-    (59) empty -> .
-    (58) variavel -> . ID
+    (27) comando_condicional_1 -> . IF AP expressao FP THEN comandos
+    (28) comando_condicional_1 -> . IF AP expressao FP THEN comandos ELSE comandos
+    (29) comando_repetitivo_1 -> . WHILE AP expressao FP DO comandos
+    (60) empty -> .
+    (59) variavel -> . ID
 
   ! shift/reduce conflict for BEGIN resolved as shift
   ! shift/reduce conflict for IF resolved as shift
@@ -2413,14 +2415,14 @@ state 118
     BEGIN           shift and go to state 8
     IF              shift and go to state 46
     WHILE           shift and go to state 47
-    END             reduce using rule 59 (empty -> .)
-    ELSE            reduce using rule 59 (empty -> .)
+    END             reduce using rule 60 (empty -> .)
+    ELSE            reduce using rule 60 (empty -> .)
     ID              shift and go to state 35
 
-  ! BEGIN           [ reduce using rule 59 (empty -> .) ]
-  ! IF              [ reduce using rule 59 (empty -> .) ]
-  ! WHILE           [ reduce using rule 59 (empty -> .) ]
-  ! ID              [ reduce using rule 59 (empty -> .) ]
+  ! BEGIN           [ reduce using rule 60 (empty -> .) ]
+  ! IF              [ reduce using rule 60 (empty -> .) ]
+  ! WHILE           [ reduce using rule 60 (empty -> .) ]
+  ! ID              [ reduce using rule 60 (empty -> .) ]
 
     comandos                       shift and go to state 120
     atribuicao                     shift and go to state 39
@@ -2440,14 +2442,14 @@ state 119
 
 state 120
 
-    (27) comando_condicional_1 -> IF AP expressao FP THEN comandos ELSE comandos .
+    (28) comando_condicional_1 -> IF AP expressao FP THEN comandos ELSE comandos .
 
-    BEGIN           reduce using rule 27 (comando_condicional_1 -> IF AP expressao FP THEN comandos ELSE comandos .)
-    IF              reduce using rule 27 (comando_condicional_1 -> IF AP expressao FP THEN comandos ELSE comandos .)
-    WHILE           reduce using rule 27 (comando_condicional_1 -> IF AP expressao FP THEN comandos ELSE comandos .)
-    ID              reduce using rule 27 (comando_condicional_1 -> IF AP expressao FP THEN comandos ELSE comandos .)
-    END             reduce using rule 27 (comando_condicional_1 -> IF AP expressao FP THEN comandos ELSE comandos .)
-    ELSE            reduce using rule 27 (comando_condicional_1 -> IF AP expressao FP THEN comandos ELSE comandos .)
+    BEGIN           reduce using rule 28 (comando_condicional_1 -> IF AP expressao FP THEN comandos ELSE comandos .)
+    IF              reduce using rule 28 (comando_condicional_1 -> IF AP expressao FP THEN comandos ELSE comandos .)
+    WHILE           reduce using rule 28 (comando_condicional_1 -> IF AP expressao FP THEN comandos ELSE comandos .)
+    ID              reduce using rule 28 (comando_condicional_1 -> IF AP expressao FP THEN comandos ELSE comandos .)
+    END             reduce using rule 28 (comando_condicional_1 -> IF AP expressao FP THEN comandos ELSE comandos .)
+    ELSE            reduce using rule 28 (comando_condicional_1 -> IF AP expressao FP THEN comandos ELSE comandos .)
 
 WARNING: 
 WARNING: Conflicts:

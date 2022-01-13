@@ -19,17 +19,25 @@ writeFile = 'ReadWrite-Files/write.txt'
 
 from Syntactic.SymbolTable import *
 from Syntactic.Scope import *
+from Syntactic.Errors import *
 
 # PARTES DA UI
 from UI.MainWindow import *
 
 # 32 shift/reduce é o normal
 
-scope_pointer = -1
-scopes = []
-begin_stack = []
 
-def createParser():    
+
+def createParser():  
+
+    scope_pointer = -1
+    scopes = [] #talvez seja necessario resetar os scopes sempre que rodar o programa
+    begin_stack = []
+
+    # objeto que controla os erros
+    errors = Errors()  
+
+
     #chamando o lexer
     lexerClass = myLexer()
     lexer = lexerClass.build()
@@ -52,6 +60,7 @@ def createParser():
         '''
     
         p[0] = p[4]
+
 
     def p_bloco(p):
         '''bloco : new_scope parte_declaracao_de_variaveis parte_declaracao_de_subrotinas
@@ -86,7 +95,7 @@ def createParser():
         print('declaracao_de_variaveis-debug: ', p[1], p[2])
 
         for variavel in p[2]:
-            scopes[-1].variableTable.insert(variavel, p[1], False, None)
+            scopes[-1].variableTable.insert(variavel, p[1], p.lineno(1),False, None)
 
         #print('declaracao_de_variaveis-debug-tabela: ', str(variaveis.table))
 
@@ -154,13 +163,14 @@ def createParser():
 
     # COMANDOS    
     def p_comando_composto(p):
-        '''comando_composto : BEGIN new_begin comandos END 
+        '''comando_composto : BEGIN new_begin comandos END
                             
         ''' 
         p[0] = p[2]
 
         begin_stack.pop()
         if(len(begin_stack) == 0):
+            p_warnings(None)
             scopes.pop()
 
 
@@ -173,7 +183,15 @@ def createParser():
     def p_new_begin(p):
         "new_begin :"
         begin_stack.append("begin") 
-        
+    
+    def p_warnings(p):
+        '''warnings : '''
+
+        tabela_de_variaveis = scopes[-1].variableTable.table
+
+        for variavel in tabela_de_variaveis:
+            if(variavel['utilizada'] == False):
+                errors.add_warning("WARNING: Variavel '"+ variavel['lexema'] +"' declarada e nao utilizada - Linha: " + str(variavel['linha']))
 
     def p_comandos(p):
         '''comandos : atribuicao FIM_LINHA comandos
@@ -197,12 +215,21 @@ def createParser():
         
         temp = scopes[-1].variableTable.modify(p[1], p[3])
 
-        if(temp != "ERROR: tipo"):
-            p[0] = temp
-        else:
-            print("ERROR: O valor atribuido a variável ", str(p[1]) ," não é compatível com o seu tipo - Linha: ", p.lineno(1))
-            p_error("ERROR: O valor atribuido a variável "+ str(p[1]) +" não é compatível com o seu tipo - Linha: " + str(p.lineno(1)))
+        if(temp == errors.ERROR_TIPO):
+            error_message = "ERROR: O valor atribuido a variável '"+ str(p[1]) +"' não é compatível com o seu tipo - Linha: " + str(p.lineno(1))
+            
+            #chama a função de erro
+            p_error(error_message)
             raise SyntaxError
+            
+        elif(temp == errors.ERROR_VARIAVEL_NAO_DECLARADA):
+            error_message = "ERROR: A variavel '" + str(p[1]) +"' não foi declarada - Linha: "+ str(p.lineno(1))
+            
+
+            p_error(error_message)
+            raise SyntaxError
+        else:
+            p[0] = temp
             
        
 
@@ -281,10 +308,28 @@ def createParser():
             print('expressao-debug: ', p[1], p[2], p[3])
 
             if(isinstance(p[1], str)):  #CASO P[1] ESTEJA SE REFERINDO AO NOME DE UMA VARIAVEL, PEGAMOS SEU VALOR PARA REALIZAR O CALCULO
-                p[1] = scopes[-1].variableTable.get_value(p[1])
+                v1 = scopes[-1].variableTable.get_value(p[1])
+                
+                if(v1 == errors.ERROR_VARIAVEL_SEM_VALOR): #caso a variavel nao tenha valor - Erro
+                    p_error("ERROR: A variavel '" + p[1] + "' não tem valor definido - Linha: " + str(p.lineno(1)))
+                    raise SyntaxError
+                elif(v1 == errors.ERROR_VARIAVEL_NAO_DECLARADA):
+                    p_error("ERROR: A variavel '" + str(p[1]) +"' não foi declarada - Linha: "+ str(p.lineno(1)))
+                    raise SyntaxError
+                else:
+                    p[1] = v1
+
             if(isinstance(p[3], str)):  #O MESMO QUE PRO P[1]
-                p[3] = scopes[-1].variableTable.get_value(p[3])
-            
+                v2 = scopes[-1].variableTable.get_value(p[3])
+                
+                if(v2 == errors.ERROR_VARIAVEL_SEM_VALOR): #caso a variavel nao tenha valor - Erro
+                    p_error("ERROR: A variavel '" + p[3] + "' não tem valor definido - Linha: " + str(p.lineno(3)))
+                    raise SyntaxError
+                elif(v2 == errors.ERROR_VARIAVEL_NAO_DECLARADA):
+                    p_error("ERROR: A variavel '" + str(p[3]) +"' não foi declarada - Linha: "+ str(p.lineno(3)))
+                    raise SyntaxError
+                else: # caso a variavel tenha valor, atribuimos esse valor
+                    p[3] = v2
 
             if(p[2] == '<>'):
                 if(p[1] == p[3]):
@@ -334,9 +379,30 @@ def createParser():
          '''
         if(len(p) > 2 and p[1] != None and p[3] != None):
             if(isinstance(p[1], str)):  #CASO P[1] ESTEJA SE REFERINDO AO NOME DE UMA VARIAVEL, PEGAMOS SEU VALOR PARA REALIZAR O CALCULO
-                p[1] = scopes[-1].variableTable.get_value(p[1])
+                v1 = scopes[-1].variableTable.get_value(p[1])
+                
+                if(v1 == errors.ERROR_VARIAVEL_SEM_VALOR): #caso a variavel nao tenha valor - Erro
+                    p_error("ERROR: A variavel '" + str(p[1]) + "' não tem valor definido - Linha: " + str(p.lineno(1)))
+                    raise SyntaxError
+                elif(v1 == errors.ERROR_VARIAVEL_NAO_DECLARADA):
+                    p_error("ERROR: A variavel '" + str(p[1]) +"' não foi declarada - Linha: "+ str(p.lineno(1)))
+                    raise SyntaxError
+                else:
+                    p[1] = v1
+
             if(isinstance(p[3], str)):  #O MESMO QUE PRO P[1]
-                p[3] = scopes[-1].variableTable.get_value(p[3])
+                v2 = scopes[-1].variableTable.get_value(p[3])
+                
+                if(v2 == errors.ERROR_VARIAVEL_SEM_VALOR): #caso a variavel nao tenha valor - Erro
+                    p_error("ERROR: A variavel '" + p[3] + "' não tem valor definido - Linha: " + str(p.lineno(3)))
+                    raise SyntaxError
+                elif(v2 == errors.ERROR_VARIAVEL_NAO_DECLARADA):
+                    p_error("ERROR: A variavel '" + str(p[3]) +"' não foi declarada - Linha: "+ str(p.lineno(3)))
+                    raise SyntaxError
+                else: # caso a variavel tenha valor, atribuimos esse valor
+                    p[3] = v2
+
+
 
             if(p[2] == '+'):
                 p[0] = p[1] + p[3]
@@ -355,11 +421,35 @@ def createParser():
                  | termo AND fator
                  | fator
          '''
+
+
         if(len(p) > 2 and p[1] != None and p[3] != None):
+            print('termo-debug: ', p[1], p[2], p[3])
+
             if(isinstance(p[1], str)):  #CASO P[1] ESTEJA SE REFERINDO AO NOME DE UMA VARIAVEL, PEGAMOS SEU VALOR PARA REALIZAR O CALCULO
-                p[1] = scopes[-1].variableTable.get_value(p[1])
+                v1 = scopes[-1].variableTable.get_value(p[1])
+                
+                if(v1 == errors.ERROR_VARIAVEL_SEM_VALOR): #caso a variavel nao tenha valor - Erro
+                    p_error("ERROR: A variavel '" + p[1] + "' não tem valor definido - Linha: " + str(p.lineno(1)))
+                    raise SyntaxError
+                elif(v1 == errors.ERROR_VARIAVEL_NAO_DECLARADA):
+                    p_error("ERROR: A variavel '" + str(p[1]) +"' não foi declarada - Linha: "+ str(p.lineno(1)))
+                    raise SyntaxError
+                else:
+                    p[1] = v1
+
             if(isinstance(p[3], str)):  #O MESMO QUE PRO P[1]
-                p[3] = scopes[-1].variableTable.get_value(p[3])
+                v2 = scopes[-1].variableTable.get_value(p[3])
+                
+                if(v2 == errors.ERROR_VARIAVEL_SEM_VALOR): #caso a variavel nao tenha valor - Erro
+                    p_error("ERROR: A variavel '" + p[3] + "' não tem valor definido - Linha: " + str(p.lineno(3)))
+                    raise SyntaxError
+                elif(v2 == errors.ERROR_VARIAVEL_NAO_DECLARADA):
+                    p_error("ERROR: A variavel '" + str(p[3]) +"' não foi declarada - Linha: "+ str(p.lineno(3)))
+                    raise SyntaxError
+                else: # caso a variavel tenha valor, atribuimos esse valor
+                    p[3] = v2
+
 
             if(p[2] == '*'):
                 p[0] = p[1] * p[3]
@@ -420,12 +510,33 @@ def createParser():
          
 
     # Error rule for syntax errors
+    # TODO - mostrar todos os erros ao mesmo tempo pro usuario
     def p_error(p):
         if(not p):
             print("Syntax error at EOF\n")
-        else:
+        elif(isinstance(p, str)):
             print(str(p))
+            #adiciona erro à lista de erros para serem exibidos na interface
+            errors.add_error(p)
 
+            # #tratamento para o parser continuar o trabalho, ignorando o erro, para que seja possivel exibir todos os erros ao mesmo tempo
+            # while(True):
+            #     tok = parser.token()
+            #     print(tok.type)
+            #     if(tok.type == 'FIM_LINHA'):
+            #         tok = parser.token();
+            #         break
+            #     elif(not tok):
+            #         break
+
+            tok = parser.token()
+
+            parser.errok()
+
+            parser.parse()
+            
+            return tok
+            
 
     parser = yacc.yacc(debug=True) 
 
