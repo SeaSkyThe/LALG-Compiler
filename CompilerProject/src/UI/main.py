@@ -8,6 +8,11 @@ from Syntactic.parser import *
 #importando classe de erros
 from Syntactic.Errors import *
 
+#importando gerador de codigo
+
+from CodeGeneration.CodeGeneration import *
+
+
 #Importando componentes para a sintaxe
 from PyQt5.QtCore import QFile, QRegExp, Qt
 from PyQt5.QtGui import QFont, QSyntaxHighlighter, QTextCharFormat, QColor
@@ -15,6 +20,9 @@ from PyQt5.QtGui import QFont, QSyntaxHighlighter, QTextCharFormat, QColor
 
 # Chamando objeto Errors
 errors = Errors()
+
+# Chamando objeto gerador de codigo
+codeGenerator = CodeGenerator()
 
 # Line number Widget definition
 class LineNumberArea(QtWidgets.QWidget):
@@ -387,40 +395,56 @@ class ExecWindow(Ui_MainWindow):
         #calculando resultado e exibindo na tela de output - se não for "None"
         
         result = self.parser.parse(text, tracking=True)
-        error_list = ""
+        
         # condição para exibição na caixa de texto de output
         if(result != None):  # caso retorne algo diferente de None, ou seja, existe um resultado, não tivemos erros
-            result = str(result) + "\n"
+            error_list = ""
+            
 
             #print(errors.get_errorList())
             #INCUINDO ERROS NO OUTPUT
-            for error in errors.get_errorList():
-                result = result + error + "\n"
-            errors.clear_errors() 
-             # INCLUINDO WARNINGS NO OUTPUT
-            for warning in errors.get_warningList():
-                result = result + warning + "\n"
-            errors.clear_warnings()
+            if(errors.has_errors()):  #SE TIVER ERROS, EXIBE APENAS OS ERROS
+                for error in errors.get_errorList():
+                    error_list = error_list + error + "\n"
+                errors.clear_errors() 
+
+                self.textOutput.setText("")
+                self.textOutput.setText(error_list)
+            else:
+                result = str(result) + "\n"
+                # INCLUINDO WARNINGS NO OUTPUT
+                for warning in errors.get_warningList():
+                    result = result + warning + "\n"
+                errors.clear_warnings()
 
 
-            self.textOutput.setText("")
-            self.textOutput.setText(str(result))
+                self.textOutput.setText("")
+                self.textOutput.setText(str(result))
+
+                codeGenerator.salvarEmArquivo("codigoIntermediario.txt")
 
 
         else: # caso existirem erros
              # INCLUINDO ERROS NO OUTPUT
-            for error in errors.get_errorList():
-                error_list = error_list + error + "\n"
+            error_list = ""
+            if(errors.has_errors()): #SE TIVER ERROS, EXIBE APENAS OS ERROS
+                for error in errors.get_errorList():
+                    error_list = error_list + error + "\n"
+                errors.clear_errors() 
+
+                self.textOutput.setText("")
+                self.textOutput.setText(error_list)
             
-            errors.clear_errors()
-        
-            # INCLUINDO WARNINGS NO OUTPUT
-            for warning in errors.get_warningList():
-                error_list = error_list + warning + "\n"
-            errors.clear_warnings()
-            
-            self.textOutput.setText("")
-            self.textOutput.setText(error_list)
+            else:
+                # INCLUINDO WARNINGS NO OUTPUT
+                for warning in errors.get_warningList():
+                    error_list = error_list + warning + "\n"
+                errors.clear_warnings()
+                
+                self.textOutput.setText("")
+                self.textOutput.setText(error_list)
+
+                codeGenerator.salvarEmArquivo("codigoIntermediario.txt")
         return
 
     # Opening a File

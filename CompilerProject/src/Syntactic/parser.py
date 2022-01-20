@@ -21,6 +21,10 @@ from Syntactic.SymbolTable import *
 from Syntactic.Scope import *
 from Syntactic.Errors import *
 
+
+#GERACAO DE CODIGO
+from CodeGeneration.CodeGeneration import *
+
 # PARTES DA UI
 from UI.MainWindow import *
 
@@ -30,13 +34,14 @@ from UI.MainWindow import *
 
 def createParser():  
 
-    scope_pointer = -1
+    # ESTRUTURAS QUE CUIDAM DA ANALISE SEMANTICA 
     scopes = [] #talvez seja necessario resetar os scopes sempre que rodar o programa
     begin_stack = []
-
     # objeto que controla os erros
     errors = Errors()  
 
+    # ESTRUTURA DE AUXILIO NA GERACAO DE CODIGO
+    codeGenerator = CodeGenerator()
 
     #chamando o lexer
     lexerClass = myLexer()
@@ -58,7 +63,8 @@ def createParser():
     def p_programa(p):
         '''programa : PROGRAM ID FIM_LINHA bloco comando_composto PONTO_FINAL
         '''
-    
+        #codeGenerator.iniciarPrograma(p[2])
+        
         p[0] = p[4]
 
 
@@ -96,6 +102,7 @@ def createParser():
 
         for variavel in p[2]:
             scopes[-1].variableTable.insert(variavel, p[1], p.lineno(1),False, None)
+            #codeGenerator.declararVariavel(variavel, p[1])
 
         #print('declaracao_de_variaveis-debug-tabela: ', str(variaveis.table))
 
@@ -330,7 +337,7 @@ def createParser():
                 else: # caso a variavel tenha valor, atribuimos esse valor
                     p[3] = v2
 
-            if(p[2] == '<>'):
+            if(p[2] == '='):
                 if(p[1] == p[3]):
                     p[0] = True
                 else:
@@ -360,7 +367,7 @@ def createParser():
             p[0] = p[1]
         
     def p_relacao(p):
-        '''relacao : IGUAL     
+        '''relacao : IGUAL   
                    | MAIOR_IGUAL
                    | MAIOR
                    | MENOR_IGUAL

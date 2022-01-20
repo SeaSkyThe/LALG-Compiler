@@ -39,3 +39,9 @@ class Errors(object):
 
 	def get_warningList(self):
 		return self.warningList
+
+	def has_errors(self):
+		if(len(self.errorList) > 0):
+			return True
+
+		return False
