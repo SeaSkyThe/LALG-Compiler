@@ -14,7 +14,7 @@ from CodeGeneration.CodeGeneration import *
 
 
 #Importando componentes para a sintaxe
-from PyQt5.QtCore import QFile, QRegExp, Qt
+from PyQt5.QtCore import QFile, QRegExp, Qt, QSize
 from PyQt5.QtGui import QFont, QSyntaxHighlighter, QTextCharFormat, QColor
 
 
@@ -157,7 +157,7 @@ class Highlighter(QSyntaxHighlighter):
     def inputRules(self):
         #Keywords format
         keyword = QTextCharFormat()
-        keyword.setForeground(QColor('#229bdd'))
+        keyword.setForeground(QColor('#00006e')) #Dark Blue
         keyword.setFontWeight(QFont.Bold)
         keywordPatterns = [r"\bint\b", r"\bfloat\b", r"\breal\b",r"\bboolean\b", r"\bvar\b",  r"\bprocedure\b", 
         r"\bbegin\b",  r"\bend\b", r"\bprogram\b", r"\bread\b", r"\bwrite\b"
@@ -166,7 +166,7 @@ class Highlighter(QSyntaxHighlighter):
                 for pattern in keywordPatterns]
         #Conditions and loops
         conditionAndLoops = QTextCharFormat()
-        conditionAndLoops.setForeground(QColor('#d11f1f'))
+        conditionAndLoops.setForeground(QColor('#920003')) #Red
         conditionAndLoops.setFontWeight(QFont.Bold)
         conditionAndLoopsPatterns = [r"\bwhile\b", r"\bfor\b", r"\bdo\b", r"\bif\b",  r"\belse\b", 
         r"\bthen\b"
@@ -176,13 +176,13 @@ class Highlighter(QSyntaxHighlighter):
         
         #Numbers Format
         number = QTextCharFormat()
-        number.setForeground(QColor('#8f3dd6'))
+        number.setForeground(QColor('#00b0f4')) #Cyan
         self.highlightingRules.append((QRegExp(r"\b\d+\b|\btrue\b|\bfalse\b"),
                 number))
 
         # Operators format
         operator = QTextCharFormat()
-        operator.setForeground(QColor('#c98e20'))
+        operator.setForeground(QColor('#646464')) #Gray
         self.highlightingRules.append((QRegExp(r"[\+\-\*/<>=:()]|\bdiv\b"),
                 operator))
 
@@ -202,36 +202,26 @@ class Highlighter(QSyntaxHighlighter):
     def outputRules(self):
         #Any
         anyChar = QTextCharFormat()
-        anyChar.setForeground(QColor('#ff00ee'))
+        anyChar.setForeground(QColor('#282828')) #Black
         anyChar.setFontWeight(QFont.Bold)
         self.highlightingRules.append((QRegExp(r"."),
                 anyChar))
 
         #Variable Type
         variable = QTextCharFormat()
-        variable.setForeground(QColor('#14b3a3'))
+        variable.setForeground(QColor('#00006e')) #Dark Blue
         variable.setFontWeight(QFont.Bold)
-        variablePatterns = [r"\bint\b", r"\bfloat\b", r"\bdouble\b", r"\bboolean\b",  
-            r"\bvar\b"
+        variablePatterns = [r"\bint\b", r"\bfloat\b", r"\bdouble\b", r"\bboolean\b, \bprocedure\b", r"\bprogram\b", 
+        r"\bbegin\b", r"\bend\b", r"\bvar\b"
         ]
 
         for pattern in variablePatterns:
             self.highlightingRules.append((QRegExp(pattern),
                 variable))
 
-        #key Type
-        key = QTextCharFormat()
-        key.setForeground(QColor('#00f8fc'))
-        key.setFontWeight(QFont.Bold)
-        keyPatterns = [r"\bprocedure\b", r"\bprogram\b", r"\bbegin\b", r"\bend\b",  
-        ]
-        for pattern in keyPatterns:
-            self.highlightingRules.append((QRegExp(pattern),
-                key))
-
         #condition Type
         condition = QTextCharFormat()
-        condition.setForeground(QColor('#750d85'))
+        condition.setForeground(QColor('#920003')) #Red
         condition.setFontWeight(QFont.Bold)
         conditionPatterns = [r"\bif\b", r"\belse\b", r"\bthen\b", r"\bwhile\b", r"\bfor\b",
         ]
@@ -239,28 +229,34 @@ class Highlighter(QSyntaxHighlighter):
             self.highlightingRules.append((QRegExp(pattern),
                 condition))
 
+        #WARNING
+        warning = QTextCharFormat()
+        warning.setForeground(QColor('#F29F18')) #Yellow
+        self.highlightingRules.append((QRegExp(r"(?=WARNING:).*"),
+                warning))
+
         #numbers
         numbers = QTextCharFormat()
-        numbers.setForeground(QColor('#32a852'))
+        numbers.setForeground(QColor('#00b0f4')) #Gray
         self.highlightingRules.append((QRegExp(r"\b\d+\b|\bdiv\b"),
                 numbers))
 
 
         #Symbols
         Symbols = QTextCharFormat()
-        Symbols.setForeground(QColor('#ff0000'))
+        Symbols.setForeground(QColor('#F0750F')) #Yellow
         self.highlightingRules.append((QRegExp(r"[\W]|\bdiv\b"),
                 Symbols))
 
         #Lexic Pointer
         LexicPointer = QTextCharFormat()
-        LexicPointer.setForeground(QColor('#363636'))
+        LexicPointer.setForeground(QColor('#1C1C1C')) #Purble
         self.highlightingRules.append((QRegExp(r'(?==>).*'),
                 LexicPointer))
 
         #Line Number
         line = QTextCharFormat()
-        line.setForeground(QColor('#7300ff'))
+        line.setForeground(QColor('#646464')) #Green
         self.highlightingRules.append((QRegExp(r"^LINHA.*"),
                 line))
 
@@ -335,34 +331,103 @@ class ExecWindow(Ui_MainWindow):
     def setupUi(self, window):
         super().setupUi(self.window)
         
-        # Setting window icon
-        self.window.setWindowIcon(QtGui.QIcon('icons/icons8-svelte-48.png'))
+        # Setting window properties
+        self.window.setWindowIcon(QtGui.QIcon('icons/windowIcon.png'))
+        #Window Flags (Disable resize)
+        self.window.setWindowFlags(QtCore.Qt.WindowCloseButtonHint | QtCore.Qt.WindowMinimizeButtonHint)
+        self.window.setStyleSheet("background-color: white;")
 
         # Creating Code Area with Line Number
         self.textInput = CodeArea(self.centralwidget)
         self.textInput.setGeometry(QtCore.QRect(20 , 50, 841, 451))
         self.textInput.setObjectName("textInput")
+
         # Setting tab distance
         self.textInput.setTabStopDistance(QtGui.QFontMetricsF(self.textInput.font()).horizontalAdvance(' ') * 4)
 
         # Setting syntax colors for textInput
         self.highlighter = Highlighter('input', self.textInput.document())
         self.highlighter.inputRules()
+
         # Setting syntax colors for textOutput
         self.highlighter2 = Highlighter('output', self.textOutput.document())
         self.highlighter2.outputRules()
 
-        # Setting buttons icons
-        pixmap = QtGui.QPixmap("icons/botao-play.png")
-        compile_icon = QtGui.QIcon(pixmap)
-        self.analyzeButton.setIcon(compile_icon)
-        self.analyzeButton.setIconSize(self.analyzeButton.size())
+        # Setting buttons properties
+        pixmap = QtGui.QPixmap("icons/analyze.png")
+        analyze_icon = QtGui.QIcon(pixmap)
+        self.analyzeButton.setIcon(analyze_icon)
+        self.analyzeButton.setIconSize(QSize(23, 23))
+        self.analyzeButton.setStyleSheet(
+        """
+        QPushButton
+        {
+        background-color: #D0D0D0;
+        border-radius: 15px;
+        }
+        QPushButton::hover
+        {
+        background-color: #9A9A9A;
+        }
+        """
+        )
 
+        pixmap = QtGui.QPixmap("icons/build.png")
+        compile_icon = QtGui.QIcon(pixmap)
+        self.compileButton.setIcon(compile_icon)
+        self.compileButton.setIconSize(QSize(23, 23))
+        self.compileButton.setStyleSheet(
+        """
+        QPushButton
+        {
+        background-color: #D0D0D0;
+        border-radius: 15px;
+        }
+        QPushButton::hover
+        {
+        background-color: #9A9A9A;
+        }
+        """
+        )
 
         # Setting fonts and styles of the text
+        self.textInput.setFont(QFont("Courier New", 12))
+        self.textOutput.setFont(QFont("Courier New", 12))
 
-
-    
+        # Setting Menu properties
+        # Shortcuts
+        self.actionOpen.setShortcut("Ctrl+O")
+        self.actionSave.setShortcut("Ctrl+S")
+        self.menuBar.setStyleSheet(
+        """
+        QMenuBar
+        {
+            background-color: lightGray;
+            color: #000;
+        }
+        QMenuBar::item
+        {
+            background-color: lightGray;
+            color: #000;
+        }
+        QMenuBar::item::selected
+        {
+            background-color: Gray;
+            color: #000;
+        }
+        QMenu
+        {
+            background-color: lightGray;
+            color: #000;
+        }
+        QMenu::item::selected
+        {
+            background-color: Gray;
+            color: #000;
+        }
+         """
+        )
+            
     
     def connectActions(self):
         # pressing the analyze button
