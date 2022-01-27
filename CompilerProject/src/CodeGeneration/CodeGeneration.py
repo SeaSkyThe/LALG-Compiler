@@ -4,6 +4,12 @@ from CodeGeneration.Variavel import *
 
 errors = Errors()
 
+
+import inspect
+
+DEBUG = False
+
+
 class CodeGenerator():
 	_instance = None
 	def __new__(self, textOutput=None):
@@ -59,6 +65,10 @@ class CodeGenerator():
 		if(errors.has_errors()):
 			return
 
+		if(DEBUG):
+			print(str(inspect.stack()[0][3]) + ": ")
+			self.printComandos()
+
 		else:
 			self.nomePrograma = nome
 			self.listaComandos.append('INPP ')
@@ -68,6 +78,10 @@ class CodeGenerator():
 		if(errors.has_errors()):
 			return
 
+		if(DEBUG):
+			print(str(inspect.stack()[0][3]) + ": ")
+			self.printComandos()
+
 
 		variavel = ""
 
@@ -75,17 +89,35 @@ class CodeGenerator():
 			variavel = Integer(nomeVariavel, self.contadorData, None)
 			self.contadorData = self.contadorData + 1
 
+			self.listaVariaveis[nomeVariavel] = variavel
+			self.listaComandos.append("AMEM 1")
+
 		elif(tipo == 'boolean'):
 			variavel = Boolean(nomeVariavel, self.contadorData, None)
 			self.contadorData = self.contadorData + 1
 
-		self.listaVariaveis[nomeVariavel] = variavel
-		self.listaComandos.append("AMEM 1")
+			self.listaVariaveis[nomeVariavel] = variavel
+			self.listaComandos.append("AMEM 1")
 
-	def atribuicaoVariavel(self, nomeVariavel, valor):
+		elif(tipo == 'real'):
+			variavel = Float(nomeVariavel, self.contadorData, None)
+			self.contadorData = self.contadorData + 1
+
+			self.listaVariaveis[nomeVariavel] = variavel
+			self.listaComandos.append("AMEM 1")
+		
+		else:
+			erros.add_error("ERROR: Tipo nao existe\n")
+
+	def atribuicaoVariavel(self, nomeVariavel, valor=None): #VERIFICAR SOBRE O VALOR DA VARIAVEL
 		if(errors.has_errors()):
 			return
 
+		if(DEBUG):
+			print(str(inspect.stack()[0][3]) + ": ")
+			self.printComandos()
+
+		print("LISTA VARIAVEIS: " + str(self.listaVariaveis))
 		self.listaVariaveis[nomeVariavel].setValor(valor)
 
 		enderecoAlocacao = self.listaVariaveis[nomeVariavel].getEnderecoAlocacao()
@@ -97,11 +129,19 @@ class CodeGenerator():
 		if(errors.has_errors()):
 			return
 
+		if(DEBUG):
+			print(str(inspect.stack()[0][3]) + ": ")
+			self.printComandos()
+
 		self.listaComandos.append("LEIT")
 
 	def leituraCaracter(self):
 		if(errors.has_errors()):
 			return
+
+		if(DEBUG):
+			print(str(inspect.stack()[0][3]) + ": ")
+			self.printComandos()
 
 		self.listaComandos.append("LEICH")
 
@@ -109,67 +149,116 @@ class CodeGenerator():
 		if(errors.has_errors()):
 			return
 
-		self.posicaoIF.append(len(self.listaComandos))
+		if(DEBUG):
+			print(str(inspect.stack()[0][3]) + ": ")
+			self.printComandos()
 
+		self.posicaoIF.append(len(self.listaComandos))
 		self.executaNada()
+
 
 	def desvioIF(self):
 		if(errors.has_errors()):
 			return
 
-		self.desvioSeFalso(self.posicaoIF[-1], len(self.listaComandos))
-		self.posicaoIF2.append(self.posicaoIF.pop())
+		if(DEBUG):
+			print(str(inspect.stack()[0][3]) + ": ")
+			self.printComandos()
 
+		self.desvioSeFalso(self.posicaoIF[0], len(self.listaComandos) + 1)
+		self.posicaoIF2.append(self.posicaoIF.pop())
 
 
 	def verificaElse(self):
 		if(errors.has_errors()):
 			return
 
-		executaNada()
-		self.posicaoELSE.append(len(self.listaComandos) - 1)
+		if(DEBUG):
+			print(str(inspect.stack()[0][3]) + ": ")
+			self.printComandos()
+			
 
+		
+		self.posicaoELSE.append(len(self.listaComandos))
+		self.executaNada()
 
 	def setExpressao(self, num):
 		if(errors.has_errors()):
 			return
 
+		if(DEBUG):
+			print(str(inspect.stack()[0][3]) + ": ")
+			self.printComandos()
+
 		self.posicaoExpressao = num;
+
 
 	def desvioElse(self):
 		if(errors.has_errors()):
 			return
 
-		self.desvioIncondicional(self.posicaoELSE[-1], len(self.listaComandos))
-		self.desvioSeFalso(posicaoIF2.pop(), posicaoELSE.pop() + 1)
+		if(DEBUG):
+			print(str(inspect.stack()[0][3]) + ": ")
+			self.printComandos()
 
+			
+
+		posIF2 = self.posicaoIF2.pop()
+		posELSE = self.posicaoELSE.pop()
+
+		self.desvioIncondicional(posELSE, len(self.listaComandos) + 1)
+		
+		self.desvioSeFalso(posIF2, posELSE + 2)
+		
 
 	def verificaWhile(self):
 		if(errors.has_errors()):
 			return
 
+		if(DEBUG):
+			print(str(inspect.stack()[0][3]) + ": ")
+			self.printComandos()
+
 		self.posicaoWHILE.append(len(self.listaComandos))
-		executaNada()
+		self.executaNada()
 
 
 	def desvioWhile(self):
 		if(errors.has_errors()):
 			return
 
-		executaNada()
-		self.desvioIncondicional(len(self.listaComandos) - 1, self.posicaoExpressao)
-		self.desvioSeFalso(posicaoWHILE.pop(), len(self.listaComandos))
+		if(DEBUG):
+			print(str(inspect.stack()[0][3]) + ": ")
+			self.printComandos()
+
+		
+
+		posWHILE = self.posicaoWHILE.pop()
+
+		self.executaNada()
+		self.desvioIncondicional(len(self.listaComandos) - 1, self.posicaoExpressao + 1)
+		
+
+		self.desvioSeFalso(posWHILE, len(self.listaComandos) + 1)
 
 
 	def desvioIncondicional(self, posicaoComando, posicaoDesvio):
 		if(errors.has_errors()):
 			return
 
+		if(DEBUG):
+			print(str(inspect.stack()[0][3]) + ": ")
+			self.printComandos()
+
 		self.listaComandos[posicaoComando] = "DSVS " + str(posicaoDesvio)
 
 	def desvioSeFalso(self, posicaoComando, posicaoDesvio):
 		if(errors.has_errors()):
 			return
+
+		if(DEBUG):
+			print(str(inspect.stack()[0][3]) + ": ")
+			self.printComandos()
 
 		self.listaComandos[posicaoComando] = "DSVF " + str(posicaoDesvio)
 
@@ -179,6 +268,10 @@ class CodeGenerator():
 		if(errors.has_errors()):
 			return
 
+		if(DEBUG):
+			print(str(inspect.stack()[0][3]) + ": ")
+			self.printComandos()
+
 		if(operador == "="):
 			self.comparaIgual()
 		elif(operador == "<"):
@@ -186,14 +279,30 @@ class CodeGenerator():
 		elif(operador == "<="):
 			self.comparaMenorIgual()
 		elif(operador == ">="):
-			self.comparaMaior()
-		elif(operador == ">"):
 			self.comparaMaiorIgual()
+		elif(operador == ">"):
+			self.comparaMaior()
+		elif(operador == "<>"):
+			self.comparaDesigual()
 
+
+	def comaparaDesigual(self):
+		if(errors.has_errors()):
+			return
+
+		if(DEBUG):
+			print(str(inspect.stack()[0][3]) + ": ")
+			self.printComandos()
+
+		self.listaComandos.append("CMDG")
 
 	def comparaIgual(self):
 		if(errors.has_errors()):
 			return
+
+		if(DEBUG):
+			print(str(inspect.stack()[0][3]) + ": ")
+			self.printComandos()
 
 		self.listaComandos.append("CMIG")
 
@@ -201,11 +310,19 @@ class CodeGenerator():
 		if(errors.has_errors()):
 			return
 
+		if(DEBUG):
+			print(str(inspect.stack()[0][3]) + ": ")
+			self.printComandos()
+
 		self.listaComandos.append("CMME")
 
 	def comparaMenorIgual(self):
 		if(errors.has_errors()):
 			return
+
+		if(DEBUG):
+			print(str(inspect.stack()[0][3]) + ": ")
+			self.printComandos()
 
 		self.listaComandos.append("CMEG")
 
@@ -213,11 +330,19 @@ class CodeGenerator():
 		if(errors.has_errors()):
 			return
 
+		if(DEBUG):
+			print(str(inspect.stack()[0][3]) + ": ")
+			self.printComandos()
+
 		self.listaComandos.append("CMAG")
 
 	def comparaMaior(self):
 		if(errors.has_errors()):
 			return
+
+		if(DEBUG):
+			print(str(inspect.stack()[0][3]) + ": ")
+			self.printComandos()
 
 		self.listaComandos.append("CMMA")
 
@@ -227,18 +352,30 @@ class CodeGenerator():
 		if(errors.has_errors()):
 			return
 
+		if(DEBUG):
+			print(str(inspect.stack()[0][3]) + ": ")
+			self.printComandos()
+
 		self.inversao()
 
 	def inversao(self):
 		if(errors.has_errors()):
 			return
 
+		if(DEBUG):
+			print(str(inspect.stack()[0][3]) + ": ")
+			self.printComandos()
+
 		self.listaComandos.append("INVR")
 
 
-	def verificarOperador(self, operador):
+	def verificaOperador(self, operador):
 		if(errors.has_errors()):
 			return
+
+		if(DEBUG):
+			print(str(inspect.stack()[0][3]) + ": ")
+			self.printComandos()
 
 		if(operador == "+"):
 			self.adicao()
@@ -262,11 +399,19 @@ class CodeGenerator():
 		if(errors.has_errors()):
 			return
 
+		if(DEBUG):
+			print(str(inspect.stack()[0][3]) + ": ")
+			self.printComandos()
+
 		self.listaComandos.append("SOMA")
 
 	def subtracao(self):
 		if(errors.has_errors()):
 			return
+
+		if(DEBUG):
+			print(str(inspect.stack()[0][3]) + ": ")
+			self.printComandos()
 
 		self.listaComandos.append("SUBT")
 
@@ -274,11 +419,19 @@ class CodeGenerator():
 		if(errors.has_errors()):
 			return
 
+		if(DEBUG):
+			print(str(inspect.stack()[0][3]) + ": ")
+			self.printComandos()
+
 		self.listaComandos.append("MULT")
 
 	def divisao(self):
 		if(errors.has_errors()):
 			return
+
+		if(DEBUG):
+			print(str(inspect.stack()[0][3]) + ": ")
+			self.printComandos()
 
 		self.listaComandos.append("DIVI")
 
@@ -286,11 +439,19 @@ class CodeGenerator():
 		if(errors.has_errors()):
 			return
 
+		if(DEBUG):
+			print(str(inspect.stack()[0][3]) + ": ")
+			self.printComandos()
+
 		self.listaComandos.append("MODI")
 
 	def disjuncao(self):
 		if(errors.has_errors()):
 			return
+
+		if(DEBUG):
+			print(str(inspect.stack()[0][3]) + ": ")
+			self.printComandos()
 
 		self.listaComandos.append("DISJ")
 
@@ -298,11 +459,19 @@ class CodeGenerator():
 		if(errors.has_errors()):
 			return
 
+		if(DEBUG):
+			print(str(inspect.stack()[0][3]) + ": ")
+			self.printComandos()
+
 		self.listaComandos.append("CONJ")
 
 	def negacao(self):
 		if(errors.has_errors()):
 			return
+
+		if(DEBUG):
+			print(str(inspect.stack()[0][3]) + ": ")
+			self.printComandos()
 
 		self.listaComandos.append("NEGA")
 
@@ -311,11 +480,19 @@ class CodeGenerator():
 		if(errors.has_errors()):
 			return
 
+		if(DEBUG):
+			print(str(inspect.stack()[0][3]) + ": ")
+			self.printComandos()
+
 		self.listaComandos.append("CRCT " + str(valor))
 
 	def carregaValorDaVariavel(self, nomeVariavel):
 		if(errors.has_errors()):
 			return
+
+		if(DEBUG):
+			print(str(inspect.stack()[0][3]) + ": ")
+			self.printComandos()
 
 		enderecoAlocacao = self.listaVariaveis[nomeVariavel].getEnderecoAlocacao()
 
@@ -325,6 +502,10 @@ class CodeGenerator():
 		if(errors.has_errors()):
 			return
 
+		if(DEBUG):
+			print(str(inspect.stack()[0][3]) + ": ")
+			self.printComandos()
+
 		self.listaComandos.append("NADA")
 
 
@@ -332,11 +513,19 @@ class CodeGenerator():
 		if(errors.has_errors()):
 			return
 
+		if(DEBUG):
+			print(str(inspect.stack()[0][3]) + ": ")
+			self.printComandos()
+
 		self.listaComandos.append("IMPR")
 
 	def imprimeCaracter(self):
 		if(errors.has_errors()):
 			return
+
+		if(DEBUG):
+			print(str(inspect.stack()[0][3]) + ": ")
+			self.printComandos()
 
 		self.listaComandos.append("IMPC")
 
@@ -344,11 +533,19 @@ class CodeGenerator():
 		if(errors.has_errors()):
 			return
 
+		if(DEBUG):
+			print(str(inspect.stack()[0][3]) + ": ")
+			self.printComandos()
+
 		self.listaComandos.append("IMPE")
 
 	def alocaMemoria(self, n):
 		if(errors.has_errors()):
 			return
+
+		if(DEBUG):
+			print(str(inspect.stack()[0][3]) + ": ")
+			self.printComandos()
 
 		self.listaComandos.append("AMEM " + n)
 
@@ -356,21 +553,65 @@ class CodeGenerator():
 		if(errors.has_errors()):
 			return
 
+		if(DEBUG):
+			print(str(inspect.stack()[0][3]) + ": ")
+			self.printComandos()
+
 		self.listaComandos.append("DMEM " + n)
 
 	def finalizarPrograma(self):
 		if(errors.has_errors()):
 			return
 
+		if(DEBUG):
+			print(str(inspect.stack()[0][3]) + ": ")
+			self.printComandos()
+
 		self.listaComandos.append("PARA")
 
 
 	#READ E WRITE de lista de variaveis talvez seja necessario
 
+	def listaVariaveisRead(self, lista_de_variaveis):
+		if(errors.has_errors()):
+			return
+
+		if(DEBUG):
+			print(str(inspect.stack()[0][3]) + ": ")
+			self.printComandos()
+
+		for variavel in lista_de_variaveis:
+			self.leituraInteiro()
+			self.atribuicaoVariavel(variavel)
+
+
+	def listaVariaveisWrite(self, lista_de_variaveis):
+		if(errors.has_errors()):
+			return
+
+		if(DEBUG):
+			print(str(inspect.stack()[0][3]) + ": ")
+			self.printComandos()
+
+		for variavel in lista_de_variaveis:
+			self.carregaValorDaVariavel(variavel)
+			self.imprimeInteiro()
+
 	#
 
 	def salvarEmArquivo(self, caminho):
+		count = 0
 		with open(caminho, 'w') as file:
+			file.write("INPP\n".format(nline=count))
+			print("\n\n{nline}: INPP\n".format(nline=count))
+			count = count + 1
 			for comando in self.listaComandos:
-				file.write("%s\n" % comando)
+				file.write("{comand}\n".format(comand=comando))
+				print("{nline}: {comand}\n".format(nline=count, comand=comando))
 
+				count = count + 1
+
+
+	def printComandos(self):
+		print(self.listaComandos)
+		print("\n")

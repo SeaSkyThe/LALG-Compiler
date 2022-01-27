@@ -5,7 +5,7 @@
 
 # TODO - SEMANTICA CHAMADA DE PROCEDIMENTOS, WHILE, IF THEN. E aviso de erros para todos.
 
-
+import time
 import ply.yacc as yacc
 
 # Get the token map from the lexer.  This is required.
@@ -35,7 +35,7 @@ from UI.MainWindow import *
 def createParser():  
 
     # ESTRUTURAS QUE CUIDAM DA ANALISE SEMANTICA 
-    scopes = [] #talvez seja necessario resetar os scopes sempre que rodar o programa
+    scopes = [] 
     begin_stack = []
     # objeto que controla os erros
     errors = Errors()  
@@ -59,15 +59,27 @@ def createParser():
         ('left', 'INT', 'REAL', 'BOOLEAN'),
     )
 
-    #Programa e Bloco - POR ENQUANTO ESTÁ OBRIGATORIO O PROGRAMA TER "Begin End."
+    #Programa e Bloco - POR ENQUANTO ESTÁ OBRIGATORIO O PROGRAMA TER "Begin End."  
+
+    # ERRO AO INICIAR p_inicio_programa na linha de programa
     def p_programa(p):
-        '''programa : PROGRAM ID FIM_LINHA bloco comando_composto PONTO_FINAL
+        '''programa :  PROGRAM ID FIM_LINHA bloco comando_composto PONTO_FINAL fim_programa
         '''
-        #codeGenerator.iniciarPrograma(p[2])
         
         p[0] = p[4]
+        
 
+    # def p_inicio_programa(p):
+    #     '''inicio_programa : 
 
+    #     '''
+    #     codeGenerator.iniciarPrograma(None)
+
+    def p_fim_programa(p):
+        '''fim_programa : 
+
+        '''
+        codeGenerator.finalizarPrograma()
     def p_bloco(p):
         '''bloco : new_scope parte_declaracao_de_variaveis parte_declaracao_de_subrotinas
         ''' 
@@ -101,8 +113,13 @@ def createParser():
         print('declaracao_de_variaveis-debug: ', p[1], p[2])
 
         for variavel in p[2]:
-            scopes[-1].variableTable.insert(variavel, p[1], p.lineno(1),False, None)
-            #codeGenerator.declararVariavel(variavel, p[1])
+            v = scopes[-1].variableTable.insert(variavel, p[1], p.lineno(1),False, None)
+            if(v == errors.ERROR_VARIAVEL_JA_DECLARADA):
+                error_message = "ERROR: A variavel '"+ str(variavel) +" ja foi declarada anteriormente - Linha: " + str(p.lineno(2))
+                print(error_message)
+                p_error(error_message)
+
+            codeGenerator.declararVariavel(variavel, p[1])
 
         #print('declaracao_de_variaveis-debug-tabela: ', str(variaveis.table))
 
@@ -132,9 +149,13 @@ def createParser():
         '''declaracao_de_procedimento : PROCEDURE ID parametros_formais FIM_LINHA bloco comando_composto FIM_LINHA
         ''' 
 
-        scopes[-1].procedureTable.insert(p[2], p[3], p[5][1])
+        procedure = scopes[-1].procedureTable.insert(p[2], p[3], p[5][1])
 
-        p[0] = (p[2], p[3], p[5][1], p[6]) #(id, parametros_formais, bloco, comando_composto)
+        if(procedure == errors.ERROR_PROCEDURE_JA_DECLARADA):
+            error_message = "ERROR: A procedure '"+ str(p[2]) +"' ja foi declarada - Linha: " + str(p.lineno(2))
+            p_error(error_message)
+        else:
+            p[0] = (p[2], p[3], p[5][1], p[6]) #(id, parametros_formais, bloco, comando_composto)
 
         print('\ndeclaracao_de_procedimento - debug: ', p[5])
 
@@ -180,7 +201,8 @@ def createParser():
             p_warnings(None)
             scopes.pop()
 
-
+    #TRATAMENTO DE ESCOPOS 
+    #==========================
     def p_new_scope(p):
         "new_scope :"
         temp_scope = Scope()
@@ -190,7 +212,10 @@ def createParser():
     def p_new_begin(p):
         "new_begin :"
         begin_stack.append("begin") 
-    
+    #==========================
+
+    #TRATAMENTO DE AVISOS
+    #============================================================================================================================================================
     def p_warnings(p):
         '''warnings : '''
 
@@ -199,7 +224,8 @@ def createParser():
         for variavel in tabela_de_variaveis:
             if(variavel['utilizada'] == False):
                 errors.add_warning("WARNING: Variavel '"+ variavel['lexema'] +"' declarada e nao utilizada - Linha: " + str(variavel['linha']))
-
+    #============================================================================================================================================================
+               
     def p_comandos(p):
         '''comandos : atribuicao FIM_LINHA comandos
                     | chamada_de_procedimento FIM_LINHA comandos
@@ -220,6 +246,7 @@ def createParser():
         '''atribuicao : variavel OPIGUAL_ATRIB expressao
         ''' 
         
+
         temp = scopes[-1].variableTable.modify(p[1], p[3])
 
         if(temp == errors.ERROR_TIPO):
@@ -236,45 +263,152 @@ def createParser():
             #raise SyntaxError
         else:
             p[0] = temp
-            
-       
 
+            codeGenerator.atribuicaoVariavel(p[1], p[3])
+            
        
 
         print('atribuicao-debug', p[1], p[3])
         #print('atribuicao-debug-variaveis', str(variaveis.table))
 
+
     def p_comando_condicional_1(p):
-        '''comando_condicional_1 : IF AP expressao FP THEN comandos  %prec IF 
-                                 | IF AP expressao FP THEN comandos ELSE comandos %prec ELSE
+        '''comando_condicional_1 : IF  AP expressao FP THEN verifica_IF comandos desvio_IF %prec IF 
+                                 | IF  AP expressao FP THEN verifica_IF comandos desvio_IF ELSE verifica_ELSE comandos desvio_ELSE %prec ELSE
         '''
+        
+        if(len(p) == 9): #SE FOR SEM ELSE
+            if(p[4]):
+                p[0] = p[7] #recebe o comando
+    
+        
 
-        if(len(p) == 7): #SE FOR SEM ELSE
-            if(p[3]):
-                p[0] = p[6] #recebe o comando
-
-        if(len(p) > 7): #se for com else
-            if(p[3]):
-                p[0] = p[6]
+        else: #se for com else
+            if(p[4]):
+                p[0] = p[7]
             else:
-                p[0] = p[8]
+                p[0] = p[9]
+                
+    # GERACAO DE CODIGO PARA IF STATEMENT
+    # ====================================================
+    def p_verifica_IF(p):
+        ''' verifica_IF :
+        '''
+        codeGenerator.verificaIF()
+    
+    def p_desvio_IF(p):
+        ''' desvio_IF :
+        '''
+        codeGenerator.desvioIF()
+
+    def p_verifica_ELSE(p):
+        ''' verifica_ELSE :
+        '''
+        codeGenerator.verificaElse()
 
 
-    #TODO - FAZER O LOOP CORRETO DE ACORDO COM A CONDIÇÃO
+    def p_desvio_ELSE(p):
+        ''' desvio_ELSE :
+        '''
+        codeGenerator.desvioElse()
+        
+    # ====================================================
+
+    
+
     def p_comando_repetitivo_1(p):
-        '''comando_repetitivo_1 : WHILE AP expressao FP DO comandos
+        '''comando_repetitivo_1 : WHILE AP set_expressao expressao verifica_WHILE FP DO comando_composto desvio_WHILE
         '''
 
         while(p[3]):
             p[0] = p[6]
             break 
 
+    # GERACAO DE CODIGO PARA WHILE
+    # ====================================================
+    def p_set_expressao(p):
+        '''set_expressao :  '''
+
+        codeGenerator.setExpressao(codeGenerator.getContador())
+
+    def p_verifica_WHILE(p):
+        ''' verifica_WHILE :
+        '''
+        codeGenerator.verificaWhile()
+
+    def p_desvio_WHILE(p):
+        ''' desvio_WHILE :
+        '''
+        codeGenerator.desvioWhile()
+
+
     #TODO - FAZER TODA A VERIFICAÇÃO DE PROCEDIMENTOS E VERIFICAR QUAL A EXECUÇÃO CORRETA - problema com 1 parametro
+    
+    # ====================================================
     def p_chamada_de_procedimento(p):
         '''chamada_de_procedimento : variavel AP lista_de_parametros FP
+                                   | READ AP lista_de_parametros FP
+                                   | WRITE AP lista_de_parametros FP
         '''
         if(p[1] != None):
-            p[0] = p[1]
+            lista_de_parametros = p[3]
+
+            
+            if(p[1] == 'read'):
+                IS_OK = True
+                #verificar se as variaveis existem
+                for variavel in lista_de_parametros:
+                    if(isinstance(variavel, str)): 
+                        v = scopes[-1].variableTable.search(variavel)
+                        if(v == errors.ERROR_VARIAVEL_NAO_DECLARADA):
+                            p_error("ERROR: A variavel '" + str(variavel) +"' não foi declarada - Linha: "+ str(p.lineno(1)))
+                            #raise SyntaxError
+                            IS_OK = False
+                        
+                        elif(scopes[-1].variableTable.get_tipo(variavel) != 'int'):
+                            p_error("ERROR: A variavel '"+ str(variavel) + "' não e inteira (READ so aceita inteiros) - Linha: "+ str(p.lineno(1)))
+
+                    else:
+                        error_message = ("ERROR: Os parametros passados para a funcao READ, nao sao compativeis - Linha: "+ str(p.lineno(1)))
+                        p_error(error_message)
+                        print(error_message)
+                        break
+
+                if(IS_OK):
+                    with open(readFile, 'r') as file:
+                        valores = file.read()
+                    valores = valores.split(" ")
+                    
+                    contador_valores = 0
+                    if(len(valores) >= len(lista_de_parametros)):
+                        codeGenerator.listaVariaveisRead(lista_de_parametros) # CODIGO DA LEITURA DAS VARIAVEIS
+                        for parametro in lista_de_parametros:
+                            p = scopes[-1].variableTable.modify(parametro, int(valores[contador_valores]))
+                            print("chamada-de-procedimento-debug: variavel: " + str(parametro) + " valor: " + str(valores[contador_valores]))
+                            contador_valores = contador_valores + 1
+                    else:
+                        error_message = "A lista de parametros para a procedure READ e o numero de valores no arquivo sao diferentes - Linha: " + str(p.lineno(1))
+
+            elif(p[1] == 'write'): # verificar se a variavel que está sendo escrita, de fato existe
+                codeGenerator.listaVariaveisWrite(lista_de_parametros)
+                with open(writeFile, 'w') as file:
+                    for variable in lista_de_parametros:
+                        value = scopes[-1].variableTable.get_value(variable)
+
+                        if(value == errors.ERROR_VARIAVEL_NAO_DECLARADA):
+                            p_error("ERROR: A variavel '" + str(variable) +"' não foi declarada - Linha: "+ str(p.lineno(1)))
+                        
+                        else:
+                            #file.write("Linha - " + str(p.lineno(1)) + ": " + str(value) + "\n")
+                            file.write(str(value) + " ")
+            else:
+                procedure = scopes[-1].procedureTable.search(p[1])
+
+                if(procedure == errors.ERROR_PROCEDURE_NAO_DECLARADA):
+                    error_message = "ERROR: A procedure '"+ str(p[1]) +"' nao foi declarada - Linha: " + str(p.lineno(1))
+                    p_error(error_message)
+                
+                p[0] = p[1]
 
 
     def p_lista_de_parametros(p):
@@ -287,12 +421,15 @@ def createParser():
                 lista_de_parametros1.append(p[1])
                 for parametro in p[2]:
                     lista_de_parametros1.append(parametro)
+
             else:
                 lista_de_parametros1.append(p[1])
 
         p[0] = lista_de_parametros1
+        
 
         print('lista_de_parametros-debug: ', p[0])
+
 
     def p_mais_parametros(p):
         '''mais_parametros : SEPARADOR lista_de_parametros
@@ -304,68 +441,95 @@ def createParser():
 
 
     def p_expressao(p): 
-        '''expressao : expressao_simples     
+        '''expressao : expressao_simples      
                      | expressao_simples relacao expressao_simples
         ''' 
 
         print("\n\nESCOPOS ATUAIS: ", str(scopes), '\n\n')
 
         if(len(p) > 2 and p[1] != None and p[3] != None):
+
             print('expressao-debug: ', p[1], p[2], p[3])
 
             if(isinstance(p[1], str)):  #CASO P[1] ESTEJA SE REFERINDO AO NOME DE UMA VARIAVEL, PEGAMOS SEU VALOR PARA REALIZAR O CALCULO
+                codeGenerator.carregaValorDaVariavel(p[1])
                 v1 = scopes[-1].variableTable.get_value(p[1])
                 
                 if(v1 == errors.ERROR_VARIAVEL_SEM_VALOR): #caso a variavel nao tenha valor - Erro
                     p_error("ERROR: A variavel '" + p[1] + "' não tem valor definido - Linha: " + str(p.lineno(1)))
+                    p[1] = -10000
                     #raise SyntaxError
                 elif(v1 == errors.ERROR_VARIAVEL_NAO_DECLARADA):
                     p_error("ERROR: A variavel '" + str(p[1]) +"' não foi declarada - Linha: "+ str(p.lineno(1)))
+                    p[1] = -10000
                     #raise SyntaxError
                 else:
                     p[1] = v1
 
+            else:
+               # codeGenerator.carregaValorConstante(p[1])
+                pass
+
             if(isinstance(p[3], str)):  #O MESMO QUE PRO P[1]
+                codeGenerator.carregaValorDaVariavel(p[3])
                 v2 = scopes[-1].variableTable.get_value(p[3])
                 
                 if(v2 == errors.ERROR_VARIAVEL_SEM_VALOR): #caso a variavel nao tenha valor - Erro
                     p_error("ERROR: A variavel '" + p[3] + "' não tem valor definido - Linha: " + str(p.lineno(3)))
+                    p[3] = -10000
                     #raise SyntaxError
                 elif(v2 == errors.ERROR_VARIAVEL_NAO_DECLARADA):
                     p_error("ERROR: A variavel '" + str(p[3]) +"' não foi declarada - Linha: "+ str(p.lineno(3)))
+                    p[3] = -10000 #recebe o "endereço de memoria"
                     #raise SyntaxError
                 else: # caso a variavel tenha valor, atribuimos esse valor
                     p[3] = v2
+            else:
+                #codeGenerator.carregaValorConstante(p[3])  
+                pass  
 
+            codeGenerator.verificaRelacao(p[2])#
+
+            resultado_relacao = None
             if(p[2] == '='):
                 if(p[1] == p[3]):
-                    p[0] = True
+                    resultado_relacao = True
                 else:
-                    p[0] = False
+                    resultado_relacao = False
             elif(p[2] == '>='):
                 if(p[1] >= p[3]):
-                    p[0] = True
+                    resultado_relacao = True
                 else:
-                    p[0] = False
+                    resultado_relacao = False
             elif(p[2] == '>'):
                 if(p[1] > p[3]):
-                    p[0] = True
+                    resultado_relacao = True
                 else:
-                    p[0] = False 
+                    resultado_relacao = False 
             elif(p[2] == '<='):
                 if(p[1] <= p[3]):
-                    p[0] = True
+                    resultado_relacao = True
                 else:
-                    p[0] = False 
+                    resultado_relacao = False 
             elif(p[2] == '<'):
                 if(p[1] < p[3]):
-                    p[0] = True
+                    resultado_relacao = True
                 else:
-                    p[0] = False 
+                    resultado_relacao = False 
+            elif(p[2] == '<>'):
+                if(p[1] != p[3]):
+                    resultado_relacao = True
+                else:
+                    resultado_relacao = False
+
+            p[0] = resultado_relacao
+
         else:
-            print('expressao-debug: ', p[1])
+            print('expressao-debug: ', p[1])  
+
             p[0] = p[1]
-        
+
+
     def p_relacao(p):
         '''relacao : IGUAL   
                    | MAIOR_IGUAL
@@ -375,49 +539,67 @@ def createParser():
 
         p[0] = p[1]
 
+
     #seria o "expressao simples" definido no pdf
     def p_expressao_simples(p): 
         '''expressao_simples : expressao_simples OPSOMA termo
                              | expressao_simples OPSUB termo
                              | expressao_simples OR termo
-                             | termo  
+                             | termo 
                 
          '''
+        
         if(len(p) > 2 and p[1] != None and p[3] != None):
+        
             if(isinstance(p[1], str)):  #CASO P[1] ESTEJA SE REFERINDO AO NOME DE UMA VARIAVEL, PEGAMOS SEU VALOR PARA REALIZAR O CALCULO
+                codeGenerator.carregaValorDaVariavel(p[1])
                 v1 = scopes[-1].variableTable.get_value(p[1])
-                
                 if(v1 == errors.ERROR_VARIAVEL_SEM_VALOR): #caso a variavel nao tenha valor - Erro
                     p_error("ERROR: A variavel '" + str(p[1]) + "' não tem valor definido - Linha: " + str(p.lineno(1)))
-                    #raise SyntaxError
+                    p[1] = -10000
+                    #rai se SyntaxError
                 elif(v1 == errors.ERROR_VARIAVEL_NAO_DECLARADA):
                     p_error("ERROR: A variavel '" + str(p[1]) +"' não foi declarada - Linha: "+ str(p.lineno(1)))
+                    p[1] = -10000
                     #raise SyntaxError
                 else:
                     p[1] = v1
+            else:
+                #codeGenerator.carregaValorConstante(p[1])
+                pass
 
             if(isinstance(p[3], str)):  #O MESMO QUE PRO P[1]
+                codeGenerator.carregaValorDaVariavel(p[3])
                 v2 = scopes[-1].variableTable.get_value(p[3])
-                
                 if(v2 == errors.ERROR_VARIAVEL_SEM_VALOR): #caso a variavel nao tenha valor - Erro
                     p_error("ERROR: A variavel '" + p[3] + "' não tem valor definido - Linha: " + str(p.lineno(3)))
+                    p[3] = -10000
                     #raise SyntaxError
                 elif(v2 == errors.ERROR_VARIAVEL_NAO_DECLARADA):
                     p_error("ERROR: A variavel '" + str(p[3]) +"' não foi declarada - Linha: "+ str(p.lineno(3)))
+                    p[3] = -10000
                     #raise SyntaxError
                 else: # caso a variavel tenha valor, atribuimos esse valor
                     p[3] = v2
 
+            else:
+                #codeGenerator.carregaValorConstante(p[3])
+                pass
 
+            
 
             if(p[2] == '+'):
                 p[0] = p[1] + p[3]
             elif(p[2] == '-'):
+                codeGenerator.inverterSinal()
                 p[0] = p[1] - p[3]
             elif(p[2] == 'or'):
                 p[0] = p[1] or p[3]
-        else: 
+
+            codeGenerator.verificaOperador(p[2])
+        else:   
             p[0] = p[1]
+    
 
 
     def p_termo(p):
@@ -428,11 +610,13 @@ def createParser():
                  | fator
          '''
 
-
+        
         if(len(p) > 2 and p[1] != None and p[3] != None):
+
             print('termo-debug: ', p[1], p[2], p[3])
 
             if(isinstance(p[1], str)):  #CASO P[1] ESTEJA SE REFERINDO AO NOME DE UMA VARIAVEL, PEGAMOS SEU VALOR PARA REALIZAR O CALCULO
+                codeGenerator.carregaValorDaVariavel(p[1])
                 v1 = scopes[-1].variableTable.get_value(p[1])
                 
                 if(v1 == errors.ERROR_VARIAVEL_SEM_VALOR): #caso a variavel nao tenha valor - Erro
@@ -441,11 +625,16 @@ def createParser():
                     #raise SyntaxError
                 elif(v1 == errors.ERROR_VARIAVEL_NAO_DECLARADA):
                     p_error("ERROR: A variavel '" + str(p[1]) +"' não foi declarada - Linha: "+ str(p.lineno(1)))
+                    p[3] = -10000
                     #raise SyntaxError
                 else:
                     p[1] = v1
+            else:
+                #codeGenerator.carregaValorConstante(p[1])
+                pass
 
             if(isinstance(p[3], str)):  #O MESMO QUE PRO P[1]
+                codeGenerator.carregaValorDaVariavel(p[3])
                 v2 = scopes[-1].variableTable.get_value(p[3])
                 
                 if(v2 == errors.ERROR_VARIAVEL_SEM_VALOR): #caso a variavel nao tenha valor - Erro
@@ -454,10 +643,17 @@ def createParser():
                     #raise SyntaxError
                 elif(v2 == errors.ERROR_VARIAVEL_NAO_DECLARADA):
                     p_error("ERROR: A variavel '" + str(p[3]) +"' não foi declarada - Linha: "+ str(p.lineno(3)))
+                    p[3] = -10000
                     #raise SyntaxError
                 else: # caso a variavel tenha valor, atribuimos esse valor
                     p[3] = v2
 
+            else:
+                
+                #codeGenerator.carregaValorConstante(p[3])
+                pass
+
+            codeGenerator.verificaOperador(p[2])
 
             if(p[2] == '*'):
                 p[0] = p[1] * p[3]
@@ -475,12 +671,15 @@ def createParser():
                     p[0] = p[1] #tratamento do erro
                 else:
                     p[0] = p[1] // p[3]
-        else:
+
+            
+
+        else:  
             p[0] = p[1]
 
     def p_fator(p): #trocar "variavel" por "ID" evita muitos shift/reduce conflicts
-        '''fator : variavel   
-                 | numero
+        '''fator : numero  
+                 | variavel 
                  | TRUE
                  | FALSE
                  | AP expressao_simples FP
@@ -499,11 +698,15 @@ def createParser():
                 p[0] = False
 
         else: # se for variavel ou numero
-            if(isinstance(p[1], int) or isinstance(p[1], float) or isinstance(p[1], bool)): #se for numero
+            if(isinstance(p[1], int) or isinstance(p[1], float)): #se for numero
+                codeGenerator.carregaValorConstante(p[1])
                 p[0] = p[1]
             else: #se for variavel
                 p[0] = p[1]
 
+        
+
+    
 
     def p_numero(p):
         '''numero : NUM_INT
@@ -528,6 +731,7 @@ def createParser():
     # Error rule for syntax errors
     
     def p_error(p):
+        print("ENTREI AQ")
         if(isinstance(p, str)):
             print(str(p))
             #adiciona erro à lista de erros para serem exibidos na interface
@@ -552,14 +756,26 @@ def createParser():
             #return tok
 
         else:
+            
             if(p != None):
                 print("ERRO DE SINTAXE - Token '" + str(p.value) + "' - LINHA " + str(p.lineno)) 
                 errors.add_error("ERRO DE SINTAXE  - Token '" + str(p.value) + "' - LINHA " + str(p.lineno))
-            else:
-                print("ERRO DE SINTAXE  - EOF") 
-                errors.add_error("ERRO DE SINTAXE  - EOF")
+                
+                while True:
+                    tok = parser.token()         # Get the next token
+                    if not tok or tok.type == 'PONTO_FINAL': break
 
-            #parser.errok()
+
+                parser.errok()
+
+            # else:
+               
+            #     print("ERRO DE SINTAXE  - EOF") 
+            #     errors.add_error("ERRO DE SINTAXE  - EOF")
+
+                
+
+            
 
         
 

@@ -1,0 +1,20 @@
+program while_1;
+int x, y, count;
+
+begin
+	read(x, y);
+	while (x < y) do
+	begin
+		write(x);
+		x := x + 1;
+	end
+	
+	x := 45;
+	count := 0;
+
+	while(count <= 45) do 
+	begin
+		write(count);
+		count := count + 1;
+	end
+end.

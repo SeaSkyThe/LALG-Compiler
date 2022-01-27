@@ -1,0 +1,10 @@
+program exemplo_1;
+int x, y;
+
+begin
+	read(x, y);
+	if (x > y) then
+	begin
+		write(x);
+	end
+end.

@@ -18,6 +18,13 @@ class Errors(object):
 		self.warningList = []
 
 
+		self.ERROR_PROCEDURE_NAO_DECLARADA = "ERROR: procedure-nao-declarada"
+		self.ERROR_PROCEDURE_JA_DECLARADA = "ERROR: procedure-ja-declarada"
+
+		self.ERROR_READ_PARAMETROS = "ERROR: parametros-read-incoerentes"
+		
+		
+
 	def add_error(self, error):
 		self.errorList.append(error)
 		return True

@@ -46,3 +46,16 @@ class Boolean(Variavel):
 
 	def setValor(self, valor):
 		self.valor = valor
+
+class Float(Variavel):
+	def __init__(self, nome, endereco, valor):
+		super().__init__(nome, endereco)
+
+		self.valor = valor
+
+
+	def getValor(self):
+		return self.valor
+
+	def setValor(self, valor):
+		self.valor = valor

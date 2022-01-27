@@ -7,14 +7,15 @@ from Lexic.LALGLex import *
 from Syntactic.parser import *
 #importando classe de erros
 from Syntactic.Errors import *
-
 #importando gerador de codigo
-
 from CodeGeneration.CodeGeneration import *
-
+#importando interpretador de codigo
+from Interpreter.Interpreter import *
+#importando logger
+from Syntactic.logger import*
 
 #Importando componentes para a sintaxe
-from PyQt5.QtCore import QFile, QRegExp, Qt, QSize
+from PyQt5.QtCore import QFile, QRegExp, Qt, QSize, QObject, QThread, pyqtSignal
 from PyQt5.QtGui import QFont, QSyntaxHighlighter, QTextCharFormat, QColor
 
 
@@ -23,6 +24,13 @@ errors = Errors()
 
 # Chamando objeto gerador de codigo
 codeGenerator = CodeGenerator()
+
+# Chamando objeto Interpretador de codigo
+codeInterpreter = Interpreter()
+
+# Chamando objeto logger
+
+logger = Logger()
 
 # Line number Widget definition
 class LineNumberArea(QtWidgets.QWidget):
@@ -326,7 +334,8 @@ class ExecWindow(Ui_MainWindow):
         self.parser = None
         self.setupUi(self.window)
         self.connectActions()
-    
+        
+
     # ADD WINDOW CHARACTERISTICS HERE
     def setupUi(self, window):
         super().setupUi(self.window)
@@ -336,6 +345,7 @@ class ExecWindow(Ui_MainWindow):
         #Window Flags (Disable resize)
         self.window.setWindowFlags(QtCore.Qt.WindowCloseButtonHint | QtCore.Qt.WindowMinimizeButtonHint)
         self.window.setStyleSheet("background-color: white;")
+        self.window.setFixedSize(self.window.frameGeometry().width(), self.window.frameGeometry().height()) #TAMANHO FIXO
 
         # Creating Code Area with Line Number
         self.textInput = CodeArea(self.centralwidget)
@@ -453,13 +463,14 @@ class ExecWindow(Ui_MainWindow):
     def parse(self):
         self.parser = createParser()
 
-
         #pegando o input e jogando no parser que foi criado utilizando o analisador lexico
         text = self.textInput.toPlainText()
 
         #calculando resultado e exibindo na tela de output - se não for "None"
         
-        result = self.parser.parse(text, tracking=True)
+        result = self.parser.parse(text, tracking=True, debug=logger.getLog())
+
+
         
         # condição para exibição na caixa de texto de output
         if(result != None):  # caso retorne algo diferente de None, ou seja, existe um resultado, não tivemos erros
@@ -488,6 +499,10 @@ class ExecWindow(Ui_MainWindow):
 
                 codeGenerator.salvarEmArquivo("codigoIntermediario.txt")
 
+                codeInterpreter.readFile("codigoIntermediario.txt")
+                codeInterpreter.execute()
+
+
 
         else: # caso existirem erros
              # INCLUINDO ERROS NO OUTPUT
@@ -510,7 +525,11 @@ class ExecWindow(Ui_MainWindow):
                 self.textOutput.setText(error_list)
 
                 codeGenerator.salvarEmArquivo("codigoIntermediario.txt")
+
+                codeInterpreter.readFile("codigoIntermediario.txt")
+                codeInterpreter.execute()
         return
+
 
     # Opening a File
     def openFile(self):
