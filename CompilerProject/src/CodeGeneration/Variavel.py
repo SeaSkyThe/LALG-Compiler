@@ -51,8 +51,7 @@ class Float(Variavel):
 	def __init__(self, nome, endereco, valor):
 		super().__init__(nome, endereco)
 
-		self.valor = valor
-
+		self.valor = float(valor)
 
 	def getValor(self):
 		return self.valor

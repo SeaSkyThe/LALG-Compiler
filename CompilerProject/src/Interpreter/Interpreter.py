@@ -97,7 +97,7 @@ class Interpreter:
 
 		#self.leit_count = 0
 
-		#self.print_list = ""
+		self.print_list = ""
 
 		command = None
 
@@ -311,7 +311,7 @@ class Interpreter:
 
 			#guardando para ser impresso na tela
 			self.print_list = self.print_list + str(a) + "\n"
-			print("PRINT LIST: " + self.print_list, end="")
+			
 
 		elif(command[0] == "IMPC"):
 			a = chr(self.stack.pop())

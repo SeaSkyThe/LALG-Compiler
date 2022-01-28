@@ -494,9 +494,12 @@ class CodeGenerator():
 			print(str(inspect.stack()[0][3]) + ": ")
 			self.printComandos()
 
-		enderecoAlocacao = self.listaVariaveis[nomeVariavel].getEnderecoAlocacao()
+		try:
+			enderecoAlocacao = self.listaVariaveis[nomeVariavel].getEnderecoAlocacao()
 
-		self.listaComandos.append("CRVL " + str(enderecoAlocacao) + " " + str(posNaExpressao))
+			self.listaComandos.append("CRVL " + str(enderecoAlocacao) + " " + str(posNaExpressao))
+		except Exception as e:
+			return e
 
 	def executaNada(self):
 		if(errors.has_errors()):

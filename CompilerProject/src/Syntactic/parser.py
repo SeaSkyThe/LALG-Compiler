@@ -392,15 +392,21 @@ def createParser():
             elif(p[1] == 'write'): # verificar se a variavel que está sendo escrita, de fato existe
                 codeGenerator.listaVariaveisWrite(lista_de_parametros, p.lexpos(3))
                 with open(writeFile, 'w') as file:
-                    for variable in lista_de_parametros:
-                        value = scopes[-1].variableTable.get_value(variable)
+                    for parametro in lista_de_parametros:
+                        if(isinstance(parametro, str)): #se o parametro for uma variavel , busca ela
+                            try:
+                                value = scopes[-1].variableTable.get_value(parametro)
 
-                        if(value == errors.ERROR_VARIAVEL_NAO_DECLARADA):
-                            p_error("ERROR: A variavel '" + str(variable) +"' não foi declarada - Linha: "+ str(p.lineno(1)))
-                        
-                        else:
-                            #file.write("Linha - " + str(p.lineno(1)) + ": " + str(value) + "\n")
-                            file.write(str(value) + " ")
+                                if(value == errors.ERROR_VARIAVEL_NAO_DECLARADA):
+                                    p_error("ERROR: A variavel '" + str(parametro) +"' não foi declarada - Linha: "+ str(p.lineno(1)))
+                                
+                                else:
+                                    #file.write("Linha - " + str(p.lineno(1)) + ": " + str(value) + "\n")
+                                    file.write(str(value) + " ")
+                            except:
+                                p_error("ERROR: A funcao WRITE aceita apenas variaveis como parametros.")
+                        else:# se nao usa o valor
+                            file.write(str(parametro) + " ")
             else:
                 procedure = scopes[-1].procedureTable.search(p[1])
 
@@ -610,7 +616,9 @@ def createParser():
                  | fator
          '''
 
-        
+        divisao_inteira = False
+        v1 = None
+        v2 = None
         if(len(p) > 2 and p[1] != None and p[3] != None):
 
             print('termo-debug: ', p[1], p[2], p[3])
@@ -628,7 +636,7 @@ def createParser():
                     p[3] = -10000
                     #raise SyntaxError
                 else:
-                    p[1] = v1
+                    p[1], v1 = v1, p[1]
             else:
                 #codeGenerator.carregaValorConstante(p[1])
                 pass
@@ -646,7 +654,7 @@ def createParser():
                     p[3] = -10000
                     #raise SyntaxError
                 else: # caso a variavel tenha valor, atribuimos esse valor
-                    p[3] = v2
+                    p[3], v2 = v2, p[3]
 
             else:
                 
@@ -655,6 +663,10 @@ def createParser():
 
             codeGenerator.verificaOperador(p[2])
 
+            if(isinstance(p[-2], str)): #verificando se é o caso de atribuicao ex : x := 45/y , nesse caso p[-2] = x
+                if(scopes[-1].variableTable.get_tipo(p[-2]) == 'int'):
+                    divisao_inteira = True
+
             if(p[2] == '*'):
                 p[0] = p[1] * p[3]
             elif(p[2] == '/'):
@@ -662,7 +674,10 @@ def createParser():
                     p_error("ERROR: Zero Division - Linha: " + str(p.lineno(3)));
                     p[0] = p[1] #tratamento do erro
                 else:
-                    p[0] = p[1] / p[3]
+                    if(divisao_inteira):
+                        p[0] = int(p[1] / p[3])
+                    else:
+                        p[0] = p[1]/p[3]
             elif(p[2] == 'and'):
                 p[0] = p[1] and p[3]
             elif(p[2] == 'div'):
