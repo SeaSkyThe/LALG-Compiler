@@ -1,3 +1,5 @@
+from PyQt5 import QtCore, QtGui, QtWidgets
+
 from Syntactic.Errors import *
 
 from CodeGeneration.CodeGeneration import *
@@ -28,12 +30,17 @@ class Interpreter:
 		self.incrementFlag = True
 		self.stopFlag = False
 
-		self.leit_count = 0
 
+		#Contador de leitura 
+		#self.leit_count = 0
+
+		#Lista para ser printada 
+		self.print_list = ""
+
+
+		#Inicializando arquivo
 		with open(writeFile, "w") as f:
 			f.write("")
-
-
 
 
 	def setStack(self, stack):
@@ -78,19 +85,19 @@ class Interpreter:
 
 
 
-	def execute(self):
+	def execute(self, window):
 
 		#self.revise()
 
-		with open("ERRORLOG-INTERPRETER.txt", "w") as f:
-			f.write("")
 
 		self.instructionCounter = 0;
 
 		self.incrementFlag = True
 		self.stopFlag = False
 
-		self.leit_count = 0
+		#self.leit_count = 0
+
+		#self.print_list = ""
 
 		command = None
 
@@ -99,17 +106,12 @@ class Interpreter:
 			try:
 
 				command = self.code[self.instructionCounter] #lista de comandos
-				
-				with open("ERRORLOG-INTERPRETER.txt", "a") as f:
-					f.write(str(command) + " Contador: " + str(self.instructionCounter) + "\n")
 
 				print(str(command) + " Contador: " + str(self.instructionCounter) + "\n")
-				self.interpreta(command)
+
+				self.interpreta(command, window)
+
 				print(str(self.stack) + "\n\n")
-
-				with open("ERRORLOG-INTERPRETER.txt", "a") as f:
-					f.write(str(self.stack) + "\n\n")
-
 
 				if(self.incrementFlag):
 					self.instructionCounter = self.instructionCounter + 1
@@ -118,22 +120,22 @@ class Interpreter:
 					self.incrementFlag = True
 
 				if(self.stopFlag):
-					return
-
-				
+					return self.print_list
 
 			except Exception as e:
-				with open("ERRORLOG-INTERPRETER.txt", "a") as f:
-					f.write(str(e))
 				print("ERROR: Execution Error: " + str(e))
 
+		 
 
-	def interpreta(self, command):
-		leit_list = None
+	def interpreta(self, command, window):
+		#CASO FOR LER PELO ARQUIVO TIRAR COMENTARIO DAS LINHAS ABAIXO ATE A SEPARACAO
 
-		with open(readFile, "r") as f:
-			leit_list = f.read().split(" ")
+		# leit_list = None
 
+		# with open(readFile, "r") as f:
+		# 	leit_list = f.read().split(" ")
+
+		#=============================================
 		
 		#print(command[0] + "\n")
 
@@ -169,7 +171,7 @@ class Interpreter:
 			try:
 				self.stack.append(b/a)
 			except ZeroDivisionError:
-				errors.add_error("ERROR: Zero Division Error ")
+				errors.add_error("ERROR: Zero Division")
 				self.stack.append(-100000)
 
 
@@ -283,22 +285,33 @@ class Interpreter:
 			pass
 
 		elif(command[0] == "LEIT"): # LEITURA DE INTEIRO - TALVEZ COLOCAR UMA JANELA PARA INTRODUZIR VALOR - POR ENQUANTO FAZEMOS PELO ARQUIVO
-			a = int(leit_list[self.leit_count])
-			self.leit_count = self.leit_count + 1
+			number, confirmed = QtWidgets.QInputDialog.getInt(window, 'Input', 'Digite um inteiro: ')
+			self.stack.append(number)
 
-			self.stack.append(a)
+			# a = int(leit_list[self.leit_count])
+			# self.leit_count = self.leit_count + 1
 
-		elif(command[0] == "LEICH"): # LEITURA DE INTEIRO - TALVEZ COLOCAR UMA JANELA PARA INTRODUZIR VALOR - POR ENQUANTO FAZEMOS PELO ARQUIVO
-			a = chr(leit_list[self.leit_count])
-			self.leit_count = self.leit_count + 1
+			# self.stack.append(a)
 
-			self.stack.append(a)
+		elif(command[0] == "LEICH"): # LEITURA DE CHAR - TALVEZ COLOCAR UMA JANELA PARA INTRODUZIR VALOR - POR ENQUANTO FAZEMOS PELO ARQUIVO
+			character, confirmed = QtWidgets.QInputDialog.getInt(window, 'Input', 'Digite um char: ')
+			self.stack.append(chr(character))
+
+			# a = chr(leit_list[self.leit_count])
+			# self.leit_count = self.leit_count + 1
+
+			# self.stack.append(a)
 
 		elif(command[0] == "IMPR"):
 			a = int(self.stack.pop())
 
+			#imprimindo no arquivo
 			with open(writeFile, "a") as f:
 				f.write(str(a) + " ")
+
+			#guardando para ser impresso na tela
+			self.print_list = self.print_list + str(a) + "\n"
+			print("PRINT LIST: " + self.print_list, end="")
 
 		elif(command[0] == "IMPC"):
 			a = chr(self.stack.pop())

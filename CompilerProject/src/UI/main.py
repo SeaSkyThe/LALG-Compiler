@@ -15,7 +15,7 @@ from Interpreter.Interpreter import *
 from Syntactic.logger import*
 
 #Importando componentes para a sintaxe
-from PyQt5.QtCore import QFile, QRegExp, Qt, QSize, QObject, QThread, pyqtSignal
+from PyQt5.QtCore import QFile, QRegExp, Qt, QSize, QObject
 from PyQt5.QtGui import QFont, QSyntaxHighlighter, QTextCharFormat, QColor
 
 
@@ -497,12 +497,14 @@ class ExecWindow(Ui_MainWindow):
                 self.textOutput.setText("")
                 self.textOutput.setText(str(result))
 
+                #GERA CODIGO INTERMEDIARIO
                 codeGenerator.salvarEmArquivo("codigoIntermediario.txt")
-
+                #INTERPRETA CODIGO INTERMEDIARIO
                 codeInterpreter.readFile("codigoIntermediario.txt")
-                codeInterpreter.execute()
+                output = codeInterpreter.execute(self.window)
 
-
+                self.textOutput.setText("")
+                self.textOutput.setText(str(output))
 
         else: # caso existirem erros
              # INCLUINDO ERROS NO OUTPUT
@@ -524,10 +526,14 @@ class ExecWindow(Ui_MainWindow):
                 self.textOutput.setText("")
                 self.textOutput.setText(error_list)
 
+                #GERA CODIGO INTERMEDIARIO
                 codeGenerator.salvarEmArquivo("codigoIntermediario.txt")
-
+                #INTERPRETA CODIGO INTERMEDIARIO
                 codeInterpreter.readFile("codigoIntermediario.txt")
-                codeInterpreter.execute()
+                output = codeInterpreter.execute(self.window, self.textOutput)
+
+                self.textOutput.setText("")
+                self.textOutput.setText(str(output))
         return
 
 
