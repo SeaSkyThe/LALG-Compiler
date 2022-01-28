@@ -1,4 +1,9 @@
 from Syntactic.Errors import *
+
+from CodeGeneration.CodeGeneration import *
+
+codeGenerator = CodeGenerator()
+
 import time
 errors = Errors()
 
@@ -72,7 +77,13 @@ class Interpreter:
 			self.text = self.text + "\n"
 
 
+
 	def execute(self):
+
+		#self.revise()
+
+		with open("ERRORLOG-INTERPRETER.txt", "w") as f:
+			f.write("")
 
 		self.instructionCounter = 0;
 
@@ -83,9 +94,10 @@ class Interpreter:
 
 		command = None
 
-
+		print("\n\n\nCODIGO: \n\n" + str(self.code))
 		while(self.instructionCounter < len(self.code)):
 			try:
+
 				command = self.code[self.instructionCounter] #lista de comandos
 				
 				with open("ERRORLOG-INTERPRETER.txt", "a") as f:
@@ -238,6 +250,7 @@ class Interpreter:
 				self.stack.append(0)
 
 		elif(command[0] == "CMIG"): #COMPARA SE IGUAL
+
 			a = self.stack.pop()
 			b = self.stack.pop()
 
@@ -313,3 +326,33 @@ class Interpreter:
 
 		elif(command[0] == "PARA"):
 			self.stopFlag = True
+
+
+	#FUNCOES DE REVISAO CASO SEJA NECESSARIO REVISAR O CODIGO PRE INTERPRETACAO
+
+	# def revise(self):
+	# 	for command in self.code:
+	# 		self.verifyConstValueOrder(command)
+
+	# def verifyConstValueOrder(self, command): #funcao para corrigir o bug de ordem para operacoes com constante à esquerda ex: b/4
+		
+
+	# 	code_list_with_details = codeGenerator.getListaComandos() #essa lista é -1 em relação a lista presente no interpretador, entao qualquer
+	# 															  #uso de index tem que ser adicionado o -1
+
+	# 	operations_that_order_matters = ["DIVI", "MODI","CMME","CMEG","CMMA","CMAG","CMIG","CMDG"]
+
+	# 	if(command[0] in operations_that_order_matters):
+	# 		command_index = self.code.index(command)
+
+	# 		if(self.code[command_index - 1][0] == "CRVL" and self.code[command_index - 2][0] == "CRCT"): #se for um Carrega constante seguido de um carrega variavel
+	# 			if(code_list_with_details[command_index - 2][2] < code_list_with_details[command_index - 3][2]): #e se a variavel vem antes da constante
+	# 																								#temos que inverter a ordem desses comandos
+	# 				self.code[command_index - 1], self.code[command_index - 2] = self.code[command_index - 2], self.code[command_index - 1]
+
+
+		
+
+
+	
+	 

@@ -2,6 +2,7 @@ from Syntactic.Errors import *
 
 from CodeGeneration.Variavel import *
 
+
 errors = Errors()
 
 
@@ -71,7 +72,7 @@ class CodeGenerator():
 
 		else:
 			self.nomePrograma = nome
-			self.listaComandos.append('INPP ')
+			self.listaComandos.append('INPP')
 
 
 	def declararVariavel(self, nomeVariavel, tipo): # fazer float
@@ -117,7 +118,6 @@ class CodeGenerator():
 			print(str(inspect.stack()[0][3]) + ": ")
 			self.printComandos()
 
-		print("LISTA VARIAVEIS: " + str(self.listaVariaveis))
 		self.listaVariaveis[nomeVariavel].setValor(valor)
 
 		enderecoAlocacao = self.listaVariaveis[nomeVariavel].getEnderecoAlocacao()
@@ -476,7 +476,7 @@ class CodeGenerator():
 		self.listaComandos.append("NEGA")
 
 
-	def carregaValorConstante(self, valor):
+	def carregaValorConstante(self, valor, posNaExpressao):
 		if(errors.has_errors()):
 			return
 
@@ -484,9 +484,9 @@ class CodeGenerator():
 			print(str(inspect.stack()[0][3]) + ": ")
 			self.printComandos()
 
-		self.listaComandos.append("CRCT " + str(valor))
+		self.listaComandos.append("CRCT " + str(valor) + " " + str(posNaExpressao))
 
-	def carregaValorDaVariavel(self, nomeVariavel):
+	def carregaValorDaVariavel(self, nomeVariavel, posNaExpressao):
 		if(errors.has_errors()):
 			return
 
@@ -496,7 +496,7 @@ class CodeGenerator():
 
 		enderecoAlocacao = self.listaVariaveis[nomeVariavel].getEnderecoAlocacao()
 
-		self.listaComandos.append("CRVL " + str(enderecoAlocacao))
+		self.listaComandos.append("CRVL " + str(enderecoAlocacao) + " " + str(posNaExpressao))
 
 	def executaNada(self):
 		if(errors.has_errors()):
@@ -585,7 +585,7 @@ class CodeGenerator():
 			self.atribuicaoVariavel(variavel)
 
 
-	def listaVariaveisWrite(self, lista_de_variaveis):
+	def listaVariaveisWrite(self, lista_de_variaveis, posNaExpressao):
 		if(errors.has_errors()):
 			return
 
@@ -594,23 +594,58 @@ class CodeGenerator():
 			self.printComandos()
 
 		for variavel in lista_de_variaveis:
-			self.carregaValorDaVariavel(variavel)
+			self.carregaValorDaVariavel(variavel, posNaExpressao)
 			self.imprimeInteiro()
 
 	#
 
 	def salvarEmArquivo(self, caminho):
+		self.revise()
+
 		count = 0
+
 		with open(caminho, 'w') as file:
-			file.write("INPP\n".format(nline=count))
-			print("\n\n{nline}: INPP\n".format(nline=count))
+			file.write("{comand}\n".format(comand='INPP'))
+			print("0: INPP\n")
 			count = count + 1
 			for comando in self.listaComandos:
-				file.write("{comand}\n".format(comand=comando))
-				print("{nline}: {comand}\n".format(nline=count, comand=comando))
+				print(str(count) + ": ", end="")
+				if(len(comando) >= 2):
+					file.write("{comand} {argument}\n".format(comand=comando[0], argument=comando[1]))
+					print(str(comando[0]) + " " +str(comando[1]) + "\n")
+				else:
+					file.write("{comand}\n".format(comand=comando[0]))
+					print(str(comando[0]) + "\n")
 
 				count = count + 1
 
+	def revise(self):
+		for comando in self.listaComandos:
+			self.listaComandos[self.listaComandos.index(comando)] = list(comando.split(" "))
+
+		for comando in self.listaComandos:
+			self.verifyConstValueOrder(comando)
+
+	def verifyConstValueOrder(self, command): #funcao para corrigir o bug de ordem para operacoes com constante à esquerda ex: b/4
+		
+		print("\n\nEntrou na verificação com o comando: " + str(command))
+
+		operations_that_order_matters = ["DIVI", "MODI","CMME","CMEG","CMMA","CMAG","CMIG","CMDG"]
+
+		if(command[0] in operations_that_order_matters):
+			command_index = self.listaComandos.index(command)
+
+			#print("\n\nComandos antes: " + str(self.code[command_index - 1]) + str(self.code[command_index - 2]))
+
+			if(self.listaComandos[command_index - 1][0] == "CRVL" and self.listaComandos[command_index - 2][0] == "CRCT"): #se for um Carrega constante seguido de um carrega variavel
+				print("\n\nComandos na lista detalhada: " + str(self.listaComandos[command_index - 1][2]) +" "+ str(self.listaComandos[command_index - 2][2]))
+				if(self.listaComandos[command_index - 1][2] < self.listaComandos[command_index - 2][2]): #e se a variavel vem antes da constante
+																									#temos que inverter a ordem desses comandos
+					self.listaComandos[command_index - 1], self.listaComandos[command_index - 2] = self.listaComandos[command_index - 2], self.listaComandos[command_index - 1]
+
+
+					print("\n\nModificou com o comando: " + str(command))
+					print("\n\nLista pos modificada: " + str(self.listaComandos))
 
 	def printComandos(self):
 		print(self.listaComandos)

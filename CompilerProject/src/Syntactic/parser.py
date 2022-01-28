@@ -3,7 +3,8 @@
 # [ESCOPO1, ESCOPO2] - SE ESCOPO 2 FOR UMA PROCEDURE, SUA ASSINATURA ESTÁ REGISTRADA EM ESCOPO 1
 
 
-# TODO - SEMANTICA CHAMADA DE PROCEDIMENTOS, WHILE, IF THEN. E aviso de erros para todos.
+# TODO - CORRIGIR BUG DE EMPILHAMENTO, PARA COMPARAÇÕES COM CONSTANTES À DIREITA (CONSTANTE SE TORNA PRIORIDADE) - EX a <= 0
+# NO MOMENTO ESTÁ EMPLIHANDO 0 depois valor de a, e fazendo a operação <=, que resulta em 0 <= a.
 
 import time
 import ply.yacc as yacc
@@ -73,7 +74,7 @@ def createParser():
     #     '''inicio_programa : 
 
     #     '''
-    #     codeGenerator.iniciarPrograma(None)
+    #     codeGenerator.iniciarPrograma(p[-1])
 
     def p_fim_programa(p):
         '''fim_programa : 
@@ -243,10 +244,9 @@ def createParser():
 
 
     def p_atribuicao(p):
-        '''atribuicao : variavel OPIGUAL_ATRIB expressao
+        '''atribuicao : variavel OPIGUAL_ATRIB expressao 
         ''' 
         
-
         temp = scopes[-1].variableTable.modify(p[1], p[3])
 
         if(temp == errors.ERROR_TIPO):
@@ -271,6 +271,7 @@ def createParser():
         print('atribuicao-debug', p[1], p[3])
         #print('atribuicao-debug-variaveis', str(variaveis.table))
 
+    
 
     def p_comando_condicional_1(p):
         '''comando_condicional_1 : IF  AP expressao FP THEN verifica_IF comandos desvio_IF %prec IF 
@@ -314,7 +315,6 @@ def createParser():
         
     # ====================================================
 
-    
 
     def p_comando_repetitivo_1(p):
         '''comando_repetitivo_1 : WHILE AP set_expressao expressao verifica_WHILE FP DO comando_composto desvio_WHILE
@@ -342,7 +342,7 @@ def createParser():
         codeGenerator.desvioWhile()
 
 
-    #TODO - FAZER TODA A VERIFICAÇÃO DE PROCEDIMENTOS E VERIFICAR QUAL A EXECUÇÃO CORRETA - problema com 1 parametro
+    
     
     # ====================================================
     def p_chamada_de_procedimento(p):
@@ -390,7 +390,7 @@ def createParser():
                         error_message = "A lista de parametros para a procedure READ e o numero de valores no arquivo sao diferentes - Linha: " + str(p.lineno(1))
 
             elif(p[1] == 'write'): # verificar se a variavel que está sendo escrita, de fato existe
-                codeGenerator.listaVariaveisWrite(lista_de_parametros)
+                codeGenerator.listaVariaveisWrite(lista_de_parametros, p.lexpos(3))
                 with open(writeFile, 'w') as file:
                     for variable in lista_de_parametros:
                         value = scopes[-1].variableTable.get_value(variable)
@@ -452,7 +452,7 @@ def createParser():
             print('expressao-debug: ', p[1], p[2], p[3])
 
             if(isinstance(p[1], str)):  #CASO P[1] ESTEJA SE REFERINDO AO NOME DE UMA VARIAVEL, PEGAMOS SEU VALOR PARA REALIZAR O CALCULO
-                codeGenerator.carregaValorDaVariavel(p[1])
+                codeGenerator.carregaValorDaVariavel(p[1], p.lexpos(1))
                 v1 = scopes[-1].variableTable.get_value(p[1])
                 
                 if(v1 == errors.ERROR_VARIAVEL_SEM_VALOR): #caso a variavel nao tenha valor - Erro
@@ -467,11 +467,11 @@ def createParser():
                     p[1] = v1
 
             else:
-               # codeGenerator.carregaValorConstante(p[1])
+                #codeGenerator.carregaValorConstante(p[1])
                 pass
 
             if(isinstance(p[3], str)):  #O MESMO QUE PRO P[1]
-                codeGenerator.carregaValorDaVariavel(p[3])
+                codeGenerator.carregaValorDaVariavel(p[3], p.lexpos(3))
                 v2 = scopes[-1].variableTable.get_value(p[3])
                 
                 if(v2 == errors.ERROR_VARIAVEL_SEM_VALOR): #caso a variavel nao tenha valor - Erro
@@ -552,7 +552,7 @@ def createParser():
         if(len(p) > 2 and p[1] != None and p[3] != None):
         
             if(isinstance(p[1], str)):  #CASO P[1] ESTEJA SE REFERINDO AO NOME DE UMA VARIAVEL, PEGAMOS SEU VALOR PARA REALIZAR O CALCULO
-                codeGenerator.carregaValorDaVariavel(p[1])
+                codeGenerator.carregaValorDaVariavel(p[1], p.lexpos(1))
                 v1 = scopes[-1].variableTable.get_value(p[1])
                 if(v1 == errors.ERROR_VARIAVEL_SEM_VALOR): #caso a variavel nao tenha valor - Erro
                     p_error("ERROR: A variavel '" + str(p[1]) + "' não tem valor definido - Linha: " + str(p.lineno(1)))
@@ -565,11 +565,11 @@ def createParser():
                 else:
                     p[1] = v1
             else:
-                #codeGenerator.carregaValorConstante(p[1])
+                # codeGenerator.carregaValorConstante(p[1])
                 pass
 
             if(isinstance(p[3], str)):  #O MESMO QUE PRO P[1]
-                codeGenerator.carregaValorDaVariavel(p[3])
+                codeGenerator.carregaValorDaVariavel(p[3], p.lexpos(3))
                 v2 = scopes[-1].variableTable.get_value(p[3])
                 if(v2 == errors.ERROR_VARIAVEL_SEM_VALOR): #caso a variavel nao tenha valor - Erro
                     p_error("ERROR: A variavel '" + p[3] + "' não tem valor definido - Linha: " + str(p.lineno(3)))
@@ -583,7 +583,7 @@ def createParser():
                     p[3] = v2
 
             else:
-                #codeGenerator.carregaValorConstante(p[3])
+                # codeGenerator.carregaValorConstante(p[3])
                 pass
 
             
@@ -616,7 +616,7 @@ def createParser():
             print('termo-debug: ', p[1], p[2], p[3])
 
             if(isinstance(p[1], str)):  #CASO P[1] ESTEJA SE REFERINDO AO NOME DE UMA VARIAVEL, PEGAMOS SEU VALOR PARA REALIZAR O CALCULO
-                codeGenerator.carregaValorDaVariavel(p[1])
+                codeGenerator.carregaValorDaVariavel(p[1], p.lexpos(1))
                 v1 = scopes[-1].variableTable.get_value(p[1])
                 
                 if(v1 == errors.ERROR_VARIAVEL_SEM_VALOR): #caso a variavel nao tenha valor - Erro
@@ -634,7 +634,7 @@ def createParser():
                 pass
 
             if(isinstance(p[3], str)):  #O MESMO QUE PRO P[1]
-                codeGenerator.carregaValorDaVariavel(p[3])
+                codeGenerator.carregaValorDaVariavel(p[3], p.lexpos(3))
                 v2 = scopes[-1].variableTable.get_value(p[3])
                 
                 if(v2 == errors.ERROR_VARIAVEL_SEM_VALOR): #caso a variavel nao tenha valor - Erro
@@ -699,14 +699,13 @@ def createParser():
 
         else: # se for variavel ou numero
             if(isinstance(p[1], int) or isinstance(p[1], float)): #se for numero
-                codeGenerator.carregaValorConstante(p[1])
+                codeGenerator.carregaValorConstante(p[1], p.lexpos(1))
                 p[0] = p[1]
             else: #se for variavel
                 p[0] = p[1]
 
         
 
-    
 
     def p_numero(p):
         '''numero : NUM_INT
@@ -715,7 +714,7 @@ def createParser():
         '''
         p[0] = p[1]
 
-    #TODO - SISTEMA DE VARIAVEIS
+    
     def p_variavel(p):
         '''variavel : ID     
         ''' 
